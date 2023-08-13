@@ -2,7 +2,7 @@
 import { mdiForwardburger, mdiBackburger, mdiMenu } from "@mdi/js";
 import { ref } from "vue";
 // import { useRouter } from "vue-router";
-import { Link } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 
 import menuAside from "@/menuAside.js";
 import menuNavBar from "@/menuNavBar.js";
@@ -15,6 +15,13 @@ import NavBarItemPlain from "@/components/NavBarItemPlain.vue";
 import AsideMenu from "@/components/AsideMenu.vue";
 import FooterBar from "@/components/FooterBar.vue";
 
+router.on("navigate", () => {
+  isAsideMobileExpanded.value = false;
+  isAsideLgActive.value = false;
+});
+
+
+
 useMainStore().setUser({
   name: "John Doe",
   email: "john@example.com",
@@ -26,25 +33,41 @@ const layoutAsidePadding = "xl:pl-60";
 
 const styleStore = useStyleStore();
 
-const router = useRouter();
+// const router = useRouter();
 
 const isAsideMobileExpanded = ref(false);
 const isAsideLgActive = ref(false);
 
-router.beforeEach(() => {
-  isAsideMobileExpanded.value = false;
-  isAsideLgActive.value = false;
-});
+// router.beforeEach(() => {
+//   isAsideMobileExpanded.value = false;
+//   isAsideLgActive.value = false;
+// });
+
+// const menuClick = (event, item) => {
+//   if (item.isToggleLightDark) {
+//     styleStore.setDarkMode();
+//   }
+
+//   if (item.isLogout) {
+//     //
+//   }
+// };
+
+
+// Replace `isLogout` logic:
 
 const menuClick = (event, item) => {
+  // ...
   if (item.isToggleLightDark) {
     styleStore.setDarkMode();
   }
 
   if (item.isLogout) {
-    //
+    // Add:
+    router.post(route("logout"));
   }
 };
+
 </script>
 
 <template>

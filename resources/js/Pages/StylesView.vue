@@ -1,10 +1,13 @@
 <script setup>
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
+// import { Link } from "@inertiajs/vue3";
+
 import { useStyleStore } from "@/stores/style.js";
 import { gradientBgPurplePink } from "@/colors.js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import LayoutGuest from "@/layouts/LayoutGuest.vue";
+import { router } from "@inertiajs/vue3";
 
 const styles = ["white", "basic"];
 
@@ -12,12 +15,15 @@ const styleStore = useStyleStore();
 
 styleStore.setDarkMode(false);
 
-const router = useRouter();
+// const router = useRouter();
 
 const click = (slug) => {
   styleStore.setStyle(slug);
-  router.push("/dashboard");
+  // router.push("/dashboard");
+  router.get("/dashboard")
+
 };
+
 </script>
 
 <template>

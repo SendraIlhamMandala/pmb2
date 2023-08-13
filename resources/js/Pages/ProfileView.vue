@@ -2,23 +2,25 @@
 import { reactive } from "vue";
 import { useMainStore } from "@/stores/main";
 import {
-  mdiAccount,
-  mdiMail,
-  mdiAsterisk,
-  mdiFormTextboxPassword,
-  mdiGithub,
+  mdiAccount, // icon for account
+  mdiMail, // icon for mail
+  mdiAsterisk, // icon for asterisk
+  mdiFormTextboxPassword, // icon for password textbox
+  mdiGithub, // icon for GitHub
 } from "@mdi/js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBox from "@/components/CardBox.vue";
-import BaseDivider from "@/components/BaseDivider.vue";
-import FormField from "@/components/FormField.vue";
-import FormControl from "@/components/FormControl.vue";
-import FormFilePicker from "@/components/FormFilePicker.vue";
-import BaseButton from "@/components/BaseButton.vue";
-import BaseButtons from "@/components/BaseButtons.vue";
-import UserCard from "@/components/UserCard.vue";
-import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
+
+import SectionMain from "@/components/SectionMain.vue";  
+import CardBox from "@/components/CardBox.vue";  
+import BaseDivider from "@/components/BaseDivider.vue"; 
+import FormField from "@/components/FormField.vue";  
+import FormControl from "@/components/FormControl.vue";  
+import FormFilePicker from "@/components/FormFilePicker.vue";  
+import BaseButton from "@/components/BaseButton.vue";  
+import BaseButtons from "@/components/BaseButtons.vue";  
+import UserCard from "@/components/UserCard.vue";  
+import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";  
+import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue"; // section title with button component
+
 
 const mainStore = useMainStore();
 

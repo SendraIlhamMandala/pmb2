@@ -40,7 +40,7 @@ export default [
     icon: mdiResponsive,
   },
   {
-    route: "Styles",
+    route: "styles",
     label: "Styles",
     icon: mdiPalette,
   },

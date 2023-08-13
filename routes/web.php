@@ -45,11 +45,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
   Route::get('/forms', function () {
     return Inertia::render('FormsView');
   })->name('forms');
+
   //inertia route style view
   Route::get('/styles',function
   () {
-    return Inertia::render('StyleView');
-  })->name('Styles');
+    return Inertia::render('StylesView');
+  })->name('styles');
   
   Route::get('/ui', function () {
     return Inertia::render('UiView');

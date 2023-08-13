@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import { useStyleStore } from "@/stores/style.js";
 import { mdiMinus, mdiPlus } from "@mdi/js";
@@ -6,7 +7,6 @@ import { getButtonColor } from "@/colors.js";
 import BaseIcon from "@/components/BaseIcon.vue";
 import AsideMenuList from "@/components/AsideMenuList.vue";
 
-import { Link } from "@inertiajs/vue3";
 // import { RouterLink } from "vue-router";
 // ...
 
@@ -15,13 +15,13 @@ const itemHref = computed(() =>
   props.item.route ? route(props.item.route) : props.item.href
 );
 
+
 // Add activeInactiveStyle
 const activeInactiveStyle = computed(() =>
   props.item.route && route().current(props.item.route)
     ? styleStore.asideMenuItemActiveStyle
     : ""
 );
-
 
 const props = defineProps({
   item: {
@@ -65,8 +65,8 @@ const menuClick = (event) => {
   <li>
     <component
       :is="item.route ? Link : 'a'"
-
-      :href="item.href ?? null"
+      
+      :href="itemHref"
       :target="item.target ?? null"
       class="flex cursor-pointer"
       :class="componentClass"
@@ -76,11 +76,14 @@ const menuClick = (event) => {
         v-if="item.icon"
         :path="item.icon"
         class="flex-none"
+        :class="activeInactiveStyle"
         w="w-16"
+
         :size="18"
       />
       <span
         class="grow text-ellipsis line-clamp-1"
+        
         :class="[{ 'pr-12': !hasDropdown }, activeInactiveStyle]"
         >{{ item.label }}</span
       >
@@ -88,13 +91,17 @@ const menuClick = (event) => {
         v-if="hasDropdown"
         :path="isDropdownActive ? mdiMinus : mdiPlus"
         class="flex-none"
-        w="w-12"
+        :class="activeInactiveStyle"
+        
       />
     </component>
     <AsideMenuList
       v-if="hasDropdown"
       :menu="item.menu"
-      
+      :class="[
+        styleStore.asideMenuDropdownStyle,
+        isDropdownActive ? 'block dark:bg-slate-800/50' : 'hidden',
+      ]"
       is-dropdown-list
     />
   </li>

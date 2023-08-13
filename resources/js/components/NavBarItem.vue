@@ -25,6 +25,7 @@ const itemHref = computed(() =>
   props.item.route ? route(props.item.route) : props.item.href
 );
 
+
 // Update `const is` to return `Link` when `props.routeName` is set:
 const is = computed(() => {
   if (props.item.href) {
@@ -106,8 +107,7 @@ onBeforeUnmount(() => {
     ref="root"
     class="block lg:flex items-center relative cursor-pointer"
     :class="componentClass"
-    :to="item.to ?? null"
-    :href="item.href ?? null"
+    :href="itemHref"
     :target="item.target ?? null"
     @click="menuClick"
   >

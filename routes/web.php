@@ -17,22 +17,67 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+  return Inertia::render('Welcome', [
+    'canLogin' => Route::has('login'),
+    'canRegister' => Route::has('register'),
+    'laravelVersion' => Application::VERSION,
+    'phpVersion' => PHP_VERSION,
+  ]);
 });
 
-Route::get('/dashboard', function () {
+
+
+//create route group
+Route::middleware(['auth', 'verified'])->group(function () {
+  
+  Route::get('/dashboard', function () {
     return Inertia::render('HomeView');
-  })->middleware(['auth', 'verified'])->name('dashboard');
+  })->name('dashboard');
+  
+  Route::get('/tables', function () {
+    return Inertia::render('TablesView');
+  })->name('tables');
+  
+  Route::get('/Profile',function() {
+    return Inertia::render('ProfileView');
+  })->name('profile');
+
+  Route::get('/forms', function () {
+    return Inertia::render('FormsView');
+  })->name('forms');
+  //inertia route style view
+  Route::get('/styles',function
+  () {
+    return Inertia::render('StyleView');
+  })->name('Styles');
+  
+  Route::get('/ui', function () {
+    return Inertia::render('UiView');
+  })->name('ui');
+  
+  //route responsive
+  Route::get('/responsive', function () {
+    return Inertia::render('ResponsiveView');
+  })->name('responsive');
+  
+  
+  
+  //inertia route error view
+  Route::get('/error',function
+  () {
+    return Inertia::render('ErrorView');
+  })->name('error');
+
+  
+
+});
+
+
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+  Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

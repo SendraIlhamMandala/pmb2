@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -38,13 +39,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     return Inertia::render('TablesView');
   })->name('tables');
   
-  Route::get('/Profile',function() {
-    return Inertia::render('ProfileView');
-  })->name('profile');
+  Route::get('/profilez',function() {
+    return Inertia::render('ProfileView', [
+      'status' => session('status'),
+  ]);
+  })->name('profilez');
+
+  
 
   Route::get('/forms', function () {
     return Inertia::render('FormsView');
   })->name('forms');
+
+
+  // Route::get('/games',[GameController::class,'index'])->name('games');
+//create resource for games
+
+Route::resource('games', GameController::class);
+
 
   //inertia route style view
   Route::get('/styles',function

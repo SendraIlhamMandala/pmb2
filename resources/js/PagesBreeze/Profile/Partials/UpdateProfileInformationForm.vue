@@ -1,9 +1,10 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputError from '@/ComponentsBreeze/InputError.vue';
+import InputLabel from '@/ComponentsBreeze/InputLabel.vue';
+import PrimaryButton from '@/ComponentsBreeze/PrimaryButton.vue';
+import TextInput from '@/ComponentsBreeze/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -13,26 +14,45 @@ defineProps({
         type: String,
     },
 });
-
+var num = 123;
 const user = usePage().props.auth.user;
 
 const form = useForm({
     name: user.name,
     email: user.email,
 });
+
+function getNum() {
+    
+
+    if (form.wasSuccessful) {
+        return num = 999;
+    }else{
+        return num = 123;
+    }
+    
+}
+
+const reverseinput = computed(() => {
+    return form.name.split('').reverse().join('')
+  
+});
+
+
+
 </script>
 
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
+            <h2 class="text-lg font-medium text-gray-900">Profile Information{{ getNum() }} {{ reverseinput }}</h2>
 
             <p class="mt-1 text-sm text-gray-600">
                 Update your account's profile information and email address.
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="form.patch(route('profile.update', {preserveScroll: true,}))" class="mt-6 space-y-6">
             <div>
                 <InputLabel for="name" value="Name" />
 

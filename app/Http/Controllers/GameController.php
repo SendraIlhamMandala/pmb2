@@ -22,8 +22,20 @@ class GameController extends Controller
     {
         
         $games = Game::orderBy('created_at', 'desc')->get();
+        $gamesEdit =[] ;
+
+        foreach ($games as $gamekey => $gamevalue) {
+            $gamesEdit[$gamekey]['id'] = $gamevalue->id;
+            $gamesEdit[$gamekey]['name'] = $gamevalue->name;
+            $gamesEdit[$gamekey]['price'] = $gamevalue->price;
+            $gamesEdit[$gamekey]['created_at']['date'] = date('d-m-Y', strtotime($gamevalue->created_at));
+            $gamesEdit[$gamekey]['created_at']['hour'] = date('H:i', strtotime($gamevalue->created_at));
+        }
+        // dd($gamesEdit, $games);
+
         return Inertia::render('Games/GamesView', [
             'games' => $games,
+            'gamesEdit' => $gamesEdit,
             'status' => session('status'),]);
     }
  
@@ -39,7 +51,7 @@ class GameController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         //
         //dd($request->user(),User::all());
@@ -47,8 +59,8 @@ class GameController extends Controller
         $game = Game::create($request->all());
         
         // return back();
-        // return redirect(route('games.index'));
-        return Inertia::location('/games');
+        return redirect(route('games.index'));
+        // return Inertia::location('/games');
 
 
     }
@@ -84,4 +96,6 @@ class GameController extends Controller
     {
         //
     }
+
+
 }

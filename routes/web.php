@@ -56,7 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //create resource for games
 
 Route::resource('games', GameController::class);
-
+Route::get('/getgames',[GameController::class,'getGames']);
 
   //inertia route style view
   Route::get('/styles',function

@@ -10,6 +10,7 @@
         "@mdi/js": "^7.2.96",
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/line-clamp": "^0.4.4",
+        "@types/pdfmake": "^0.2.2",
         "@vitejs/plugin-vue": "^4.0.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.1.2",
@@ -23,10 +24,14 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "datatables.net-buttons": "^2.4.1",
+        "datatables.net-buttons-dt": "^2.4.1",
         "datatables.net-dt": "^1.13.6",
         "datatables.net-responsive": "^2.5.0",
         "datatables.net-scroller": "^2.2.0",
         "datatables.net-select": "^1.7.0",
-        "datatables.net-vue3": "^2.1.2"
+        "datatables.net-vue3": "^2.1.2",
+        "jszip": "^3.10.1",
+        "pdfmake": "^0.2.7"
     }
 }

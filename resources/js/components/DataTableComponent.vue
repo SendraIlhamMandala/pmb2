@@ -23,6 +23,7 @@ let props = defineProps({
     form: Object,
     games: Object,
     columns: Object,
+    dataExcel: Object,
 });
 </script>
 
@@ -40,7 +41,7 @@ let props = defineProps({
             select: true,
             order: [],
             
-            buttons: ['copy', 'excel', 'pdf',
+            buttons: ['copy', props.dataExcel , 'pdf',
             {
                 
                         text: 'Toggle action',
@@ -49,14 +50,7 @@ let props = defineProps({
                             dt.column( -1 ).visible( ! dt.column( -1 ).visible() );
                         }
                  
-            },{
-            extend: 'excelHtml5',
-            customize: function ( xlsx ){
-                var sheet = xlsx.xl.worksheets['sheet1.xml'];
- 
-                // jQuery selector to add a border
-                $('row c[r*="10"]', sheet).attr( 's', '25' );
-            }}
+            },
           ],
         }"
     >

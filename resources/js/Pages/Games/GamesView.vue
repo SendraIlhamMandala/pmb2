@@ -62,6 +62,18 @@ const columns = [
   { data: 'price' },
   { data: 'created_at.date' , title: 'Date'},
   { data: 'created_at.hour' , title: 'Hour'},
+   {
+            title: 'action',
+            mRender: function (data, type, row) {
+                return "<a class='table-edit' data-id='" + row.id + "' href='/games/" + row.id + "') >EDIT</a>"
+            }
+        },
+         {
+          title: 'action',
+            mRender: function (data, type, row) {
+              return "<a class='table-edit' data-id='" + row.id + "' onClick=window.alert('You_Deleted"+row.id+"') >DELETE</a>"
+            }
+        },       
   
 ];
 

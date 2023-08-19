@@ -22,12 +22,6 @@ router.on("navigate", () => {
 
 
 
-useMainStore().setUser({
-  name: "John Doe",
-  email: "john@example.com",
-  avatar:
-    "https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93",
-});
 
 const layoutAsidePadding = "xl:pl-60";
 
@@ -122,12 +116,11 @@ const menuClick = (event, item) => {
       />
       <slot />
       <FooterBar>
-        Get more with
         <a
-          href="https://tailwind-vue.justboil.me/"
+          href="https://fisip.uniga.ac.id/"
           target="_blank"
           class="text-blue-600"
-          >Premium version</a
+          > Fisip Uniga</a
         >
       </FooterBar>
     </div>

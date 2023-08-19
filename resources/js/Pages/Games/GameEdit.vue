@@ -24,21 +24,14 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["games", "gamesEdit"]);
+var props = defineProps(["game"]);
 
-// Mendefinisikan konfigurasi untuk mengekspor data ke Excel
-const dataExcel = {
-    extend: "excel",
-    messageTop: "data Gameee",
-    exportOptions: {
-        columns: [0, 1, 2, 3, 4],
-    },
-};
+
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: "",
-    price: "",
+    name: props.game.name,
+    price:  props.game.price,
 });
 
 // Membuat referensi reaktif untuk status form dengan header
@@ -61,40 +54,15 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formStatusSubmit = () => {
-    form.post("/games", {
-        preserveScroll: true,
-    });
+    
+    form.put(route('games.update', props.game.id))
+
 };
 
 // Mendefinisikan kolom-kolom untuk tabel data
-const columns = [
-    { data: "id" },
-    { data: "name" },
-    { data: "price" },
-    { data: "created_at.date", title: "Tanggal" },
-    { data: "created_at.hour", title: "Jam" },
-    {
-        title: "aksi",
-        mRender: function (data, type, row) {
-            // Render tautan aksi edit dengan ID baris
-            return (
-                "<a class='table-edit' data-id='" + row.id + "' href='/games/" + row.id + "/edit') >EDIT</a>"
-            );
-        },
-    },
-    {
-        title: "aksi",
-        mRender: function (data, type, row) {
-            // Render tautan aksi hapus dengan ID baris
-            return (
-                "<a class='table-edit' href='games/deleteone/" + row.id + "'' method='delete' ) >HAPUS</a>"
-            );
-        },
-    },
-];
+
 
 // Menampilkan elemen pertama dari properti gamesEdit ke konsol
-console.log(props.gamesEdit[0]);
 
 </script>
 
@@ -106,7 +74,7 @@ console.log(props.gamesEdit[0]);
         <SectionMain>
             <SectionTitle>Form with status example</SectionTitle>
 
-            <CardBox is-form is-hoverable
+            <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span><b class="capitalize">{{
@@ -115,7 +83,7 @@ console.log(props.gamesEdit[0]);
                         {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
                 </NotificationBarInCard>
                 <FormField label="Name">
-                    <FormControl v-model="form.name" :icon-left="mdiAccount" help="Game name" placeholder="Game name"
+                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="Game name" placeholder="Game name"
                         required />
                 </FormField>
 
@@ -128,14 +96,7 @@ console.log(props.gamesEdit[0]);
                     <BaseButton label="Trigger" type="submit" color="info" />
                 </template>
             </CardBox>
-            <CardBox class="mt-6">
-
-                <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Game</span>
-                </NotificationBarInCard>
-                <datatablecomponent :dataExcel="dataExcel" :games="gamesEdit" :form="form" :columns="columns">
-                </datatablecomponent>
-            </CardBox>
+         
         </SectionMain>
     </LayoutAuthenticated>
 </template>

@@ -53,7 +53,7 @@ class GameController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
+        // dd($request);
         //dd($request->user(),User::all());
         //store all request to games 
         $game = Game::create($request->all());
@@ -79,24 +79,44 @@ class GameController extends Controller
      */
     public function edit(Game $game)
     {
-        //
+        //edit page
+        return Inertia::render('Games/GameEdit', [
+            'game' => $game
+        ]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Game $game)
+    public function update(Request $request, Game $game): RedirectResponse
     {
-        //
+        //update game
+        $game->update($request->all());
+        return redirect(route('games.index'));
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Game $game)
+    public function destroy(Game $game): RedirectResponse
     {
-        //
+        //delete game
+        $game->delete();
+        return redirect(route('games.index'));
+
     }
 
+    public function deleteOne(Game $id): RedirectResponse
+    {
+        $id->delete();
+        return redirect(route('games.index'));
+  
+    }
+
+    public function deleteMultiple($id){
+        dd($id);
+    }
 
 }

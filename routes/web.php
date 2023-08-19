@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -25,6 +26,9 @@ Route::get('/', function () {
     'phpVersion' => PHP_VERSION,
   ]);
 });
+
+//get gethtmlpage fromcontroller
+Route::get('/gethtmlpage',[Controller::class,'gethtmlpage'])->name('gethtmlpage');
 
 
 
@@ -57,6 +61,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::resource('games', GameController::class);
 Route::get('/getgames',[GameController::class,'getGames']);
+Route::get('/games/deleteone/{id}',[GameController::class,'deleteOne'])->name('deleteOne');
+Route::get('/games/deletemultiple/{id}',[GameController::class,'deleteMultiple'])->name('deleteMultiple');
 
   //inertia route style view
   Route::get('/styles',function
@@ -80,9 +86,6 @@ Route::get('/getgames',[GameController::class,'getGames']);
   () {
     return Inertia::render('ErrorView');
   })->name('error');
-
-  
-
 });
 
 

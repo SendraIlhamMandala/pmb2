@@ -1,7 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { useForm, Head, Link } from "@inertiajs/vue3";
+import { computed } from "vue";
 import LayoutGuest from "@/layouts/LayoutGuest.vue";
 import SectionFullScreen from "@/components/SectionFullScreen.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -12,35 +11,33 @@ import FormValidationErrors from "@/components/FormValidationErrors.vue";
 import NotificationBarInCard from "@/components/NotificationBarInCard.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 
-
-
-
-
 const props = defineProps({
-    status: {
-        type: String,
-    },
+  status: {
+    type: String,
+    default: null,
+  },
 });
 
-const form = useForm({});
+const form = useForm();
+
+const verificationLinkSent = computed(
+  () => props.status === "verification-link-sent"
+);
 
 const submit = () => {
-    form.post(route('verification.send'));
+  form.post(route("verification.send"));
 };
-
-const verificationLinkSent = computed(() => props.status === 'verification-link-sent');
 </script>
 
 <template>
-  
-    <LayoutGuest>
+  <LayoutGuest>
     <Head title="Email Verification" />
 
-    <SectionFullScreen v-slot="{ cardClass }" bg="pinkRed">
+    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
       <CardBox :class="cardClass" is-form @submit.prevent="submit">
         <FormValidationErrors />
 
-        <NotificationBarInCard v-if="verificationLinkSent" color="success">
+        <NotificationBarInCard v-if="verificationLinkSent" color="info">
           A new verification link has been sent to the email address you
           provided during registration.
         </NotificationBarInCard>

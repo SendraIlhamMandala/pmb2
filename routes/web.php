@@ -30,75 +30,72 @@ Route::get('/', function () {
 });
 
 //get gethtmlpage fromcontroller
-Route::get('/gethtmlpage',[Controller::class,'gethtmlpage'])->name('gethtmlpage');
+Route::get('/gethtmlpage', [Controller::class, 'gethtmlpage'])->name('gethtmlpage');
 
 
 
 //create route group
 Route::middleware(['auth', 'verified'])->group(function () {
-  
+
   Route::get('/dashboard', function () {
     return Inertia::render('HomeView');
   })->name('dashboard');
-  
+
   Route::get('/tables', function () {
     return Inertia::render('TablesView');
   })->name('tables');
-  
-  Route::get('/profilez',function() {
+
+  Route::get('/profilez', function () {
     return Inertia::render('ProfileView', [
       'status' => session('status'),
-  ]);
+    ]);
   })->name('profilez');
 
-  
+
 
   Route::get('/forms', function () {
     return Inertia::render('FormsView');
   })->name('forms');
 
 
-  // Route::get('/games',[GameController::class,'index'])->name('games');
-//create resource for games
-
-Route::resource('roles', RoleController ::class);
-Route::get('/roles/delete/{id}',[RoleController::class,'deleteOne'])->name('roles.deleteOne');
-Route::get('/roles/deletemultiple/{id}',[RoleController::class,'deleteMultiple'])->name('roles.deleteMultiple');
-
-Route::resource('games', GameController::class);
-Route::get('/getgames',[GameController::class,'getGames']);
-Route::get('/games/deleteone/{id}',[GameController::class,'deleteOne'])->name('games.deleteOne');
-Route::get('/games/deletemultiple/{id}',[GameController::class,'deleteMultiple'])->name('games.deleteMultiple');
 
 
-Route::resource('users', UserController::class);
+  Route::resource('roles', RoleController::class);
+  Route::get('/roles/delete/{id}', [RoleController::class, 'deleteOne'])->name('roles.deleteOne');
+  Route::get('/roles/deletemultiple/{id}', [RoleController::class, 'deleteMultiple'])->name('roles.deleteMultiple');
+
+  Route::resource('games', GameController::class)->middleware('verified');
+  Route::get('/getgames', [GameController::class, 'getGames']);
+  Route::get('/games/deleteone/{id}', [GameController::class, 'deleteOne'])->name('games.deleteOne');
+  Route::get('/games/deletemultiple/{id}', [GameController::class, 'deleteMultiple'])->name('games.deleteMultiple');
+
+
+  Route::resource('users', UserController::class);
 
 
   //inertia route style view
-  Route::get('/styles',function
-  () {
+  Route::get('/styles', function () {
     return Inertia::render('StylesView');
   })->name('styles');
-  
+
   Route::get('/ui', function () {
     return Inertia::render('UiView');
   })->name('ui');
-  
+
   //route responsive
   Route::get('/responsive', function () {
     return Inertia::render('ResponsiveView');
   })->name('responsive');
-  
-  
-  
+
+
+
   //inertia route error view
-  Route::get('/error',function
-  () {
+  Route::get('/error', function () {
     return Inertia::render('ErrorView');
   })->name('error');
 });
 
-
+Route::get('/cat',[Controller::class, 'cat'] );
 
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

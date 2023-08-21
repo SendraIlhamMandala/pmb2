@@ -23,6 +23,7 @@ import CardBoxClient from "@/components/CardBoxClient.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import SectionBannerStarOnGitHub from "@/components/SectionBannerStarOnGitHub.vue";
+import AppHead from "@/components/AppHead.vue";
 
 const chartData = ref(null);
 
@@ -43,6 +44,7 @@ const transactionBarItems = computed(() => mainStore.history);
 
 <template>
   <LayoutAuthenticated>
+<AppHead title="Dashboard" />
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiChartTimelineVariant"

@@ -3,6 +3,8 @@
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -59,10 +61,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
   // Route::get('/games',[GameController::class,'index'])->name('games');
 //create resource for games
 
+Route::resource('roles', RoleController ::class);
+Route::get('/roles/delete/{id}',[RoleController::class,'deleteOne'])->name('roles.deleteOne');
+Route::get('/roles/deletemultiple/{id}',[RoleController::class,'deleteMultiple'])->name('roles.deleteMultiple');
+
 Route::resource('games', GameController::class);
 Route::get('/getgames',[GameController::class,'getGames']);
-Route::get('/games/deleteone/{id}',[GameController::class,'deleteOne'])->name('deleteOne');
-Route::get('/games/deletemultiple/{id}',[GameController::class,'deleteMultiple'])->name('deleteMultiple');
+Route::get('/games/deleteone/{id}',[GameController::class,'deleteOne'])->name('games.deleteOne');
+Route::get('/games/deletemultiple/{id}',[GameController::class,'deleteMultiple'])->name('games.deleteMultiple');
+
+
+Route::resource('users', UserController::class);
+
 
   //inertia route style view
   Route::get('/styles',function

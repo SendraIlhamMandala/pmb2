@@ -115,8 +115,17 @@ class GameController extends Controller
   
     }
 
-    public function deleteMultiple($id){
-        dd($id);
+    public function deleteMultiple($id): RedirectResponse
+    {
+        $games = [];
+        $ids = json_decode($id);
+        foreach ($ids as $key => $value_id) {
+            $games[$key] = Game::find($value_id);
+            $games[$key]->delete();
+        }
+        
+        return redirect(route('games.index'));
+        
     }
 
 }

@@ -30,6 +30,16 @@ export default [
         icon: mdiTable,
     },
     {
+        route: "users.index",
+        label: "Users",
+        icon: mdiTable,
+    },
+    {
+        route: "roles.index",
+        label: "Roles",
+        icon: mdiTable,
+    },
+    {
         route: "forms",
         label: "Forms",
         icon: mdiSquareEditOutline,

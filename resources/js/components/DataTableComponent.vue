@@ -8,7 +8,7 @@ import jszip from "jszip";
 import pdfmake from "pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import axios from "axios";
-import {ref,onMounted} from "vue";
+import { ref, onMounted } from "vue";
 import { router } from '@inertiajs/vue3'
 
 
@@ -25,90 +25,82 @@ const options = {
 
 let props = defineProps({
     form: Object,
-    games: Object,
+    routeTo: String,
+    dataFrom: Object,
     columns: Object,
     dataExcel: Object,
 });
 
-function exportHTML(){
-      
-       
-       
+function exportHTML() {
+
+
+
     axios.get('/gethtmlpage').then(response => {
         var sourceHTML = '';
-           sourceHTML = response.data;
-           console.log(response.data);
-           var fileDownload = document.createElement("a");
-           var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-           
-       document.body.appendChild(fileDownload);
-       fileDownload.href = source;
-       fileDownload.download = 'document.doc';
-       fileDownload.click();
-       })
-       
-    }
-    let dt;
-const table = ref();
- 
-onMounted(function () {
-  dt = table.value.dt;
-});
+        sourceHTML = response.data;
+        console.log(response.data);
+        var fileDownload = document.createElement("a");
+        var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
 
-    function remove() {
-    if(confirm("delete ?")){
-        let datax = [];
-let i = 0;
-
-dt.rows({ selected: true }).every(function () {
-    
-    datax.push(this.data().id);
-    
-});
-console.log(datax);
-    //create alert delete or no
-    router.get(route(`deleteMultiple`,datax),{
-    preserveScroll: true,
+        document.body.appendChild(fileDownload);
+        fileDownload.href = source;
+        fileDownload.download = 'document.doc';
+        fileDownload.click();
     })
-  
-}else {
+
+}
+
+let dt;
+const table = ref();
+
+onMounted(function () {
+    dt = table.value.dt;
+});
+
+function deleteSelectedRows() {
+    if (confirm("delete ?")) {
+        let datax = [];
+        let i = 0;
+
+        dt.rows({ selected: true }).every(function () {
+            datax.push(this.data().id);
+        });
+        router.get(route(props.routeTo+`.deleteMultiple`, JSON.stringify(datax)), {
+            preserveScroll: true,
+        })
+
+    } else {
         return false;
     }
 }
 </script>
 
 <template>
-<button @click="remove" class="mb-12">Delete selected rows</button>
+<button @click="deleteSelectedRows" class="mb-12 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  Delete selected rows
+</button>
 
-  
-    <DataTable
-        :columns="columns"
-        ref="table"
-        :data="games"
-        class="display"
-        width="100%"
-        :options="{
-            dom: 'Bfrtip',
-            select: true,
-            order: [],
-            
-            buttons: ['copy', props.dataExcel , 'pdf',
+    <DataTable :columns="columns" ref="table" :data="dataFrom" class="display table" width="100%" :options="{
+        dom: 'Bfrtip',
+        select: true,
+        scrollX: true,
+        order: [],
+        buttons: ['copy', props.dataExcel, 'pdf',
             {
-                
-                        text: 'Toggle action',
-                        action: function ( e, dt, node, config ) {
-                            dt.column( -2 ).visible( ! dt.column( -2 ).visible() );
-                            dt.column( -1 ).visible( ! dt.column( -1 ).visible() );
-                        }
-            },{
+                text: 'Toggle action',
+                action: function (e, dt, node, config) {
+                    dt.column(-2).visible(!dt.column(-2).visible());
+                    dt.column(-1).visible(!dt.column(-1).visible());
+                }
+            }, {
                 text: 'Export doc',
-                action: function (){
+                action: function () {
                     exportHTML();
                 }
             }
-          ],
-        }"
-    >
+        ],
+        
+    }">
         <thead>
             <tr>
                 <th v-for="column in columns">{{ column.data }}</th>

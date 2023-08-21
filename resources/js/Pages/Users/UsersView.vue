@@ -20,87 +20,106 @@ import DataTablesLib from "datatables.net";
 import DataTables from "datatables.net-select";
 
 
-// Impor library DataTables
+// Import DataTables library
 DataTable.use(DataTablesLib);
 
-// Mendefinisikan properti untuk komponen
-var props = defineProps(["games", "gamesEdit"]);
+// Define component properties
+var props = defineProps(["users", "usersWithPassword", "password", "usersEdit"]);
 
-// Mendefinisikan konfigurasi untuk mengekspor data ke Excel
+// Configuration for exporting data to Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "data Gameee",
+    messageTop: "Data Gameee",
     exportOptions: {
-        columns: [0, 1, 2, 3, 4],
+        columns: [0, 1, 2, 3, 4, 5],
     },
 };
 
-// Membuat objek form menggunakan hook useForm
+// Create form object using useForm hook
 const form = useForm({
     name: "",
-    price: "",
+    email: "",
+    password: "abc",
 });
 
-// Membuat referensi reaktif untuk status form dengan header
+// Reactive reference for form status with header
 const formStatusWithHeader = ref(true);
 
-// Membuat referensi reaktif untuk status form saat ini
+// Reactive reference for current form status
 const formStatusCurrent = ref(0);
 
-// Mendefinisikan array opsi status form
+// Array of form status options
 const formStatusOptions = ["info", "success", "danger", "warning"];
 
-// Membuat properti terhitung untuk mendapatkan warna status form berdasarkan keberhasilan form
+// Computed property for form status color based on success
 const getFormStatusColor = computed(() => {
     if (form.recentlySuccessful) {
-        return formStatusOptions[1]; // Mengembalikan warna status sukses
+        return formStatusOptions[1]; // Return success status color
     } else {
-        return formStatusOptions[0]; // Mengembalikan warna status info
+        return formStatusOptions[0]; // Return info status color
     }
 });
 
-// Mendefinisikan fungsi untuk menangani pengiriman form
+// Function to handle form submission
 const formStatusSubmit = () => {
-    form.post("/games", {
+    form.post("/users", {
         preserveScroll: true,
     });
 };
 
-// Mendefinisikan kolom-kolom untuk tabel data
+// Define columns for the data table
+console.log(props.usersWithPassword);
 const columns = [
     { data: "id" },
     { data: "name" },
-    { data: "price" },
-    { data: "created_at.date", title: "Tanggal" },
-    { data: "created_at.hour", title: "Jam" },
+    { data: "email" },
+    { data: "password" },
     {
-        title: "aksi",
+        data: "created_at",
+        render: (data) =>
+            new Date(data).getDate() +
+            "-" +
+            (new Date(data).getMonth() + 1) +
+            "-" +
+            new Date(data).getFullYear(),
+        title: "Tanggal Daftar",
+    },
+    {
+        data: "created_at",
+        render: (data) =>
+            new Date(data).getHours() + ":" + new Date(data).getMinutes(),
+        title: "Jam Daftar",
+    },
+    {
+        title: "Aksi",
         mRender: function (data, type, row) {
-            // Render tautan aksi edit dengan ID baris
+            // Render edit action link with row ID
             return (
-                "<a class='table-edit' data-id='" + row.id + "' href='/games/" + row.id + "/edit') >EDIT</a>"
+                "<a class='table-edit' data-id='" +
+                row.id +
+                "' href='/users/" +
+                row.id +
+                "/edit') >EDIT</a>"
             );
         },
     },
     {
-        title: "aksi",
+        title: "Aksi",
         mRender: function (data, type, row) {
-            // Render tautan aksi hapus dengan ID baris
+            // Render delete action link with row ID
             return (
-                "<a class='table-edit' href='games/deleteone/" + row.id + "'' method='delete' ) >HAPUS</a>"
+                "<a class='table-edit' href='users/deleteone/" +
+                row.id +
+                "'' method='delete' ) >HAPUS</a>"
             );
         },
     },
 ];
-
-// Menampilkan elemen pertama dari properti gamesEdit ke konsol
-console.log(props.gamesEdit[0]);
-
 </script>
 
 <template>
 
-<AppHead title="Game" />
+<AppHead title="Users" />
     <LayoutAuthenticated>
         
         <SectionMain>
@@ -112,17 +131,17 @@ console.log(props.gamesEdit[0]);
                     <span><b class="capitalize">{{
                         formStatusOptions[formStatusCurrent]
                     }}</b>
-                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
+                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah user"}}</span>
                 </NotificationBarInCard>
                 <FormField label="Name">
-                    <FormControl v-model="form.name" :icon-left="mdiAccount" help="Game name" placeholder="Game name"
+                    <FormControl v-model="form.name" :icon-left="mdiAccount" help="User name" placeholder="User name"
+                        required />
+                </FormField>
+                 <FormField label="Email">
+                    <FormControl v-model="form.email" :icon-left="mdiAccount" help="User email" placeholder="User email"
                         required />
                 </FormField>
 
-                <FormField label="Price">
-                    <FormControl v-model="form.price" :icon-left="mdiAccount" help="Game Price" placeholder="Price"
-                        required />
-                </FormField>
 
                 <template #footer>
                     <BaseButton label="Trigger" type="submit" color="info" />
@@ -133,7 +152,7 @@ console.log(props.gamesEdit[0]);
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span>Tabel Game</span>
                 </NotificationBarInCard>
-                <datatablecomponent routeTo="games" :dataExcel="dataExcel" :dataFrom="gamesEdit" :form="form" :columns="columns">
+                <datatablecomponent routeTo="users" :dataExcel="dataExcel" :dataFrom="usersWithPassword" :form="form" :columns="columns">
                 </datatablecomponent>
             </CardBox>
         </SectionMain>

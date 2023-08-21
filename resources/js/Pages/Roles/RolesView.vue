@@ -24,14 +24,20 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["game"]);
+var props = defineProps(["roles", "rolesEdit"]);
 
-
+// Mendefinisikan konfigurasi untuk mengekspor data ke Excel
+const dataExcel = {
+    extend: "excel",
+    messageTop: "data Gameee",
+    exportOptions: {
+        columns: [0, 1, 2, 3, 4],
+    },
+};
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: props.game.name,
-    price:  props.game.price,
+    name: ""
 });
 
 // Membuat referensi reaktif untuk status form dengan header
@@ -54,44 +60,77 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formStatusSubmit = () => {
-    form.put(route('games.update', props.game.id))
+    form.post("/roles", {
+        preserveScroll: true,
+    });
 };
 
+// Mendefinisikan kolom-kolom untuk tabel data
 
+const columns = [
+    { data: "id" },
+    { data: "name" , render: data => data.toUpperCase() },
+    { data: "created_at", render: data => new Date(data).getFullYear() },
+    {
+        title: "aksi",
+        render: function (data, type, row) {
+            // Render tautan aksi edit dengan ID baris
+            return (
+                "<a class='table-edit' data-id='" + row.id + "' href='/roles/" + row.id + "/edit' >EDIT</a>"
+            );
+        },
+    },
+    {
+        title: "aksi",
+        render: function (data, type, row) {
+            // Render tautan aksi hapus dengan ID baris
+            return (
+                "<a class='table-edit' href='roles/delete/" + row.id + "'' method='delete' ) >HAPUS</a>"
+            );
+        },
+    },
+];
+
+// Menampilkan elemen pertama dari properti gamesEdit ke konsol
+// console.log(props.gamesEdit[0]);
 
 </script>
 
 <template>
 
-<AppHead :title="'Edit game '+game.id" />
+<AppHead title="Game" />
     <LayoutAuthenticated>
         
         <SectionMain>
             <SectionTitle>Form with status example</SectionTitle>
 
-            <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable
+            <CardBox is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span><b class="capitalize">{{
                         formStatusOptions[formStatusCurrent]
                     }}</b>
-                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
+                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah role"}}</span>
                 </NotificationBarInCard>
                 <FormField label="Name">
-                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="Game name" placeholder="Game name"
+                    <FormControl v-model="form.name" :icon-left="mdiAccount" help="Role name" placeholder="Role name"
                         required />
                 </FormField>
 
-                <FormField label="Price">
-                    <FormControl v-model="form.price" :icon-left="mdiAccount" help="Game Price" placeholder="Price"
-                        required />
-                </FormField>
+            
 
                 <template #footer>
-                    <BaseButton label="Trigger" type="submit" color="info" />
+                    <BaseButton label="Tambah" type="submit" color="info" />
                 </template>
             </CardBox>
-         
+            <CardBox class="mt-6">
+
+                <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
+                    <span>Tabel Game</span>
+                </NotificationBarInCard>
+                <datatablecomponent routeTo="roles" :dataExcel="dataExcel" :dataFrom="roles" :form="form" :columns="columns">
+                </datatablecomponent>
+            </CardBox>
         </SectionMain>
     </LayoutAuthenticated>
 </template>

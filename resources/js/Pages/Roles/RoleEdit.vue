@@ -24,14 +24,13 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["game"]);
+var props = defineProps(["role"]);
 
 
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: props.game.name,
-    price:  props.game.price,
+    name: props.role.name,
 });
 
 // Membuat referensi reaktif untuk status form dengan header
@@ -54,7 +53,7 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formStatusSubmit = () => {
-    form.put(route('games.update', props.game.id))
+    form.put(route('roles.update', props.role.id))
 };
 
 
@@ -63,7 +62,7 @@ const formStatusSubmit = () => {
 
 <template>
 
-<AppHead :title="'Edit game '+game.id" />
+<AppHead :title="'Edit role '+role.id" />
     <LayoutAuthenticated>
         
         <SectionMain>
@@ -82,10 +81,6 @@ const formStatusSubmit = () => {
                         required />
                 </FormField>
 
-                <FormField label="Price">
-                    <FormControl v-model="form.price" :icon-left="mdiAccount" help="Game Price" placeholder="Price"
-                        required />
-                </FormField>
 
                 <template #footer>
                     <BaseButton label="Trigger" type="submit" color="info" />

@@ -42,7 +42,7 @@ const submit = () => {
     <LayoutGuest>
         <Head title="Login" />
 
-        <SectionFullScreen v-slot="{ cardClass }" bg="">
+        <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
             <CardBox :class="cardClass" is-form @submit.prevent="submit">
                 <FormValidationErrors />
 

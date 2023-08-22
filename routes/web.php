@@ -35,7 +35,7 @@ Route::get('/gethtmlpage', [Controller::class, 'gethtmlpage'])->name('gethtmlpag
 
 
 //create route group
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified'  ])->group(function () {
 
   Route::get('/dashboard', function () {
     return Inertia::render('HomeView');
@@ -95,7 +95,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
   })->name('error');
 });
 
-Route::get('/cat',[Controller::class, 'cat'] );
+Route::get('/cat',[Controller::class, 'cat'] )->middleware('role:admin');
+Route::get('/getadmin',[Controller::class, 'getAdmin'] );
 
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -36,7 +36,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
     <LayoutGuest>
     <Head title="Email Verification" />
 
-    <SectionFullScreen v-slot="{ cardClass }" bg="pinkRed">
+    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
       <CardBox :class="cardClass" is-form @submit.prevent="submit">
         <FormValidationErrors />
 

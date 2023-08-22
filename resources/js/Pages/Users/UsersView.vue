@@ -73,6 +73,7 @@ const columns = [
     { data: "id" },
     { data: "name" },
     { data: "email" },
+    { data: "done_setup" },
     { data: "password" },
     {
         data: "created_at",
@@ -115,6 +116,21 @@ const columns = [
         },
     },
 ];
+
+const buttons_data =  ['copy', dataExcel, 'pdf',
+            {
+                text: 'Toggle action',
+                action: function (e, dt, node, config) {
+                    dt.column(-2).visible(!dt.column(-2).visible());
+                    dt.column(-1).visible(!dt.column(-1).visible());
+                }
+            }, {
+                text: 'Export doc',
+                action: function () {
+                    exportHTML();
+                }
+            }
+        ];
 </script>
 
 <template>
@@ -152,7 +168,7 @@ const columns = [
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span>Tabel Game</span>
                 </NotificationBarInCard>
-                <datatablecomponent routeTo="users" :dataExcel="dataExcel" :dataFrom="usersWithPassword" :form="form" :columns="columns">
+                <datatablecomponent :buttons_data="buttons_data" routeTo="users" :dataFrom="usersWithPassword" :form="form" :columns="columns">
                 </datatablecomponent>
             </CardBox>
         </SectionMain>

@@ -93,8 +93,21 @@ const columns = [
     },
 ];
 
-// Menampilkan elemen pertama dari properti gamesEdit ke konsol
-console.log(props.gamesEdit[0]);
+
+const buttons_data =  ['copy', dataExcel, 'pdf',
+            {
+                text: 'Toggle action',
+                action: function (e, dt, node, config) {
+                    dt.column(-2).visible(!dt.column(-2).visible());
+                    dt.column(-1).visible(!dt.column(-1).visible());
+                }
+            }, {
+                text: 'Export doc',
+                action: function () {
+                    exportHTML();
+                }
+            }
+        ];
 
 </script>
 
@@ -133,7 +146,7 @@ console.log(props.gamesEdit[0]);
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span>Tabel Game</span>
                 </NotificationBarInCard>
-                <datatablecomponent routeTo="games" :dataExcel="dataExcel" :dataFrom="gamesEdit" :form="form" :columns="columns">
+                <datatablecomponent :buttons_data="buttons_data" routeTo="games"  :dataFrom="gamesEdit" :form="form" :columns="columns">
                 </datatablecomponent>
             </CardBox>
         </SectionMain>

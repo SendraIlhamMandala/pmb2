@@ -28,7 +28,7 @@ let props = defineProps({
     routeTo: String,
     dataFrom: Object,
     columns: Object,
-    dataExcel: Object,
+    buttons_data: Object,
 });
 
 function exportHTML() {
@@ -85,20 +85,7 @@ function deleteSelectedRows() {
         select: true,
         scrollX: true,
         order: [],
-        buttons: ['copy', props.dataExcel, 'pdf',
-            {
-                text: 'Toggle action',
-                action: function (e, dt, node, config) {
-                    dt.column(-2).visible(!dt.column(-2).visible());
-                    dt.column(-1).visible(!dt.column(-1).visible());
-                }
-            }, {
-                text: 'Export doc',
-                action: function () {
-                    exportHTML();
-                }
-            }
-        ],
+        buttons: buttons_data,
         
     }">
         <thead>

@@ -48,6 +48,7 @@ const props = defineProps({
     borderless: Boolean,
     transparent: Boolean,
     ctrlKFocus: Boolean,
+  
 });
 
 const emit = defineEmits(["update:modelValue", "setRef"]);
@@ -123,6 +124,7 @@ if (props.ctrlKFocus) {
         mainStore.isFieldFocusRegistered = false;
     });
 }
+
 </script>
 
 <template>

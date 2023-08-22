@@ -43,4 +43,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    //has one DataPribadi
+    public function dataPribadi()   {
+        return $this->hasOne(DataPribadi::class);
+    }
+
 }

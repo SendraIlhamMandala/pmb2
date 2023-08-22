@@ -5,7 +5,10 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Models\DataPribadi;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,7 +30,7 @@ Route::get('/', function () {
     'laravelVersion' => Application::VERSION,
     'phpVersion' => PHP_VERSION,
   ]);
-});
+})->name('welcome');
 
 //get gethtmlpage fromcontroller
 Route::get('/gethtmlpage', [Controller::class, 'gethtmlpage'])->name('gethtmlpage');
@@ -35,7 +38,7 @@ Route::get('/gethtmlpage', [Controller::class, 'gethtmlpage'])->name('gethtmlpag
 
 
 //create route group
-Route::middleware(['auth', 'verified'  ])->group(function () {
+Route::middleware(['auth', 'verified' ])->group(function () {
 
   Route::get('/dashboard', function () {
     return Inertia::render('HomeView');
@@ -71,7 +74,7 @@ Route::middleware(['auth', 'verified'  ])->group(function () {
 
 
   Route::resource('users', UserController::class);
-
+  
 
   //inertia route style view
   Route::get('/styles', function () {
@@ -87,16 +90,36 @@ Route::middleware(['auth', 'verified'  ])->group(function () {
     return Inertia::render('ResponsiveView');
   })->name('responsive');
 
-
-
   //inertia route error view
   Route::get('/error', function () {
     return Inertia::render('ErrorView');
   })->name('error');
 });
 
-Route::get('/cat',[Controller::class, 'cat'] )->middleware('role:admin');
+Route::post('/data-pribadi/{id}', [UserController::class, 'setDataPribadi'])->name('user.set-data-pribadi');
+  Route::get('/data-pribadi', [UserController::class, 'indexDataPribadi'])->name('user.index-data-pribadi');
+
+Route::get('/cat',[Controller::class, 'cat'] )->middleware('setup');
 Route::get('/getadmin',[Controller::class, 'getAdmin'] );
+Route::get('/datapribadicek', function()  {
+
+  $user = Auth::user();
+  $dataPribadi = $user->dataPribadi;
+
+  $user_array = $user->toArray();
+  $user_array['dataPribadi'] = $dataPribadi;  
+
+  return Inertia::render('User/UserView', [
+    'user' => $user,
+    'dataPribadi' => $dataPribadi, 
+    'user_array' => $user_array
+  ]);
+} );
+
+Route::get('/link', function () {
+  Artisan::call('storage:link');
+});
+
 
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

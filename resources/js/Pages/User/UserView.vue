@@ -24,7 +24,7 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Define component properties
-var props = defineProps(["user","dataPribadi","user_array"]);
+var props = defineProps(["user"]);
 console.log(props.user);
 
 </script>

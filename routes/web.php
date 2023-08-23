@@ -101,7 +101,17 @@ Route::post('/data-pribadi/{id}', [UserController::class, 'setDataPribadi'])->na
 
 Route::get('/cat',[Controller::class, 'cat'] )->middleware('setup');
 Route::get('/getadmin',[Controller::class, 'getAdmin'] );
-Route::get('/datapribadicek', function()  { $user = Auth::user(); return Inertia::render('User/UserView', ['user' => $user,]);} );
+Route::get('/datapribadicek', function()  { 
+  $user = Auth::user();
+  $user->dataPribadi;
+
+  
+  
+
+  return Inertia::render('User/UserView', [
+    'user' => $user,
+  
+  ]);} );
 Route::get('/user-dashboard', function()  { return Inertia::render('User/IndexView');} );
 
 Route::get('/link', function () {

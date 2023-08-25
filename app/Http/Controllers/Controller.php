@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Response as HttpResponse;
@@ -9,6 +11,13 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 use mysqli;
+
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use Spatie\Permission\Models\Role;
 
@@ -59,14 +68,21 @@ class Controller extends BaseController
 
     }
 
+    function createAdmin()  {
+
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'user']);
+        return Role::all();
+    }
+
     function getAdmin()  {
         $role =  \Spatie\Permission\Models\Role::all();
         $user = Auth()->user();
         // $user->assignRole('admin');
         // Role::create(['name' => 'user']);
 
-        $user->syncRoles(['user', 'admin']);
+        $user->syncRoles(['admin']);
 
-        dd($user->roles);
+        dd($user->roles->pluck('name'));
     }
 }

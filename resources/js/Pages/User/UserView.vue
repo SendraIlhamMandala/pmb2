@@ -24,37 +24,78 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Define component properties
-var props = defineProps(["user"]);
+var props = defineProps(["user", "users"]);
 console.log(props.user);
+console.log(props.users);
 
 </script>
 
 <template>
+    <AppHead title="Users" />
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <!-- datecreated -->
+                <th>date created</th>
+                <th>foto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <!-- datecreated -->
+                <td>{{ new Date(user.created_at).toLocaleDateString() }}</td>
+                <td> <img v-if="!!user.data_pribadi" :src="'storage/avatar/' + user.data_pribadi.foto" alt="" width="100">
+                </td>
+            </tr>
+        </tbody>
 
-<AppHead title="Users" />
-<table>
-<thead>
-<tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Email</th>
-    <!-- datecreated -->
-    <th>date created</th>
-    <th>foto</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-    <td>{{ user.id }}</td>
-    <td>{{ user.name }}</td>
-    <td>{{ user.email }}</td>
-    <!-- datecreated -->
-    <td>{{ new Date(user.created_at).toLocaleDateString() }}</td>
-    <td> <img :src="'storage/avatar/'+user.data_pribadi.foto" alt="" width="100" > </td>
-</tr>
-</tbody>
+    </table>
 
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <!-- datecreated -->
+                <th>date created</th>
+                <th>foto</th>
+                <th>no ktp</th>
+                <th>nisn</th>
+                <th>tempat lahir</th>
+                <th>tanggal lahir</th>
+                <th>jenis kelamin</th>
+                <th>agama</th>
+                <th>ig</th>
+                <th>facebook</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="user2 in users" >
+                <td>{{ user2.id }}</td>
+                <td>{{ user2.name }}</td>
+                <td>{{ user2.email }}</td>
+                <!-- datecreated -->
+                <td>{{ new Date(user2.created_at).toLocaleDateString() }}</td>
+                <td> <img v-if="!!user2.data_pribadi" :src="'storage/avatar/' + user2.data_pribadi.foto" alt="" width="100"> </td>
+                <td>{{ user2.data_pribadi != null ? user2.data_pribadi.no_ktp : ''  }}</td>
+                <td>{{ user2.data_pribadi != null ? user2.data_pribadi.nisn : ''  }}</td>
+                <td>{{ user2.data_pribadi != null ? user2.data_pribadi.tempat_lahir : ''  }}</td>
+                <td>{{ user2.data_pribadi != null ? user2.data_pribadi.tanggal_lahir : ''  }}</td>
+                <td>{{ user2.data_pribadi != null ? user2.data_pribadi.jenis_kelamin : ''  }}</td>
+                <td>{{ user2.data_pribadi != null ? user2.data_pribadi.agama : ''  }}</td>
+                <td>{{ user2.data_pribadi != null ? user2.data_pribadi.ig : ''  }}</td>
+                <td>{{ user2.data_pribadi != null ? user2.data_pribadi.facebook : ''  }}</td>
+            </tr>
+        </tbody>
+
+    </table>
 </template>
 <style>
 @import "datatables.net-dt";

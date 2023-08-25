@@ -49,4 +49,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(DataPribadi::class);
     }
 
+    //has one alamat
+    public function alamat()   {
+        return $this->hasOne(Alamat::class);
+    }
+
+    //has one asal_sekolah
+    public function asalSekolah()   {
+        
+        return $this->hasOne(AsalSekolah::class);
+    }
+
+    //has one pindahan
+    public function pindahan()   {
+        
+        return $this->hasOne(Pindahan::class);
+    }
+
 }

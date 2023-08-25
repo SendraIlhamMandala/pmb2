@@ -24,14 +24,16 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["game"]);
+var props = defineProps(["user"]);
 
 
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: props.game.name,
-    price:  props.game.price,
+    name: props.user.name,
+    email:  props.user.email,
+    status: props.user.status,
+    done_setup: props.user.done_setup,
 });
 
 // Membuat referensi reaktif untuk status form dengan header
@@ -54,7 +56,7 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formStatusSubmit = () => {
-    form.put(route('games.update', props.game.id))
+    form.put(route('users.update', props.user.id))
 };
 
 
@@ -63,7 +65,7 @@ const formStatusSubmit = () => {
 
 <template>
 
-<AppHead :title="'Edit game '+game.id" />
+<AppHead :title="'Edit user '+user.id" />
     <LayoutAuthenticated>
         
         <SectionMain>
@@ -75,15 +77,25 @@ const formStatusSubmit = () => {
                     <span><b class="capitalize">{{
                         formStatusOptions[formStatusCurrent]
                     }}</b>
-                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
+                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah user"}}</span>
                 </NotificationBarInCard>
                 <FormField label="Name">
-                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="Game name" placeholder="Game name"
+                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="user name" placeholder="user name"
                         required />
                 </FormField>
 
-                <FormField label="Price">
-                    <FormControl v-model="form.price" :icon-left="mdiAccount" help="Game Price" placeholder="Price"
+                <FormField label="Email">
+                    <FormControl v-model="form.email" :icon-left="mdiAccount" help="user email" placeholder="email"
+                        required />
+                </FormField>
+
+                <FormField label="done_setup">
+                    <FormControl v-model="form.done_setup" :icon-left="mdiAccount" help="user done_setup" placeholder="done_setup"
+                        required />
+                </FormField>
+
+                <FormField label="status">
+                    <FormControl v-model="form.status" :icon-left="mdiAccount" help="user status" placeholder="status"
                         required />
                 </FormField>
 

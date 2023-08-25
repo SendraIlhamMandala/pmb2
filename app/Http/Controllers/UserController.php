@@ -76,15 +76,27 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // edit user
+        $user = User::find($id);
+        return Inertia::render('Users/UserEdit', [
+            'user' => $user,
+        ]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         //
+        $user = User::find($id);
+        // dd($request->all(), $user);
+
+        //update user
+        $user->update($request->all());
+        return redirect(route('users.index'));
+
     }
 
     /**
@@ -98,8 +110,10 @@ class UserController extends Controller
     //setDataPribadi
     public function setDataPribadi(Request $request, User $id): RedirectResponse
     {        
+        dd($request->all(),$request->alamat);
         $validator = Validator::make($request->all(), [
             'no_ktp' => 'required|numeric',
+            'nisn' => 'required|numeric',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
             'jenis_kelamin' => 'required',
@@ -123,15 +137,31 @@ class UserController extends Controller
         $request_without_foto['foto'] = $foto_name;
         $dataPribadi = new DataPribadi($request_without_foto);
         $user->dataPribadi()->save($dataPribadi);
+        $user->done_setup = 'jalur';
         $user->save();
-        return redirect(route('users.index'));
+        return redirect(route('user.data-jalur'));
     }
 
     //showDataPribadi
-    public function indexDataPribadi()
+    public function dataPribadi()
     {
+        if (Auth()->user()->done_setup == 'jalur') {
+            return redirect(route('user.data-jalur'));
+        }
         $user = Auth()->user();
-        return inertia('Users/UserDataPribadi', [
+        return inertia('User/UserDataPribadi', [
+            'user' => $user
+        ]);
+    }
+
+    public function dataJalur()
+    {
+        if (Auth()->user()->done_setup == 'not_done') {
+            return redirect(route('user.data-pribadi'));
+        }
+        
+        $user = Auth()->user();
+        return inertia('User/UserDataJalur', [
             'user' => $user
         ]);
     }

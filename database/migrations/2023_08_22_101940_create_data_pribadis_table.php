@@ -17,13 +17,16 @@ return new class extends Migration
             //user id
             $table->foreignIdFor(User::class);
             $table->string('no_ktp', 20);
+            $table->string('nisn');
             $table->text('tempat_lahir');
             $table->date('tanggal_lahir');
-            $table->string('jenis_kelamin', 20);
-            $table->string('agama', 10);
-            $table->string('ig', 300)->nullable();
-            $table->string('facebook', 300)->nullable();
+            $table->string('jenis_kelamin');
+            $table->string('agama');
+            $table->string('ig')->nullable();
+            $table->string('facebook')->nullable();
             $table->text('foto')->nullable();
+            $table->string('no_hp');
+
             $table->timestamps();
         });
     }

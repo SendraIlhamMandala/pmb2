@@ -49,7 +49,7 @@ const submit = () => {
                 <FormValidationErrors />
 
                 <FormField
-                    label="Name"
+                    label="Nama lengkap"
                     label-for="name"
                     help="Please enter your name"
                 >
@@ -94,7 +94,7 @@ const submit = () => {
                 </FormField>
 
                 <FormField
-                    label="Confirm Password"
+                    label="Ulangi password"
                     label-for="password_confirmation"
                     help="Please confirm your password"
                 >

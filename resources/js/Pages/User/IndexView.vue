@@ -1,7 +1,10 @@
 
 
 <template>
-    <section id="nav" >
+    <div class="bg-gray-50">
+
+    
+    <section id="nav"  >
         
         <nav class="fixed inset-x-0 z-50  px-4 py-4 flex justify-between items-center bg-gradient-to-r from-sky-500 to-green-500 ">
             <a class="text-3xl font-bold leading-none" href="#">
@@ -12,7 +15,7 @@
             <ul class="hidden   lg:flex lg:items-center  lg:space-x-2">
                 <!-- Menu Items -->
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white  " @click="scrollToSection('jadwal')">Jadwal Pendaftaran</a>
+                    <a class="text-sm text-white " @click="scrollToSection('jadwal')"> <p align="center" > Jadwal Pendaftaran</p></a>
                     
 
                 </li>
@@ -25,7 +28,7 @@
                 </li>
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
 
-                    <a class="text-sm text-white " href="#">Petunjuk Pendaftaran</a>
+                    <a class="text-sm text-white " @click="scrollToSection('petunjuk')"><p align="center" >Petunjuk Pendaftaran</p></a>
                 </li>
                 <li class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"
@@ -36,7 +39,7 @@
                 </li>
 
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " href="#">Jalur Seleksi</a>
+                    <a class="text-sm text-white " @click="scrollToSection('seleksi')"><p align="center" >Jalur Seleksi</p></a>
                 </li>
                 <li class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"
@@ -47,7 +50,7 @@
                 </li>
 
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " href="#">Beasiswa</a>
+                    <a class="text-sm text-white " @click="scrollToSection('beasiswa')"><p align="center" >Beasiswa</p></a>
                 </li>
                 <li class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"
@@ -58,7 +61,7 @@
                 </li>
 
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " href="#">Program Studi</a>
+                    <a class="text-sm text-white " href="#"><p align="center" >Program Studi</p></a>
                 </li>
                 <li class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"
@@ -69,16 +72,31 @@
                 </li>
 
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " href="#">Hasil tes</a>
+                    <a class="text-sm text-white " href="#"><p align="center" >Hasil tes</p></a>
                 </li>
             </ul>
 
+            
             <div class="lg:flex">
+<div v-if="canLogin" class="">
+            <Link
+                v-if="$page.props.auth.user"
+                :href="route('dashboard')"
+                class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                >Dashboard
+            </Link>
+               
 
-                <a class="hidden lg:inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-500 hover:text-white text-sm font-bold rounded-xl transition duration-200"
-                    href="#">login</a>
-                <a class="hidden lg:inline-block py-2 px-6 border border-white text-white hover:bg-white hover:text-green-500 text-sm font-bold rounded-xl transition duration-200"
-                    href="#">Daftar</a>
+
+
+            <div v-else>
+                <a class="hidden lg:inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                    href="/login">login</a>
+                <a class="hidden lg:inline-block py-2 px-6 border bg-green-400 border-white text-white hover:bg-white hover:text-green-500 text-sm font-bold rounded-xl transition duration-200"
+                    href="/register">Daftar</a>
+            </div>
+        </div>
+
                 <div class="lg:hidden">
                     <button class="navbar-burger flex items-center text-white p-3" @click="toggleMenu">
                         <svg class="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -104,25 +122,25 @@
                 <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
 
                     <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                        href="#">Petunjuk Pendaftaran</a>
+                    @click="scrollToSection('petunjuk')">Petunjuk Pendaftaran</a>
                 </li>
 
 
                 <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
-                    <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded" href="#">Jalur
+                    <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded" @click="scrollToSection('seleksi')">Jalur
                         Seleksi</a>
                 </li>
 
                 <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
 
                     <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                        href="#">Beasiswa</a>
+                    @click="scrollToSection('beasiswa')">Beasiswa</a>
                 </li>
 
 
                 <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
                     <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                        href="#">Program Studi</a>
+                    @click="scrollToSection('program_studi')">Program Studi</a>
                 </li>
 
 
@@ -135,14 +153,16 @@
     </section>
 
 
-    <section class="pt-24 pb-12 flex justify-center" id="features">
+    <section class="pt-24 pb-12 flex items-stretch justify-center  " id="pengumuman">
         <div class="container">
+
+            
             <div class="row">
                 <div class="col">
                     <h2 class="display-4 text-center font-semibold">Lorem ipsum dolor sit amet</h2>
                 </div>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 grid-rows-1 gap-4  ">
+            <div class="grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-3 grid-rows-1 gap-4  ">
 
                 <div class="col md:w-10/12  mx-auto my-6">
                     <div class="rounded overflow-hidden">
@@ -171,10 +191,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col md:w-10/12  mx-auto my-6">
+                <div class="col md:w-10/12 self-auto mx-auto my-6">
                     <div class="rounded overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img class=" shadow-lg " src="image/aab.png" alt="phone feature 1" loading="lazy" />
+                            <img class=" shadow-lg " src="storage/avatar/2023-08-22fisip.png" alt="phone feature 1" loading="lazy" />
                             <div class="w-full h-full">
                                 <div class="z-index:-1 relative">
                                     <div class="absolute bg-blue rounded-full w-[120px] h-[120px] left-[-30px] top-[-10px]">
@@ -230,12 +250,13 @@
             </div>
         </div>
     </section>
+
     <section id="jadwal" ref="jadwal" >
 
-        <div class="w-1/2 justify-center mx-auto ">
-        <div class="mb-10 overflow-hidden rounded-lg bg-white">
+        <div class="w-5/6 justify-start    mx-auto ">
+        <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
           <img
-            src="https://cdn.tailgrids.com/2.0/image/application/images/cards/card-01/image-01.jpg"
+            src="image/jadwal.png"
             alt="image"
             class="w-full"
           />
@@ -243,14 +264,17 @@
             <h3>
               <a
                 href="javascript:void(0)"
-                class="text-dark hover:text-primary mb-4 block text-xl font-semibold sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px]"
+                class="text-dark justify-start  hover:text-primary mb-4 block text-xl font-semibold sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px]"
               >
-                50+ Best creative website themes & templates
+                Jadwal pendaftaran 2024
               </a>
             </h3>
-            <p class="text-body-color mb-7 text-base leading-relaxed">
-              Lorem ipsum dolor sit amet pretium consectetur adipiscing elit.
-              Lorem consectetur adipiscing elit.
+            <p class="text-body-color mb-7 " >
+              <ul class="text-left">
+                <li> Jadwal Pendaftaran </li>
+                <li> Jadwal Seleksi </li>
+                <li> Jadwal Tes </li>
+              </ul>
             </p>
             <a
               href="javascript:void(0)"
@@ -263,6 +287,39 @@
       </div>
     </section>
 
+    <section id="petunjuk" ref="petunjuk" >
+
+<div class="w-5/6 justify-start    mx-auto ">
+<div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
+  <img
+    src="image/petunjuk.jpg"
+    alt="image"
+    class="w-full"
+  />
+  <div class="p-8 text-center sm:p-9 md:p-7 xl:p-9">
+    <h3>
+      <a
+        href="javascript:void(0)"
+        class="text-dark justify-start  hover:text-primary mb-4 block text-xl font-semibold sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px]"
+      >
+        
+      </a>
+    </h3>
+    <img
+    src="image/petunjuk_daftar.jpg"
+    alt="image"
+    class="w-full"
+  />
+    <a
+      href="javascript:void(0)"
+      class="text-body-color hover:border-primary hover:bg-primary inline-block rounded-full border border-[#E5E7EB] py-2 px-7 text-base font-medium transition hover:text-white"
+    >
+      View Details
+    </a>
+  </div>
+</div>
+</div>
+</section>
 
     <footer class="footer" ref="footer" >
         <div class="mx-auto max-w-screen-xl px-4 pt-16 pb-8 sm:px-6 lg:px-8 justify-center">
@@ -296,7 +353,7 @@
                             <li>
 
                                 <a href="#" class="text-gray-700 transition hover:opacity-75">
-                                    <BaseIcon :path="mdiWhatsapp" class="text-blue-500 " />
+                                    <BaseIcon :path="mdiWhatsapp" class="text-green-500 " />
                                     +6282219291520
                                 </a>
                             </li>
@@ -393,7 +450,7 @@
             </div>
         </div>
     </footer>
-    
+</div>    
 </template>
   
 <script setup>
@@ -402,15 +459,24 @@
 import BaseIcon from "@/components/BaseIcon.vue";
 
 import { mdiWhatsapp, mdiCellphone, mdiEmail, mdiGithub } from "@mdi/js";
+import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+const props = defineProps({
+    canLogin: {
+        type: Boolean,
+    },
+    canRegister: {
+        type: Boolean,
+    }
+});
 
+console.log(props.canLogin);
 const screenWidth = ref(window.innerWidth);
 const screenHeight = ref(window.innerHeight);
 
 const updateScreenSize = () => {
   screenWidth.value = window.innerWidth;
   screenHeight.value = window.innerHeight;
-  console.log(screenWidth.value, screenHeight.value);
 };
 
 onMounted(() => {
@@ -428,7 +494,8 @@ const toggleMenu = () => {
 
 const footer = ref(null);
 const jadwal = ref(null);
-var sect = { 'footer' : footer, 'jadwal': jadwal };
+const petunjuk = ref(null);
+var sect = { 'footer' : footer, 'jadwal': jadwal, 'petunjuk': petunjuk };
 
 console.log(sect);
 const scrollToSection = (key) => {

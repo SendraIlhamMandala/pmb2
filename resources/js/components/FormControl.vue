@@ -167,6 +167,7 @@ if (props.ctrlKFocus) {
             :placeholder="placeholder"
             :type="computedType"
             :class="inputElClass"
+            min="0"
         />
         <FormControlIcon v-if="icon" :icon="icon" :h="controlIconH" />
     </div>

@@ -36,13 +36,10 @@ Route::get('/', function () {
 Route::get('/gethtmlpage', [Controller::class, 'gethtmlpage'])->name('gethtmlpage');
 
 
-
 //create route group
-Route::middleware(['auth', 'verified' ])->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
-  Route::get('/dashboard', function () {
-    return Inertia::render('HomeView');
-  })->name('dashboard');
+
 
   Route::get('/tables', function () {
     return Inertia::render('TablesView');
@@ -74,7 +71,7 @@ Route::middleware(['auth', 'verified' ])->group(function () {
 
 
   Route::resource('users', UserController::class);
-  
+
 
   //inertia route style view
   Route::get('/styles', function () {
@@ -96,23 +93,46 @@ Route::middleware(['auth', 'verified' ])->group(function () {
   })->name('error');
 });
 
-Route::post('/data-pribadi/{id}', [UserController::class, 'setDataPribadi'])->name('user.set-data-pribadi');
-  Route::get('/data-pribadi', [UserController::class, 'indexDataPribadi'])->name('user.index-data-pribadi');
+Route::middleware('auth', 'verified')->group(function () {
 
-Route::get('/cat',[Controller::class, 'cat'] )->middleware('setup');
-Route::get('/getadmin',[Controller::class, 'getAdmin'] );
-Route::get('/datapribadicek', function()  { 
-  $user = Auth::user();
-  $user->dataPribadi;
+  Route::get('/dashboard', function () {
 
-  
-  
+    if (Auth::user()->roles->first()->name == 'user') {
+      return redirect()->route('user.data-pribadi');
+    }
 
-  return Inertia::render('User/UserView', [
-    'user' => $user,
-  
-  ]);} );
-Route::get('/user-dashboard', function()  { return Inertia::render('User/IndexView');} );
+    return Inertia::render('HomeView');
+  })->name('dashboard');
+
+  Route::post('/data-pribadi/{id}', [UserController::class, 'setDataPribadi'])->name('user.set-data-pribadi');
+  Route::get('/data-pribadi', [UserController::class, 'dataPribadi'])->name('user.data-pribadi');
+  Route::get('/data-jalur', [UserController::class, 'dataJalur'])->name('user.data-jalur');
+
+  Route::get('/cat', [Controller::class, 'cat']);
+  Route::get('/getadmin', [Controller::class, 'getAdmin']);
+  Route::get('/createadmin', [Controller::class, 'createAdmin']);
+  Route::get('/datapribadicek', function () {
+
+    $user = Auth::user();
+    $user->dataPribadi;
+    $users = App\Models\User::all();
+    $users->load('dataPribadi');
+
+    return Inertia::render('User/UserView', [
+      'user' => $user,
+      'users' => $users
+    ]);
+  });
+});
+
+Route::get('/user-dashboard', function () {
+  return Inertia::render('User/IndexView', [
+    'canLogin' => Route::has('login'),
+    'canRegister' => Route::has('register'),
+    'laravelVersion' => Application::VERSION,
+    'phpVersion' => PHP_VERSION,
+  ]);
+});
 
 Route::get('/link', function () {
   Artisan::call('storage:link');

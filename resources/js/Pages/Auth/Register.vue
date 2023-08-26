@@ -51,7 +51,7 @@ const submit = () => {
                 <FormField
                     label="Nama lengkap"
                     label-for="name"
-                    help="Please enter your name"
+                    help="Masukkan nama lengkap anda"
                 >
                     <FormControl
                         v-model="form.name"
@@ -66,7 +66,7 @@ const submit = () => {
                 <FormField
                     label="Email"
                     label-for="email"
-                    help="Please enter your email"
+                    help="Masukkan email anda"
                 >
                     <FormControl
                         v-model="form.email"
@@ -81,7 +81,7 @@ const submit = () => {
                 <FormField
                     label="Password"
                     label-for="password"
-                    help="Please enter new password"
+                    help="Masukkan password"
                 >
                     <FormControl
                         v-model="form.password"
@@ -96,7 +96,7 @@ const submit = () => {
                 <FormField
                     label="Ulangi password"
                     label-for="password_confirmation"
-                    help="Please confirm your password"
+                    help="Ulangi password"
                 >
                     <FormControl
                         v-model="form.password_confirmation"

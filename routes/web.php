@@ -109,14 +109,13 @@ Route::middleware('auth', 'verified')->group(function () {
   Route::get('/data-jalur', [UserController::class, 'dataJalur'])->name('user.data-jalur');
 
   Route::get('/cat', [Controller::class, 'cat']);
-  Route::get('/getadmin', [Controller::class, 'getAdmin']);
-  Route::get('/createadmin', [Controller::class, 'createAdmin']);
   Route::get('/datapribadicek', function () {
 
     $user = Auth::user();
     $user->dataPribadi;
     $users = App\Models\User::all();
     $users->load('dataPribadi');
+    $users->load('asalSekolah');
 
     return Inertia::render('User/UserView', [
       'user' => $user,
@@ -134,6 +133,8 @@ Route::get('/user-dashboard', function () {
   ]);
 });
 
+Route::get('/getadmin', [Controller::class, 'getAdmin']);
+Route::get('/createadmin', [Controller::class, 'createAdmin']);
 Route::get('/link', function () {
   Artisan::call('storage:link');
 });

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { mdiBallotOutline, mdiAccount, mdiMail, mdiGithub } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -35,17 +35,46 @@ const handleFileChange = (event) => {
 };
 
 
+const previewImageSKHUN = ref('');
+
+const handleFileChangeSKHUN = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImageSKHUN.value = e.target.result;
+        };
+        reader.readAsDataURL(selectedFile);
+    }
+};
+
+
+
+
+const previewImageIjazah = ref('');
+
+const handleFileChangeIjazah = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImageIjazah.value = e.target.result;
+        };
+        reader.readAsDataURL(selectedFile);
+    }
+};
+
 // Impor library DataTables
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
 var props = defineProps(["game", "user", "errors"]);
 
-const selectOptions = ["Laki - Laki",
-    "Perempuan"
-];
+const selectOptionsKelamin = ["Laki - Laki", "Perempuan"];
+const selectOptionsPekerjaan = ["PNS", "TNI / Polri", "BUMN / BUMD ", "Wiraswasta", "lainnya"];
 
-
+var pilihan_pekerjaan_ibu = ref();
+var pilihan_pekerjaan_ayah = ref();
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
@@ -54,11 +83,11 @@ const form = useForm({
         nisn: '',
         tempat_lahir: '',
         tanggal_lahir: '',
-        jenis_kelamin: selectOptions[0],
+        jenis_kelamin: selectOptionsKelamin[0],
         agama: '',
         ig: '',
         facebook: '',
-        avatar: null,
+        foto: null,
         no_hp: '',
     },
     alamat: {
@@ -69,9 +98,35 @@ const form = useForm({
         provinsi: '',
         kodepos: '',
 
+    },
+    sekolah: {
+        nama_sekolah: '',
+        alamat_sekolah: '',
+        tahun_lulus: '',
+        jurusan: '',
+        nilai_skhun: '',
+    },
+    orangtua: {
+        nama_ayah: '',
+        ktp_ayah: '',
+        tempat_lahir_ayah: '',
+        tanggal_lahir_ayah: '',
+        no_hp_ayah: '',
+        pekerjaan_ayah: '',
+        penghasilan_ayah: '',
+        nama_ibu: '',
+        ktp_ibu: '',
+        tempat_lahir_ibu: '',
+        tanggal_lahir_ibu: '',
+        no_hp_ibu: '',
+        pekerjaan_ibu: '',
+        penghasilan_ibu: '',
+
     }
 
 });
+
+
 
 // Membuat referensi reaktif untuk status form dengan header
 const formStatusWithHeader = ref(true);
@@ -101,14 +156,36 @@ function readURL(input) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-            $('#avatar')
+            $('#foto')
                 .attr('src', e.target.result);
         };
 
         reader.readAsDataURL(input.files[0]);
     }
 }
+watch(pilihan_pekerjaan_ibu, (newCount) => {
+    // yes, console.log() is a side effect
+    if (newCount != 'lainnya') {
 
+        form.orangtua.pekerjaan_ibu = newCount
+    } else {
+        form.orangtua.pekerjaan_ibu = ''
+    }
+
+    console.log(`new pilihan pekerjaan ibu is: ${newCount}`)
+})
+
+watch(pilihan_pekerjaan_ayah, (newCount) => {
+    // yes, console.log() is a side effect
+    if (newCount != 'lainnya') {
+
+        form.orangtua.pekerjaan_ayah = newCount
+    } else {
+        form.orangtua.pekerjaan_ayah = ''
+    }
+
+    console.log(`new pilihan pekerjaan ayah is: ${newCount}`)
+})
 console.log();
 </script>
 
@@ -119,50 +196,58 @@ console.log();
         <SectionMain>
             <SectionTitle>masukkan data</SectionTitle>
 
-            <div className="grid grid-cols-1 grid-rows-1 md:grid-cols-2 md:grid-rows-2   ">
 
-                <div className="grid grid-cols-1 gap-1">
 
-                    <CardBox class=" shadow-2xl md:mx-auto mx-auto w-11/12 h-full " is-form is-hoverable
-                        @submit.prevent="formSubmit">
-                        <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                            <span>
-                                {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data pribadi" }}</span>
-                        </NotificationBarInCard>
+            <CardBox class=" shadow-2xl md:mx-auto mx-auto h-full " is-form is-hoverable @submit.prevent="formSubmit">
+
+                <div className="grid md:grid-cols-2  gap-8">
+                    <div class="row-span-2">
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data pribadi" }}</span>
+                            </NotificationBarInCard>
+                        </div>
                         <FormField label="Foto">
                             <div class="grid grid-cols-3 gap-4">
                                 <div v-if="previewImage">
 
 
-                                    <img  :src="previewImage" alt="Preview Avatar" />
+                                    <img :src="previewImage" alt="Preview foto" />
                                 </div>
-                                <div v-else  >
-                                    <img class="shrink" :src="'https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=6&m=1223671392&s=170667a&w=0&h=zP3l7WJinOFaGb2i1F4g8IS2ylw0FlIaa6x3tP9sebU='"
+                                <div v-else>
+                                    <img class="shrink"
+                                        :src="'https://media.istockphoto.com/vectors/default-profile-picture-foto-photo-placeholder-vector-illustration-vector-id1223671392?k=6&m=1223671392&s=170667a&w=0&h=zP3l7WJinOFaGb2i1F4g8IS2ylw0FlIaa6x3tP9sebU='"
                                         alt="" />
                                 </div>
                                 <div class="grid grid-row-2 gap-4 col-span-2 ">
                                     <div class=" text-2xl">{{ user.name[0].toUpperCase() + user.name.slice(1) }}</div>
                                     <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChange"
-                                        @input="form.dataPribadi.avatar = $event.target.files[0]" label="Upload"
+                                        @input="form.dataPribadi.foto = $event.target.files[0]" label="Upload"
                                         class="w-full" />
 
-                                    <!-- <input type="file" @input="form.dataPribadi.avatar = $event.target.files[0]" /> -->
+                                    <!-- <input type="file" @input="form.dataPribadi.foto = $event.target.files[0]" /> -->
                                     <progress v-if="form.dataPribadi.progress" :value="form.dataPribadi.progress.percentage"
                                         max="100">
                                         {{ form.dataPribadi.progress.percentage }}%
                                     </progress>
-                                    <p>{{ errors.avatar }}</p>
+                                    <p>{{ errors.foto }}</p>
                                 </div>
                             </div>
 
                         </FormField>
-                    </CardBox>
-                    <CardBox class=" shadow-2xl md:mx-auto mx-auto w-11/12 mt-4 " is-form is-hoverable
-                        @submit.prevent="formSubmit">
-                        <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                            <span>
-                                {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data pribadi" }}</span>
-                        </NotificationBarInCard>
+
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data pribadi" }}</span>
+                            </NotificationBarInCard>
+                        </div>
                         <FormField label="No KTP">
                             <FormControl v-model="form.dataPribadi.no_ktp" type="number" class=" appearance-none"
                                 placeholder="No KTP" required />
@@ -185,7 +270,7 @@ console.log();
                         </FormField>
 
                         <FormField label="jenis_kelamin">
-                            <FormControl v-model="form.dataPribadi.jenis_kelamin" :options="selectOptions" />
+                            <FormControl v-model="form.dataPribadi.jenis_kelamin" :options="selectOptionsKelamin" />
                             <p>{{ errors.jenis_kelamin }}</p>
                         </FormField>
 
@@ -205,104 +290,275 @@ console.log();
                         </FormField>
 
                         <FormField label="No telepon aktif">
-                            <FormControl v-model="form.dataPribadi.no_hp" type="number" placeholder="No telepon aktif" />
+                            <FormControl v-model="form.dataPribadi.no_hp" type="number" placeholder="No telepon aktif"
+                                required />
                             <p>{{ errors.no_hp }}</p>
+                        </FormField>
+                    </div>
+                    <div>
+                        <!-- Repeat similar code for other fields -->
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data Alamat" }}</span>
+                            </NotificationBarInCard>
+                        </div>
+                        <FormField label="Alamat">
+                            <FormControl v-model="form.alamat.alamat" type="text" placeholder="Alamat" required />
+                            <p>{{ errors.alamat }}</p>
+                        </FormField>
+
+                        <FormField label="Kelurahan">
+                            <FormControl v-model="form.alamat.kelurahan" type="text" placeholder="Kelurahan" required />
+                            <p>{{ errors.kelurahan }}</p>
+                        </FormField>
+
+                        <FormField label="Kecamatan">
+                            <FormControl v-model="form.alamat.kecamatan" type="text" placeholder="Kecamatan" required />
+                            <p>{{ errors.kecamatan }}</p>
+                        </FormField>
+
+                        <FormField label="Kabupaten">
+                            <FormControl v-model="form.alamat.kabupaten" type="text" placeholder="Kabupaten" required />
+                            <p>{{ errors.kabupaten }}</p>
+                        </FormField>
+
+                        <FormField label="Provinsi">
+                            <FormControl v-model="form.alamat.provinsi" type="text" placeholder="Provinsi" required />
+                            <p>{{ errors.provinsi }}</p>
+                        </FormField>
+
+                        <FormField label="Kode pos">
+                            <FormControl v-model="form.alamat.kodepos" type="text" placeholder="Kode pos" required />
+                            <p>{{ errors.kodepos }}</p>
+                        </FormField>
+
+                    </div>
+                    <div>
+
+                        <!-- Repeat similar code for other fields -->
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data sekolah" }}</span>
+                            </NotificationBarInCard>
+                        </div>
+                        <FormField label="Nama Sekolah">
+                            <FormControl v-model="form.sekolah.nama_sekolah" type="text" placeholder="nama sekolah"
+                                required />
+                            <p>{{ errors.nama_sekolah }}</p>
+                        </FormField>
+
+                        <FormField label="Alamat sekolah">
+                            <FormControl v-model="form.sekolah.alamat_sekolah" type="text" placeholder="alamat sekolah"
+                                required />
+                            <p>{{ errors.alamat_sekolah }}</p>
+                        </FormField>
+
+                        <FormField label="Tahun lulus">
+                            <FormControl v-model="form.sekolah.tahun_lulus" type="text" placeholder="Tahun lulus"
+                                required />
+                            <p>{{ errors.tahun_lulus }}</p>
+                        </FormField>
+
+                        <FormField label="Jurusan">
+                            <FormControl v-model="form.sekolah.jurusan" type="text" placeholder="jurusan" required />
+                            <p>{{ errors.jurusan }}</p>
+                        </FormField>
+
+                        <!-- <FormField label="SKHUN (Sertifikat Hasil Ujian Nasional)">
+                            <FormControl v-model="form.sekolah.nilai_skhun" type="text" placeholder="nilai_skhun" required />
+                            <p>{{ errors.nilai_skhun }}</p>
+                        </FormField> -->
+
+                        <FormField label="Nilai SKHUN (sertifkat hasil ujian nasional) ">
+                            <FormControl v-model="form.sekolah.nilai_skhun" type="text" placeholder="nilai_skhun"
+                                required />
+                            <p>{{ errors.nilai_skhun }}</p>
+                        </FormField>
+                        <div class="flex gap-4 " >
+
+                        <FormField label="SKHUN" class=" justify-center ">
+
+                            <div class="">
+                                <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeSKHUN"
+                                    @input="form.sekolah.skhun = $event.target.files[0]" label="Upload"
+                                    class="w-full" />
+                                <progress v-if="form.sekolah.progress" :value="form.sekolah.progress.percentage" max="100">
+                                    {{ form.sekolah.progress.percentage }}%
+                                </progress>
+                                <p>{{ errors.foto }}</p>
+                            </div>
+                            <div v-if="previewImageSKHUN">
+                                <img width="100" height="100" :src="previewImageSKHUN" alt="Preview foto" />
+                            </div>
+                            <div v-else>
+                            </div>
+
+                        </FormField>
+
+                        <FormField label="Ijazah" class=" justify-center ">
+
+                            <div class="">
+                                <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeIjazah"
+                                    @input="form.sekolah.ijazah = $event.target.files[0]" label="Upload"
+                                    class="w-full" />
+                                <progress v-if="form.sekolah.progress" :value="form.sekolah.progress.percentage" max="100">
+                                    {{ form.sekolah.progress.percentage }}%
+                                </progress>
+                                <p>{{ errors.foto }}</p>
+                            </div>
+                            <div v-if="previewImageIjazah">
+                                <img width="100" height="100" :src="previewImageIjazah" alt="Preview foto" />
+                            </div>
+                            <div v-else>
+                            </div>
+
+                        </FormField>
+                    </div>
+
+
+                    </div>
+                    <div>
+
+                        <!-- Repeat similar code for other fields -->
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data orangtua / wali (ayah)"
+                                    }}</span>
+                            </NotificationBarInCard>
+                        </div>
+                        <FormField label="Nama Ayah">
+                            <FormControl v-model="form.orangtua.nama_ayah" type="text" placeholder="Nama Ayah" required />
+                            <p>{{ errors.nama_ayah }}</p>
+                        </FormField>
+
+                        <FormField label="KTP Ayah">
+                            <FormControl v-model="form.orangtua.ktp_ayah" type="text" placeholder="KTP Ayah" required />
+                            <p>{{ errors.ktp_ayah }}</p>
+                        </FormField>
+
+                        <FormField label="Tempat Lahir Ayah">
+                            <FormControl v-model="form.orangtua.tempat_lahir_ayah" type="text"
+                                placeholder="Tempat Lahir Ayah" required />
+                            <p>{{ errors.tempat_lahir_ayah }}</p>
+                        </FormField>
+
+                        <FormField label="Tanggal Lahir Ayah">
+                            <FormControl v-model="form.orangtua.tanggal_lahir_ayah" type="date"
+                                placeholder="Tanggal Lahir Ayah" required />
+                            <p>{{ errors.tanggal_lahir_ayah }}</p>
+                        </FormField>
+
+                        <FormField label="No. HP Ayah">
+                            <FormControl v-model="form.orangtua.no_hp_ayah" type="tel" placeholder="No. HP Ayah" required />
+                            <p>{{ errors.no_hp_ayah }}</p>
+                        </FormField>
+
+                        <FormField label="Pekerjaan ayah">
+                            <FormControl v-model="pilihan_pekerjaan_ayah" :options="selectOptionsPekerjaan" required />
+                        </FormField>
+
+                        <FormField v-if="pilihan_pekerjaan_ayah == 'lainnya'" label="Pekerjaan ayah">
+                            <FormControl v-model="form.orangtua.pekerjaan_ayah" type="text" placeholder="Pekerjaan ayah"
+                                required />
+                            <p>{{ errors.pekerjaan_ayah }}</p>
+                        </FormField>
+
+                        <FormField label="Penghasilan Ayah">
+                            <FormControl v-model="form.orangtua.penghasilan_ayah" type="number"
+                                placeholder="Penghasilan Ayah" required />
+                            <p>{{ errors.penghasilan_ayah }}</p>
                         </FormField>
 
 
 
+                    </div>
+                    <div>
+
                         <!-- Repeat similar code for other fields -->
-                    </CardBox>
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data orangtua / wali (ibu)"
+                                    }}</span>
+                            </NotificationBarInCard>
+                        </div>
+
+                        <FormField label="Nama Ibu">
+                            <FormControl v-model="form.orangtua.nama_ibu" type="text" placeholder="Nama Ibu" required />
+                            <p>{{ errors.nama_ibu }}</p>
+                        </FormField>
+
+                        <FormField label="KTP Ibu">
+                            <FormControl v-model="form.orangtua.ktp_ibu" type="text" placeholder="KTP Ibu" required />
+                            <p>{{ errors.ktp_ibu }}</p>
+                        </FormField>
+
+                        <FormField label="Tempat Lahir Ibu">
+                            <FormControl v-model="form.orangtua.tempat_lahir_ibu" type="text" placeholder="Tempat Lahir Ibu"
+                                required />
+                            <p>{{ errors.tempat_lahir_ibu }}</p>
+                        </FormField>
+
+                        <FormField label="Tanggal Lahir Ibu">
+                            <FormControl v-model="form.orangtua.tanggal_lahir_ibu" type="date"
+                                placeholder="Tanggal Lahir Ibu" required />
+                            <p>{{ errors.tanggal_lahir_ibu }}</p>
+                        </FormField>
+
+                        <FormField label="No. HP Ibu">
+                            <FormControl v-model="form.orangtua.no_hp_ibu" type="tel" placeholder="No. HP Ibu" required />
+                            <p>{{ errors.no_hp_ibu }}</p>
+                        </FormField>
+
+
+                        <FormField label="Pekerjaan Ibu">
+                            <FormControl v-model="pilihan_pekerjaan_ibu" :options="selectOptionsPekerjaan" required />
+                        </FormField>
+
+                        <FormField v-if="pilihan_pekerjaan_ibu == 'lainnya'" label="Pekerjaan Ibu">
+                            <FormControl v-model="form.orangtua.pekerjaan_ibu" type="text" placeholder="Pekerjaan Ibu"
+                                required />
+                            <p>{{ errors.pekerjaan_ibu }}</p>
+                        </FormField>
+
+
+
+                        <FormField label="Penghasilan Ibu">
+                            <FormControl v-model="form.orangtua.penghasilan_ibu" type="number" placeholder="Penghasilan Ibu"
+                                required />
+                            <p>{{ errors.penghasilan_ibu }}</p>
+                        </FormField>
+
+
+
+                    </div>
+                    <div>11</div>
                 </div>
 
 
 
-                <CardBox class=" shadow-2xl md:mx-auto mx-auto w-11/12 mt-4" is-form is-hoverable @submit.prevent="formSubmit">
-                    <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                        <span>
-                            {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data alamat" }}</span>
-                    </NotificationBarInCard>
-                    <FormField label="Alamat">
-                        <FormControl v-model="form.alamat.alamat" type="text" placeholder="Alamat" required />
-                        <p>{{ errors.alamat }}</p>
-                    </FormField>
-
-                    <FormField label="Kelurahan">
-                        <FormControl v-model="form.alamat.kelurahan" type="text" placeholder="Kelurahan" required />
-                        <p>{{ errors.kelurahan }}</p>
-                    </FormField>
-
-                    <FormField label="Kecamatan">
-                        <FormControl v-model="form.alamat.kecamatan" type="text" placeholder="Kecamatan" required />
-                        <p>{{ errors.kecamatan }}</p>
-                    </FormField>
-
-                    <FormField label="Kabupaten">
-                        <FormControl v-model="form.alamat.kabupaten" type="text" placeholder="Kabupaten" required />
-                        <p>{{ errors.kabupaten }}</p>
-                    </FormField>
-
-                    <FormField label="Provinsi">
-                        <FormControl v-model="form.alamat.provinsi" type="text" placeholder="Provinsi" required />
-                        <p>{{ errors.provinsi }}</p>
-                    </FormField>
-
-                    <FormField label="Kode pos">
-                        <FormControl v-model="form.alamat.kodepos" type="text" placeholder="Kode pos" required />
-                        <p>{{ errors.kodepos }}</p>
-                    </FormField>
 
 
-                    <!-- Repeat similar code for other fields -->
+                <!-- Repeat similar code for other fields -->
 
-                    <template #footer>
-                        <BaseButton label="Trigger" type="submit" color="info" />
-                    </template>
-                </CardBox>
-
-                <CardBox class=" shadow-2xl md:mx-auto mx-auto w-11/12 mt-4" is-form is-hoverable @submit.prevent="formSubmit">
-                    <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                        <span>
-                            {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data alamat" }}</span>
-                    </NotificationBarInCard>
-                    <FormField label="Alamat">
-                        <FormControl v-model="form.alamat.alamat" type="text" placeholder="Alamat" required />
-                        <p>{{ errors.alamat }}</p>
-                    </FormField>
-
-                    <FormField label="Kelurahan">
-                        <FormControl v-model="form.alamat.kelurahan" type="text" placeholder="Kelurahan" required />
-                        <p>{{ errors.kelurahan }}</p>
-                    </FormField>
-
-                    <FormField label="Kecamatan">
-                        <FormControl v-model="form.alamat.kecamatan" type="text" placeholder="Kecamatan" required />
-                        <p>{{ errors.kecamatan }}</p>
-                    </FormField>
-
-                    <FormField label="Kabupaten">
-                        <FormControl v-model="form.alamat.kabupaten" type="text" placeholder="Kabupaten" required />
-                        <p>{{ errors.kabupaten }}</p>
-                    </FormField>
-
-                    <FormField label="Provinsi">
-                        <FormControl v-model="form.alamat.provinsi" type="text" placeholder="Provinsi" required />
-                        <p>{{ errors.provinsi }}</p>
-                    </FormField>
-
-                    <FormField label="Kode pos">
-                        <FormControl v-model="form.alamat.kodepos" type="text" placeholder="Kode pos" required />
-                        <p>{{ errors.kodepos }}</p>
-                    </FormField>
-
-
-                    <!-- Repeat similar code for other fields -->
-
-                    <template #footer>
-                        <BaseButton label="Trigger" type="submit" color="info" />
-                    </template>
-                </CardBox>
-            </div>
+                <template #footer>
+                    <BaseButton label="Trigger" type="submit" color="info" />
+                </template>
+            </CardBox>
 
             <!-- <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable  -->
 

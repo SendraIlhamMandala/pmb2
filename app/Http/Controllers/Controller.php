@@ -36,7 +36,6 @@ class Controller extends BaseController
 
     function cat()   {
 
-
         // Create a new mysqli connection
         $conn = new mysqli("localhost", "root", "", "fisipol_cat");
         
@@ -69,9 +68,12 @@ class Controller extends BaseController
     }
 
     function createAdmin()  {
-
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'user']);
+        
+        if (!Role::findByName('admin') && !Role::findByName('user')) {
+            
+            Role::create(['name' => 'admin']);
+            Role::create(['name' => 'user']);
+        }
         return Role::all();
     }
 

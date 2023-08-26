@@ -74,6 +74,8 @@ console.log(props.users);
                 <th>agama</th>
                 <th>ig</th>
                 <th>facebook</th>
+                <th>ijazah</th>
+                <th>SKHUN</th>
             </tr>
         </thead>
         <tbody>
@@ -92,6 +94,9 @@ console.log(props.users);
                 <td>{{ user2.data_pribadi != null ? user2.data_pribadi.agama : ''  }}</td>
                 <td>{{ user2.data_pribadi != null ? user2.data_pribadi.ig : ''  }}</td>
                 <td>{{ user2.data_pribadi != null ? user2.data_pribadi.facebook : ''  }}</td>
+                <td> <img v-if="!!user2.asal_sekolah" :src="'storage/ijazah/' + user2.asal_sekolah.ijazah" alt="" width="100"> </td>
+                <td> <img v-if="!!user2.asal_sekolah" :src="'storage/skhun/' + user2.asal_sekolah.skhun" alt="" width="100"> </td>
+
             </tr>
         </tbody>
 

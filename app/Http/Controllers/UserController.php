@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AsalSekolah;
 use App\Models\DataPribadi;
 use App\Models\User;
 use ArrayObject;
@@ -110,8 +111,7 @@ class UserController extends Controller
     //setDataPribadi
     public function setDataPribadi(Request $request, User $id): RedirectResponse
     {        
-        dd($request->all(),$request->alamat);
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->dataPribadi, [
             'no_ktp' => 'required|numeric',
             'nisn' => 'required|numeric',
             'tempat_lahir' => 'required',
@@ -120,27 +120,54 @@ class UserController extends Controller
             'agama' => 'required',
             'ig' => '',
             'facebook' => '',
-            'avatar' => 'required|image|mimes:jpeg,png,jpg|max:4096',
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:4096',
+        ]);
+        $validator2 = Validator::make($request->alamat, [
+            'alamat' => 'required',
+        'kelurahan' => 'required',
+        'kecamatan' => 'required',
+        'kabupaten' => 'required',
+        'provinsi' => 'required',
+        'kodepos' => 'required',
         ]);
         if ($validator->fails()) {return back()->withErrors($validator);}
+        if ($validator2->fails()) {return back()->withErrors($validator2);}
+        // dd($request->all(),$request->alamat);
 
         $user = $id;
-        $request_without_foto = $request->except('avatar');
-        unset($request_without_foto['foto']);
 
-        $foto = $request->file('avatar');
-        $foto_name = date('Y-m-d').$foto->getClientOriginalName();
-        $path = 'avatar/'.$foto_name; 
-        Storage::disk('public')->put($path, file_get_contents($foto));
+        $dataPribadi = $request->dataPribadi;
+        $alamat = $request->alamat;
+        $sekolah = $request->sekolah;
+        $orangtua = $request->orangtua;
+        
+        $fotopribadi = $dataPribadi['foto'];
+        $fotopribadi_name = date('Y-m-d').$fotopribadi->getClientOriginalName();
+        $foto_path = 'avatar/'.$fotopribadi_name; 
+        Storage::disk('public')->put($foto_path, file_get_contents($fotopribadi));
+        $dataPribadi['foto']=  $fotopribadi_name;
 
+        $skhun = $sekolah['skhun'];
+        $skhun_name = date('Y-m-d').$skhun->getClientOriginalName();
+        $skhun_path = 'skhun/'.$skhun_name;
+        Storage::disk('public')->put($skhun_path, file_get_contents($skhun));
+        $sekolah['skhun']=  $skhun_name;
 
-        $request_without_foto['foto'] = $foto_name;
-        $dataPribadi = new DataPribadi($request_without_foto);
-        $user->dataPribadi()->save($dataPribadi);
+        $ijazah = $sekolah['ijazah'];
+        $ijazah_name = date('Y-m-d').$ijazah->getClientOriginalName();
+        $ijazah_path = 'ijazah/'.$ijazah_name;
+        Storage::disk('public')->put($ijazah_path, file_get_contents($ijazah));
+        $sekolah['ijazah']=  $ijazah_name;
+
+        $sekolah_input = new AsalSekolah($sekolah);
+        $dataPribadi_input = new DataPribadi($dataPribadi);
+        $user->dataPribadi()->save($dataPribadi_input);
+        $user->asalSekolah()->save($sekolah_input);
         $user->done_setup = 'jalur';
         $user->save();
         return redirect(route('user.data-jalur'));
     }
+    
 
     //showDataPribadi
     public function dataPribadi()

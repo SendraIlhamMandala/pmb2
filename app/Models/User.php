@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable , HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -44,26 +44,63 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
 
-    //has one DataPribadi
-    public function dataPribadi()   {
-        return $this->hasOne(DataPribadi::class);
-    }
+
 
     //has one alamat
-    public function alamat()   {
+    public function alamat()
+    {
         return $this->hasOne(Alamat::class);
     }
 
     //has one asal_sekolah
-    public function asalSekolah()   {
-        
+    public function asalSekolah()
+    {
+
         return $this->hasOne(AsalSekolah::class);
     }
 
+    //has one DataDaftar
+    public function dataDaftar()
+    {
+        return $this->hasOne(DataDaftar::class);
+    }
+
+    //has one DataPribadi
+    public function dataPribadi()
+    {
+        return $this->hasOne(DataPribadi::class);
+    }
+
+    //has one faktur
+    public function faktur()
+    {
+        return $this->hasOne(Faktur::class);
+    }
+
+    //hasone orangtua   
+    public function orangtua()
+    {
+        return $this->hasOne(Orangtua::class);
+    }
+
+    //has one pekerjaan
+    public function pekerjaan()
+    {
+        return $this->hasOne(Pekerjaan::class);
+    }
+
     //has one pindahan
-    public function pindahan()   {
-        
+    public function pindahan()
+    {
         return $this->hasOne(Pindahan::class);
     }
+
+    //has one tambahan
+    public function tambahan()
+    {
+        return $this->hasOne(Tambahan::class);
+    }
+
+    // has one 
 
 }

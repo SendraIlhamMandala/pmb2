@@ -226,7 +226,7 @@ console.log();
                                     <div class=" text-2xl">{{ user.name[0].toUpperCase() + user.name.slice(1) }}</div>
                                     <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChange"
                                         @input="form.dataPribadi.foto = $event.target.files[0]" label="Upload"
-                                        class="w-full" />
+                                        class="w-full" required />
 
                                     <!-- <input type="file" @input="form.dataPribadi.foto = $event.target.files[0]" /> -->
                                     <progress v-if="form.dataPribadi.progress" :value="form.dataPribadi.progress.percentage"
@@ -392,7 +392,7 @@ console.log();
                                 <progress v-if="form.sekolah.progress" :value="form.sekolah.progress.percentage" max="100">
                                     {{ form.sekolah.progress.percentage }}%
                                 </progress>
-                                <p>{{ errors.foto }}</p>
+                                <p>{{ errors.skhun }}</p>
                             </div>
                             <div v-if="previewImageSKHUN">
                                 <img width="100" height="100" :src="previewImageSKHUN" alt="Preview foto" />
@@ -411,7 +411,7 @@ console.log();
                                 <progress v-if="form.sekolah.progress" :value="form.sekolah.progress.percentage" max="100">
                                     {{ form.sekolah.progress.percentage }}%
                                 </progress>
-                                <p>{{ errors.foto }}</p>
+                                <p>{{ errors.ijazah }}</p>
                             </div>
                             <div v-if="previewImageIjazah">
                                 <img width="100" height="100" :src="previewImageIjazah" alt="Preview foto" />

@@ -113,6 +113,10 @@ Route::middleware('auth', 'verified')->group(function () {
 
     $user = Auth::user();
     $user->dataPribadi;
+    $user->asalSekolah;
+    $user->alamat;
+    $user->orangtua;
+    
     $users = App\Models\User::all();
     $users->load('dataPribadi');
     $users->load('asalSekolah');

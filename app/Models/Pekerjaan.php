@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Pekerjaan extends Model
 {
     use HasFactory;
+    //guard
+    protected $guarded = [];
+     //belongs to User
+     public function user()
+     {
+         return $this->belongsTo(User::class);
+     }
 }

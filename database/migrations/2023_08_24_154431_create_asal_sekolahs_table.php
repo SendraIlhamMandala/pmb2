@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class);
             $table->string('nama_sekolah');
-            $table->string('alamat_sekolah', 255);
+            $table->text('alamat_sekolah');
             $table->string('tahun_lulus');
             $table->string('jurusan');
             $table->string('nilai_skhun');

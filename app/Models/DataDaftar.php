@@ -15,4 +15,10 @@ class DataDaftar extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    //belongs to tahun
+    public function tahun()
+    {
+        return $this->belongsTo(Tahun::class);
+    }
 }

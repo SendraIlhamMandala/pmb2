@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('nim')->unique()->nullable();
             $table->string('done_setup')->default('not_done');
             $table->string('status')->default('belum selesai pendaftaran');
             $table->string('email')->unique();

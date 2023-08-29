@@ -50,7 +50,7 @@ class RoleController extends Controller
             
             // return back();
             return redirect(route('roles.index'));
-            // return Inertia::location('/games');
+            // return Inertia::location('/roles');
     
     
         }
@@ -58,10 +58,10 @@ class RoleController extends Controller
         /**
          * Display the specified resource.
          */
-        public function show(Game $game)
+        public function show(Role $role)
         {
-            //return response game
-            return response($game, 200);
+            //return response role
+            return response($role, 200);
         }
     
         /**
@@ -82,7 +82,7 @@ class RoleController extends Controller
          */
         public function update(Request $request, Role $role): RedirectResponse
         {
-            //update game
+            //update role
             $role->update($request->all());
             return redirect(route('roles.index'));
     
@@ -91,11 +91,11 @@ class RoleController extends Controller
         /**
          * Remove the specified resource from storage.
          */
-        public function destroy(Game $game): RedirectResponse
+        public function destroy(role $role): RedirectResponse
         {
-            //delete game
-            $game->delete();
-            return redirect(route('games.index'));
+            //delete role
+            $role->delete();
+            return redirect(route('roles.index'));
     
         }
     

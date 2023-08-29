@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TahunController;
 use App\Http\Controllers\UserController;
 use App\Models\DataPribadi;
 use Illuminate\Foundation\Application;
@@ -63,6 +64,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
   Route::resource('roles', RoleController::class);
   Route::get('/roles/delete/{id}', [RoleController::class, 'deleteOne'])->name('roles.deleteOne');
   Route::get('/roles/deletemultiple/{id}', [RoleController::class, 'deleteMultiple'])->name('roles.deleteMultiple');
+
+  Route::resource('tahuns', TahunController::class);
+  Route::get('/tahuns/delete/{id}', [TahunController::class, 'deleteOne'])->name('tahun.deleteOne');
+  Route::get('/tahuns/deletemultiple/{id}', [TahunController::class, 'deleteMultiple'])->name('tahun.deleteMultiple');
+
 
   Route::resource('games', GameController::class)->middleware('verified');
   Route::get('/getgames', [GameController::class, 'getGames']);

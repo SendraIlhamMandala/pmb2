@@ -39,6 +39,11 @@ export default [
         label: "Roles",
         icon: mdiTable,
     },
+      {
+        route: "tahuns.index",
+        label: "Tahun",
+        icon: mdiTable,
+    },
     {
         route: "forms",
         label: "Forms",

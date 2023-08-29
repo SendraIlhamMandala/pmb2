@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataDaftar;
+use App\Models\Tahun;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -31,6 +33,16 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $users = User::latest()->first();
+        
+        try {
+            $tahun = Tahun::latest()->where('status', 'aktif')->first();
+            
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+
+        // dd($users->dataDaftar->tahun,$tahun,$tahun->no_utama+1);
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:'.User::class,
@@ -44,7 +56,29 @@ class RegisteredUserController extends Controller
         ]);
         $user->syncRoles(['user']);
 
+        if ($users->dataDaftar->tahun == $tahun) {
+            
+        $user->nim = $users->nim+1;
 
+        }else{
+
+            $user->nim = $tahun->no_utama+1;
+        }
+
+
+        $data_daftar_list= [
+            'shift' => '-',
+            'jalur' => '-',
+            'status' => '-',
+            'program_studi' => '-',
+            'user_id' => $user->id
+        ];
+        $data_daftar = new DataDaftar($data_daftar_list);
+    
+        $tahun->dataDaftar()->save($data_daftar);
+        $user->dataDaftar()->save($data_daftar);
+        $data_daftar->save();
+        $user->save();
 
         event(new Registered($user));
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Tahun;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,8 +16,11 @@ return new class extends Migration
         Schema::create('data_daftars', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->string('jalur');
-            $table->string('program_studi');
+            $table->string('shift')->default('-');
+            $table->string('jalur')->default('-');
+            $table->string('status')->default('-');
+            $table->string('program_studi')->default('-');
+            $table->foreignIdFor(Tahun::class);
             $table->timestamps();
         });
     }

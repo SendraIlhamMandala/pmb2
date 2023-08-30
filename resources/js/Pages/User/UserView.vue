@@ -91,6 +91,42 @@ console.log(props.users);
 
                 </CardBox>
 
+                <CardBox class="overflow-auto" >
+                    <CardBoxComponentTitle title="Data Sekolah">
+                        <BaseButton :icon="mdiReload" color="whiteDark" rounded-full />
+                    </CardBoxComponentTitle>
+
+
+                    <table v-if="!!user.asal_sekolah">
+                        <thead>
+                            <tr>
+                                <th>Data daftar ID</th>
+                                <th>shift</th>
+                                <th>jalur</th>
+                                <th>program studi</th>
+                                <th>date created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ user.data_daftar.id }}</td>
+                                <td>{{ user.data_daftar.shift }}</td>
+                                <td>{{ user.data_daftar.jalur }}</td>
+                                <td>{{ user.data_daftar.program_studi }}</td>
+                                <td>{{ new Date(user.data_daftar.created_at).toLocaleDateString() }}</td>
+                            
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+
+
+
+                </CardBox>
+
 
                 <CardBox class="overflow-auto" >
                     <CardBoxComponentTitle title="Data Sekolah">
@@ -246,6 +282,8 @@ console.log(props.users);
 
 
                 </CardBox>
+
+                
 
             
             </div>

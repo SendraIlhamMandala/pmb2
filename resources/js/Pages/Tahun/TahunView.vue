@@ -152,7 +152,7 @@ console.log(props.tahun);
                             <FormControl v-model="form.gelombang" :options="selectOptionsGelombang" />
                 </FormField>
 
-                <FormField label="gelombang">
+                <FormField label="status">
                             <FormControl v-model="form.status" :options="['aktif','nonaktif']" />
                 </FormField>
                 

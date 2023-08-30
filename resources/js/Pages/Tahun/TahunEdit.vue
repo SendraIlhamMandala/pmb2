@@ -24,13 +24,20 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["role"]);
+var props = defineProps(["tahun"]);
 
 
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: props.role.name,
+
+    tahun: props.tahun.tahun,
+    gelombang: props.tahun.gelombang,
+    status: props.tahun.status,
+    daritgl: props.tahun.daritgl,
+    sampaitgl: props.tahun.sampaitgl,
+
+   
 });
 
 // Membuat referensi reaktif untuk status form dengan header
@@ -53,7 +60,7 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formStatusSubmit = () => {
-    form.put(route('roles.update', props.role.id))
+    form.put(route('roles.update', props.tahun.id))
 };
 
 
@@ -62,7 +69,7 @@ const formStatusSubmit = () => {
 
 <template>
 
-<AppHead :title="'Edit role '+role.id" />
+<AppHead :title="'Edit Tahun '+tahun.id" />
     <LayoutAuthenticated>
         
         <SectionMain>
@@ -76,8 +83,25 @@ const formStatusSubmit = () => {
                     }}</b>
                         {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
                 </NotificationBarInCard>
-                <FormField label="Name">
-                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="Game name" placeholder="Game name"
+                <FormField label="NameTahun">
+                    <FormControl v-model="form.tahun"  :icon-left="mdiAccount" help="Tahun" placeholder="Tahun"
+                        required />
+                </FormField>
+                <FormField label="Gelombang">
+                    <FormControl v-model="form.gelombang" :icon-left="mdiBallotOutline" help="Gelombang" placeholder="Gelombang"
+                        required />
+                </FormField>
+                
+                <FormField label="status">
+                            <FormControl v-model="form.status" :options="['aktif','nonaktif']" />
+                </FormField>
+                
+                <FormField label="Dari Tgl">
+                    <FormControl type="date" v-model="form.daritgl" :icon-left="mdiMail" help="Dari Tgl" placeholder="Dari Tgl"
+                        required />
+                </FormField>
+                <FormField label="Sampai Tgl">
+                    <FormControl type="date" v-model="form.sampaitgl" :icon-left="mdiMail" help="Sampai Tgl" placeholder="Sampai Tgl"
                         required />
                 </FormField>
 

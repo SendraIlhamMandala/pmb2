@@ -111,6 +111,7 @@ Route::middleware('auth', 'verified')->group(function () {
   })->name('dashboard');
 
   Route::post('/data-pribadi/{id}', [UserController::class, 'setDataPribadi'])->name('user.set-data-pribadi');
+  Route::post('/data-jalur/{id}', [UserController::class, 'setDataJalur'])->name('user.set-data-jalur');
   Route::get('/data-pribadi', [UserController::class, 'dataPribadi'])->name('user.data-pribadi');
   Route::get('/data-jalur', [UserController::class, 'dataJalur'])->name('user.data-jalur');
 
@@ -122,7 +123,8 @@ Route::middleware('auth', 'verified')->group(function () {
     $user->asalSekolah;
     $user->alamat;
     $user->orangtua;
-    
+    $user->dataDaftar;
+
     $users = App\Models\User::all();
     $users->load('dataPribadi');
     $users->load('asalSekolah');
@@ -131,7 +133,12 @@ Route::middleware('auth', 'verified')->group(function () {
       'user' => $user,
       'users' => $users
     ]);
-  });
+  })->name('usercek');
+
+
+  // Route::get('/user-dashboard', function () {
+  //   return 123123;
+  // })->name('user-dashboard');
 });
 
 Route::get('/user-dashboard', function () {
@@ -141,7 +148,7 @@ Route::get('/user-dashboard', function () {
     'laravelVersion' => Application::VERSION,
     'phpVersion' => PHP_VERSION,
   ]);
-});
+})->name('user-dashboard');
 
 Route::get('/getadmin', [Controller::class, 'getAdmin']);
 Route::get('/createadmin', [Controller::class, 'createAdmin']);

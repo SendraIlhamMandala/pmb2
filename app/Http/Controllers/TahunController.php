@@ -73,15 +73,21 @@ class TahunController extends Controller
      */
     public function edit(Tahun $tahun)
     {
-        //
+        //edit tahun
+        return Inertia::render('Tahun/TahunEdit', [
+            'tahun' => $tahun
+        ]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tahun $tahun)
+    public function update(Request $request, Tahun $tahun) : RedirectResponse
     {
-        //
+        //update tahun
+        $tahun->update($request->all());
+        return redirect(route('tahuns.index'));
     }
 
     /**

@@ -6,6 +6,15 @@ defineProps({
     type: String,
     default: null,
   },
+
+  label2: {
+    type: String,
+    default: '',
+  },
+  label3: {
+    type: String,
+    default: '',
+  },
   labelFor: {
     type: String,
     default: null,
@@ -37,8 +46,8 @@ const wrapperClass = computed(() => {
 <template>
   <div class="mb-6 last:mb-0">
     <label v-if="label" :for="labelFor" class="block font-bold mb-2">{{
-      label
-    }}</label>
+      label 
+    }} <span class="text-red-500 dark:text-slate-400" >{{ label2 }}</span> <span class="text-sm text-gray-400 dark:text-slate-400"> {{ label3 }}</span>  </label>
     <div :class="wrapperClass">
       <slot />
     </div>

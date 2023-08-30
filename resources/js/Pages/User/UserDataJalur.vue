@@ -25,24 +25,43 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["game", "user" , "errors"]);
+var props = defineProps(["game", "user", "errors"]);
 
-const selectOptions = ["Laki - Laki",
-     "Perempuan" 
+const selectOptionsStatus = [
+    "Baru",
+    "Pindahan"
 ];
+const selectOptionsShift = [
+    ["shift1",
+        "shift2"], [
+        "shift A",
+        "shift B"
+    ]
+];
+const selectOptionsJalur = [
+    ["Jalur 1",
+    "Jalur 2"],
+    ["Jalur A",
+    "Jalur B",
+    "Jalur C"]
+];
+
+const selectOptionsProgramStudi = [
+    "Prodi 1",
+    "Prodi 2"
+];
+
 
 
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    no_ktp: '',
-    tempat_lahir: '',
-    tanggal_lahir: '',
-    jenis_kelamin: selectOptions[0],
-    agama: '',
-    ig: '',
-    facebook: '',
-    avatar:null,
+    status: null,
+    shift: null,
+    jalur: null,
+    program_studi: null,
+    
+    
 });
 
 // Membuat referensi reaktif untuk status form dengan header
@@ -65,11 +84,11 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formSubmit = () => {
-    form.post(route('user.set-data-pribadi', props.user.id));
+    form.post(route('user.set-data-jalur', props.user.id));
 };
 
 
-console.log();
+console.log(selectOptionsShift);
 </script>
 
 <template>
@@ -80,55 +99,36 @@ console.log();
             <SectionTitle>masukkan data Jalur</SectionTitle>
 
             <!-- <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable  -->
-            <CardBox class=" shadow-2xl md:mx-auto" is-form is-hoverable 
-                @submit.prevent="formSubmit">
+            <CardBox class=" shadow-2xl md:mx-auto" is-form is-hoverable @submit.prevent="formSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span>
                         {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data pribadi" }}</span>
                 </NotificationBarInCard>
-                <FormField label="No KTP"  >
-                    <FormControl v-model="form.no_ktp" type="number" placeholder="No KTP" required />
-                    <p>{{ errors.no_ktp }}</p>
+
+                <FormField label="Status" label2="*" label3=" pilih salah satu">
+                    <FormControl v-model="form.status" :options="selectOptionsStatus" required />
+                    <p class="text-red-500" >{{ errors.status }}</p>
                 </FormField>
 
-                <FormField label="Tempat Lahir">
-                    <FormControl v-model="form.tempat_lahir" placeholder="Tempat Lahir" required />
-                    <p>{{ errors.tempat_lahir }}</p>
+                <FormField label="Shift" label2="*" label3=" pilih salah satu">
+                    <FormControl v-model="form.shift" :options="selectOptionsShift[0]" />
+                    <p class="text-red-500" >{{ errors.shift }}</p>
                 </FormField>
 
-                <FormField label="Tanggal Lahir">
-                    <FormControl v-model="form.tanggal_lahir" type="date" required />
-                    <p>{{ errors.tanggal_lahir }}</p>
+                <FormField label="Jalur" label2="*" label3=" pilih salah satu">
+                    <FormControl v-if="form.shift == 'shift1'" v-model="form.jalur" :options="selectOptionsJalur[0]" />
+                    <FormControl v-else v-model="form.jalur" :options="selectOptionsJalur[1]" />
+                    <p class="text-red-500" >{{ errors.jalur }}</p>
                 </FormField>
 
-                <FormField label="jenis_kelamin">
-                    <FormControl v-model="form.jenis_kelamin" :options="selectOptions" />
-                    <p>{{ errors.jenis_kelamin }}</p>
+
+                <FormField label="program studi" label2="*" label3=" pilih salah satu">
+                    <FormControl v-model="form.program_studi" :options="selectOptionsProgramStudi" />
+                    <p class="text-red-500" >{{ errors.program_studi }}</p>
                 </FormField>
 
-                <FormField label="Agama">
-                    <FormControl v-model="form.agama" placeholder="Agama" required />
-                    <p>{{ errors.agama }}</p>
-                </FormField>
 
-                <FormField label="Instagram">
-                    <FormControl v-model="form.ig" placeholder="Instagram" />
-                    <p>{{ errors.ig }}</p>
-                </FormField>
 
-                <FormField label="Facebook">
-                    <FormControl v-model="form.facebook" placeholder="Facebook" />
-                    <p>{{ errors.facebook }}</p>
-                </FormField>
-
-                <FormField label="Foto">
-                    <FormFilePicker accept=".jpg,.jpeg,.png"  @input="form.avatar = $event.target.files[0]" label="Upload" />
-                    <!-- <input type="file" @input="form.avatar = $event.target.files[0]" /> -->
-                    <progress v-if="form.progress" :value="form.progress.percentage" max="100">
-                    {{ form.progress.percentage }}%
-                    </progress>
-                    <p>{{ errors.avatar }}</p>
-                </FormField>
 
                 <!-- Repeat similar code for other fields -->
 

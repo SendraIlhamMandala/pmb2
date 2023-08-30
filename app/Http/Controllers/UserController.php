@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alamat;
 use App\Models\AsalSekolah;
+use App\Models\DataDaftar;
 use App\Models\DataPribadi;
 use App\Models\Orangtua;
 use App\Models\User;
@@ -179,17 +180,49 @@ class UserController extends Controller
         $user->asalSekolah()->save($sekolah_input);
         $user->alamat()->save($alamat_input);
         $user->orangtua()->save($orangtua_input);
-        $user->done_setup = 'jalur';
+        $user->done_setup = 'pribadi';
         $user->save();
-        return redirect(route('user.data-jalur'));
+        return redirect(route('usercek'));
+    }
+
+    //set data jalur
+    public function setDataJalur(Request $request, User $id): RedirectResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'status'=> 'required',
+            'shift'=> 'required',
+            'jalur'=> 'required',
+            'program_studi'=> 'required',
+            
+        ],[
+            'required' => ' Harap pilih :attribute .'
+        ]);
+
+        if ($validator->fails()) {
+          return back()->withErrors($validator);
+        }
+        
+        $user = $id;
+        $user->dataDaftar->status = $request->status;
+        $user->dataDaftar->shift = $request->shift;
+        $user->dataDaftar->jalur = $request->jalur;
+        $user->dataDaftar->program_studi = $request->program_studi;
+        // dd($request->all(),$user->dataDaftar,$user);
+        $user->done_setup = 'done';
+        $user->dataDaftar->save();
+        $user->save();
+        return redirect(route('user.data-pribadi'));
     }
 
 
     //showDataPribadi
     public function dataPribadi()
     {
-        if (Auth()->user()->done_setup == 'jalur') {
+        if (Auth()->user()->done_setup == 'not_done') {
             return redirect(route('user.data-jalur'));
+        }
+        elseif (Auth()->user()->done_setup == 'done') {
+            return redirect(route('user-dashboard'));
         }
         $user = Auth()->user();
         return inertia('User/UserDataPribadi', [
@@ -199,8 +232,10 @@ class UserController extends Controller
 
     public function dataJalur()
     {
-        if (Auth()->user()->done_setup == 'not_done') {
+        if (Auth()->user()->done_setup == 'pribadi') {
             return redirect(route('user.data-pribadi'));
+        }elseif (Auth()->user()->done_setup == 'done') {
+            return redirect(route('user-dashboard'));
         }
 
         $user = Auth()->user();

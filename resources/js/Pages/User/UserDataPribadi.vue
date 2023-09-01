@@ -64,6 +64,21 @@ const handleFileChangeIjazah = (event) => {
     }
 };
 
+
+
+const previewImageRanking = ref('');
+
+const handleFileChangeRanking = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImageRanking.value = e.target.result;
+        };
+        reader.readAsDataURL(selectedFile);
+    }
+};
+
 // Impor library DataTables
 DataTable.use(DataTablesLib);
 
@@ -112,15 +127,27 @@ const form = useForm({
         tempat_lahir_ayah: '',
         tanggal_lahir_ayah: '',
         no_hp_ayah: '',
-        pekerjaan_ayah: '',
+        pekerjaan_ayah: null,
         penghasilan_ayah: '',
         nama_ibu: '',
         ktp_ibu: '',
         tempat_lahir_ibu: '',
         tanggal_lahir_ibu: '',
         no_hp_ibu: '',
-        pekerjaan_ibu: '',
+        pekerjaan_ibu: null,
         penghasilan_ibu: '',
+
+    },
+    pindahan: {
+        perguruan_tinggi: '',
+        program_studi: '',
+        nomor_induk_mahasiswa: '',
+    },
+    tambahan: {
+
+        jalur: '',
+        isi_data: '',
+        foto_bukti: '',
 
     }
 
@@ -186,7 +213,7 @@ watch(pilihan_pekerjaan_ayah, (newCount) => {
 
     console.log(`new pilihan pekerjaan ayah is: ${newCount}`)
 })
-console.log();
+console.log(props.user);
 </script>
 
 <template>
@@ -200,8 +227,8 @@ console.log();
 
             <CardBox class=" shadow-2xl md:mx-auto mx-auto h-full " is-form is-hoverable @submit.prevent="formSubmit">
 
-                <div className="grid md:grid-cols-2  gap-8">
-                    <div class="row-span-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="md:col-span-2">
                         <div class="w-11/12 mx-auto mt-8">
 
                             <NotificationBarInCard :color="getFormStatusColor"
@@ -210,20 +237,18 @@ console.log();
                                     {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data pribadi" }}</span>
                             </NotificationBarInCard>
                         </div>
-                        <FormField label="Foto">
-                            <div class="grid grid-cols-3 gap-4">
-                                <div v-if="previewImage">
-
-
-                                    <img :src="previewImage" alt="Preview foto" />
+                        <FormField label="Foto" class="mx-auto" >
+                            <div class="">
+                                <div v-if="previewImage" class="flex justify-center h-40" >
+                                    <img :src="previewImage" alt="Preview foto" class="h-40" />
                                 </div>
                                 <div v-else>
                                     <img class="shrink"
                                         :src="'https://media.istockphoto.com/vectors/default-profile-picture-foto-photo-placeholder-vector-illustration-vector-id1223671392?k=6&m=1223671392&s=170667a&w=0&h=zP3l7WJinOFaGb2i1F4g8IS2ylw0FlIaa6x3tP9sebU='"
                                         alt="" />
                                 </div>
-                                <div class="grid grid-row-2 gap-4 col-span-2 ">
-                                    <div class=" text-2xl">{{ user.name[0].toUpperCase() + user.name.slice(1) }}</div>
+                                <div class="grid grid-row-2 gap-4 col-span-2 justify-center">
+                                    <div class=" text-2xl justify-center mx-auto ">{{ user.name[0].toUpperCase() + user.name.slice(1) }}</div>
                                     <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChange"
                                         @input="form.dataPribadi.foto = $event.target.files[0]" label="Upload"
                                         class="w-full" required />
@@ -381,46 +406,48 @@ console.log();
                                 required />
                             <p>{{ errors.nilai_skhun }}</p>
                         </FormField>
-                        <div class="flex gap-4 " >
+                        <div class="flex gap-4 ">
 
-                        <FormField label="SKHUN" class=" justify-center ">
+                            <FormField label="SKHUN" class=" justify-center ">
 
-                            <div class="">
-                                <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeSKHUN"
-                                    @input="form.sekolah.skhun = $event.target.files[0]" label="Upload"
-                                    class="w-full" />
-                                <progress v-if="form.sekolah.progress" :value="form.sekolah.progress.percentage" max="100">
-                                    {{ form.sekolah.progress.percentage }}%
-                                </progress>
-                                <p>{{ errors.skhun }}</p>
-                            </div>
-                            <div v-if="previewImageSKHUN">
-                                <img width="100" height="100" :src="previewImageSKHUN" alt="Preview foto" />
-                            </div>
-                            <div v-else>
-                            </div>
+                                <div class="">
+                                    <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeSKHUN"
+                                        @input="form.sekolah.skhun = $event.target.files[0]" label="Upload"
+                                        class="w-full" />
+                                    <progress v-if="form.sekolah.progress" :value="form.sekolah.progress.percentage"
+                                        max="100">
+                                        {{ form.sekolah.progress.percentage }}%
+                                    </progress>
+                                    <p>{{ errors.skhun }}</p>
+                                </div>
+                                <div v-if="previewImageSKHUN">
+                                    <img width="100" height="100" :src="previewImageSKHUN" alt="Preview foto" />
+                                </div>
+                                <div v-else>
+                                </div>
 
-                        </FormField>
+                            </FormField>
 
-                        <FormField label="Ijazah" class=" justify-center ">
+                            <FormField label="Ijazah" class=" justify-center ">
 
-                            <div class="">
-                                <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeIjazah"
-                                    @input="form.sekolah.ijazah = $event.target.files[0]" label="Upload"
-                                    class="w-full" />
-                                <progress v-if="form.sekolah.progress" :value="form.sekolah.progress.percentage" max="100">
-                                    {{ form.sekolah.progress.percentage }}%
-                                </progress>
-                                <p>{{ errors.ijazah }}</p>
-                            </div>
-                            <div v-if="previewImageIjazah">
-                                <img width="100" height="100" :src="previewImageIjazah" alt="Preview foto" />
-                            </div>
-                            <div v-else>
-                            </div>
+                                <div class="">
+                                    <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeIjazah"
+                                        @input="form.sekolah.ijazah = $event.target.files[0]" label="Upload"
+                                        class="w-full" />
+                                    <progress v-if="form.sekolah.progress" :value="form.sekolah.progress.percentage"
+                                        max="100">
+                                        {{ form.sekolah.progress.percentage }}%
+                                    </progress>
+                                    <p>{{ errors.ijazah }}</p>
+                                </div>
+                                <div v-if="previewImageIjazah">
+                                    <img width="100" height="100" :src="previewImageIjazah" alt="Preview foto" />
+                                </div>
+                                <div v-else>
+                                </div>
 
-                        </FormField>
-                    </div>
+                            </FormField>
+                        </div>
 
 
                     </div>
@@ -546,6 +573,81 @@ console.log();
 
 
                     </div>
+
+                    <div v-if="user.data_daftar.status == 'Pindahan'">
+
+                        <!-- Repeat similar code for other fields -->
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Pindahan Perguruan Tinggi"
+                                    }}</span>
+                            </NotificationBarInCard>
+                        </div>
+
+                        <FormField label="Perguruan tinggi ">
+                            <FormControl v-model="form.pindahan.perguruan_tinggi" type="text" placeholder="Perguruan tinggi"
+                                required />
+                            <p>{{ errors.perguruan_tinggi }}</p>
+                        </FormField>
+
+                        <FormField label="Program Studi ">
+                            <FormControl v-model="form.pindahan.program_studi" type="text" placeholder="program studi"
+                                required />
+                            <p>{{ errors.program_studi }}</p>
+                        </FormField>
+
+                        <FormField label="Nomor Induk Siswa (NIM)">
+                            <FormControl v-model="form.pindahan.nomor_induk_mahasiswa" type="text"
+                                placeholder="nomor induk mahasiswa" required />
+                            <p>{{ errors.nomor_induk_mahasiswa }}</p>
+                        </FormField>
+
+
+                    </div>
+
+                    <div v-if="user.data_daftar.jalur == 'Jalur ranking'">
+
+                        <!-- Repeat similar code for other fields -->
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Tambahan"
+                                    }}</span>
+                            </NotificationBarInCard>
+                        </div>
+                        <FormField label="Surat Keterangan Ranking" class=" justify-center ">
+                            <div class="">
+                                <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeRanking"
+                                    @input="form.tambahan.foto_bukti = $event.target.files[0]" label="Upload" class="w-full" />
+                                <progress v-if="form.tambahan.progress" :value="form.tambahan.progress.percentage" max="100">
+                                    {{ form.tambahan.progress.percentage }}%
+                                </progress>
+                                <p>{{ errors.foto_bukti }}</p>
+                            </div>
+                            <div v-if="previewImageRanking">
+                                <img width="100" height="100" :src="previewImageRanking" alt="Preview foto" />
+                            </div>
+                            <div v-else>
+                            </div>
+
+                        </FormField>
+
+                        <FormField label="keterangan ranking ">
+                            <FormControl v-model="form.tambahan.isi_data" type="text" placeholder="Keterangan"
+                                required />
+                            <p>{{ errors.tambahan }}</p>
+                        </FormField>
+
+                  
+
+                    </div>
                     <div>11</div>
                 </div>
 
@@ -565,4 +667,6 @@ console.log();
         </SectionMain>
     </LayoutAuthenticatedUser>
 </template>
-<style>@import "datatables.net-dt";</style>
+<style>
+@import "datatables.net-dt";
+</style>

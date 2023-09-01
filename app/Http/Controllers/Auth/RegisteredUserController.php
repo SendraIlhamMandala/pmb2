@@ -34,10 +34,9 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $users = User::latest()->first();
-        
+        // dd($users);
         try {
             $tahun = Tahun::latest()->where('status', 'aktif')->first();
-            
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors($th->getMessage());
         }
@@ -64,7 +63,7 @@ class RegisteredUserController extends Controller
 
             $user->nim = $tahun->no_utama+1;
         }
-
+        // dd($user->nim,$tahun->no_utama,$users->nim);
 
         $data_daftar_list= [
             'shift' => '-',

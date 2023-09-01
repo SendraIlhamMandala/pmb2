@@ -92,7 +92,7 @@ console.log(props.users);
                 </CardBox>
 
                 <CardBox class="overflow-auto" >
-                    <CardBoxComponentTitle title="Data Sekolah">
+                    <CardBoxComponentTitle title="Data dAFTAR">
                         <BaseButton :icon="mdiReload" color="whiteDark" rounded-full />
                     </CardBoxComponentTitle>
 
@@ -104,6 +104,8 @@ console.log(props.users);
                                 <th>shift</th>
                                 <th>jalur</th>
                                 <th>program studi</th>
+                                <th>status</th>
+                                <th>setup</th>
                                 <th>date created</th>
                             </tr>
                         </thead>
@@ -113,6 +115,8 @@ console.log(props.users);
                                 <td>{{ user.data_daftar.shift }}</td>
                                 <td>{{ user.data_daftar.jalur }}</td>
                                 <td>{{ user.data_daftar.program_studi }}</td>
+                                <td>{{ user.status}}</td>
+                                <td>{{ user.done_setup}}</td>
                                 <td>{{ new Date(user.data_daftar.created_at).toLocaleDateString() }}</td>
                             
 
@@ -283,6 +287,83 @@ console.log(props.users);
 
                 </CardBox>
 
+                <CardBox class="overflow-auto" >
+                    <CardBoxComponentTitle title="Data pindahan">
+                        <BaseButton :icon="mdiReload" color="whiteDark" rounded-full />
+                    </CardBoxComponentTitle>
+
+
+                    <table v-if="!!user.pindahan" >
+                        <thead>
+                            <tr>
+                                <th>pindahan ID</th>
+                                <th>perguruan tinggi</th>
+                                <th>program studi</th>
+                                <th>nomor induk mahasiswa</th>
+                                <th>date created</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ user.pindahan.id }}</td>
+                                <td>{{ user.pindahan.perguruan_tinggi }}</td>
+                                <td>{{ user.pindahan.program_studi }}</td>
+                                <td>{{ user.pindahan.nomor_induk_mahasiswa }}</td>
+                                <td>{{ new Date(user.pindahan.created_at).toLocaleDateString() }}</td>
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+
+
+
+
+
+                </CardBox>
+
+                <CardBox class="overflow-auto" >
+                    <CardBoxComponentTitle title="Data tambahan">
+                        <BaseButton :icon="mdiReload" color="whiteDark" rounded-full />
+                    </CardBoxComponentTitle>
+
+
+                    <table v-if="!!user.tambahan" >
+                        <thead>
+                            <tr>
+                                <th>tambahan ID</th>
+                                <th>keterangan </th>
+                                <th>surat keterangan</th>
+                                <th>date created</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ user.tambahan.id }}</td>
+                                <td>{{ user.tambahan.isi_data }}</td>
+                                <td> <img v-if="!!user.tambahan" :src="'storage/foto_bukti/' + user.tambahan.foto_bukti"
+                                        alt="" width="100">
+                                </td>
+                                <td>{{ new Date(user.alamat.created_at).toLocaleDateString() }}</td>
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+
+
+
+
+
+                </CardBox>
                 
 
             
@@ -301,6 +382,7 @@ console.log(props.users);
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>nim</th>
                     <th>Name</th>
                     <th>Email</th>
                     <!-- datecreated -->
@@ -321,6 +403,7 @@ console.log(props.users);
             <tbody>
                 <tr v-for="user2 in users">
                     <td>{{ user2.id }}</td>
+                    <td>{{ user2.nim }}</td>
                     <td>{{ user2.name }}</td>
                     <td>{{ user2.email }}</td>
                     <!-- datecreated -->

@@ -19,24 +19,21 @@ import DataTable from "datatables.net-vue3";
 import Select from "datatables.net-select";
 import DataTablesLib from "datatables.net";
 import DataTables from "datatables.net-select";
+import { watch } from "vue";
 
 
 // Impor library DataTables
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["game", "user", "errors"]);
+var props = defineProps(["shifts", "user","prodi", "errors"]);
 
 const selectOptionsStatus = [
     "Baru",
     "Pindahan"
 ];
 const selectOptionsShift = [
-    ["shift1",
-        "shift2"], [
-        "shift A",
-        "shift B"
-    ]
+    props.shifts
 ];
 const selectOptionsJalur = [
     ["Jalur 1",
@@ -87,8 +84,19 @@ const formSubmit = () => {
     form.post(route('user.set-data-jalur', props.user.id));
 };
 
+const getJalur = computed
+(() => {
+    if (form.shift) {
+    return props.shifts.find((i)=>i.name==form.shift).jalur_daftars.map((i)=> i.name)}
+});
 
-console.log(selectOptionsShift);
+watch(() => form.shift, () => {
+    form.jalur = null
+    console.log(form.shift);
+});
+
+
+console.log(selectOptionsShift,props.shifts);
 </script>
 
 <template>
@@ -111,19 +119,18 @@ console.log(selectOptionsShift);
                 </FormField>
 
                 <FormField label="Shift" label2="*" label3=" pilih salah satu">
-                    <FormControl v-model="form.shift" :options="selectOptionsShift[0]" />
+                    <FormControl v-model="form.shift" :options="shifts.map((i)=>i.name)" />
                     <p class="text-red-500" >{{ errors.shift }}</p>
                 </FormField>
 
                 <FormField label="Jalur" label2="*" label3=" pilih salah satu">
-                    <FormControl v-if="form.shift == 'shift1'" v-model="form.jalur" :options="selectOptionsJalur[0]" />
-                    <FormControl v-else v-model="form.jalur" :options="selectOptionsJalur[1]" />
+                    <FormControl v-model="form.jalur" :options="getJalur" />
                     <p class="text-red-500" >{{ errors.jalur }}</p>
                 </FormField>
 
 
                 <FormField label="program studi" label2="*" label3=" pilih salah satu">
-                    <FormControl v-model="form.program_studi" :options="selectOptionsProgramStudi" />
+                    <FormControl v-model="form.program_studi" :options="prodi.map((i)=>i.name)" />
                     <p class="text-red-500" >{{ errors.program_studi }}</p>
                 </FormField>
 

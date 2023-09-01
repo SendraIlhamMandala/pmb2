@@ -10,4 +10,9 @@ class Shift extends Model
     use HasFactory;
     protected $guarded = [];
 
+    //has many jalur daftar
+    public function jalurDaftars()
+    {
+        return $this->belongsToMany(JalurDaftar::class, 'jalur_daftars_shifts', 'shifts_id', 'jalur_daftars_id');
+    }
 }

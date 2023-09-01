@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\JalurDaftarController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProgramStudiController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\TahunController;
 use App\Http\Controllers\UserController;
 use App\Models\DataPribadi;
+use App\Models\ProgramStudi;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +68,19 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
   Route::resource('roles', RoleController::class);
   Route::get('/roles/delete/{id}', [RoleController::class, 'deleteOne'])->name('roles.deleteOne');
   Route::get('/roles/deletemultiple/{id}', [RoleController::class, 'deleteMultiple'])->name('roles.deleteMultiple');
+  
+  Route::resource('shifts', ShiftController::class);
+  Route::get('/shifts/delete/{id}', [ShiftController::class, 'deleteOne'])->name('shifts.deleteOne');
+  Route::get('/shifts/deletemultiple/{id}', [ShiftController::class, 'deleteMultiple'])->name('shifts.deleteMultiple');
+
+  Route::resource('jalurs', JalurDaftarController::class);
+  Route::get('/jalurs/delete/{id}', [JalurDaftarController::class, 'deleteOne'])->name('jalurs.deleteOne');
+  Route::get('/jalurs/deletemultiple/{id}', [JalurDaftarController::class, 'deleteMultiple'])->name('jalurs.deleteMultiple');
+
+  Route::resource('prodis', ProgramStudiController::class);
+  Route::get('/prodis/delete/{id}', [ProgramStudiController::class, 'deleteOne'])->name('prodis.deleteOne');
+  Route::get('/prodis/deletemultiple/{id}', [ProgramStudiController::class, 'deleteMultiple'])->name('prodis.deleteMultiple');
+
 
   Route::resource('tahuns', TahunController::class);
   Route::get('/tahuns/delete/{id}', [TahunController::class, 'deleteOne'])->name('tahun.deleteOne');
@@ -124,6 +141,8 @@ Route::middleware('auth', 'verified')->group(function () {
     $user->alamat;
     $user->orangtua;
     $user->dataDaftar;
+    $user->pindahan;
+    $user->tambahan;
 
     $users = App\Models\User::all();
     $users->load('dataPribadi');

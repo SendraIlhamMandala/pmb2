@@ -39,6 +39,21 @@ export default [
         label: "Roles",
         icon: mdiTable,
     },
+    {
+        route: "shifts.index",
+        label: "Shifts",
+        icon: mdiTable,
+    },
+    {
+        route: "jalurs.index",
+        label: "Jalurs",
+        icon: mdiTable,
+    },
+    {
+        route: "prodis.index",
+        label: "Prodis",
+        icon: mdiTable,
+    },
       {
         route: "tahuns.index",
         label: "Tahun",

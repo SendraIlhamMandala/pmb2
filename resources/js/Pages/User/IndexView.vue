@@ -1,6 +1,67 @@
+  
+<script setup>
 
+
+import BaseIcon from "@/components/BaseIcon.vue";
+
+import { mdiWhatsapp, mdiCellphone, mdiEmail, mdiGithub } from "@mdi/js";
+import { Head, Link } from '@inertiajs/vue3';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import AppHead from "@/components/AppHead.vue";
+
+const props = defineProps({
+    canLogin: {
+        type: Boolean,
+    },
+    canRegister: {
+        type: Boolean,
+    }
+});
+
+console.log(props.canLogin);
+const screenWidth = ref(window.innerWidth);
+const screenHeight = ref(window.innerHeight);
+
+const updateScreenSize = () => {
+  screenWidth.value = window.innerWidth;
+  screenHeight.value = window.innerHeight;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', updateScreenSize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateScreenSize);
+});
+const menuVisible = ref(false);
+
+const toggleMenu = () => {
+    menuVisible.value = !menuVisible.value;
+};
+
+const footer = ref(null);
+const jadwal = ref(null);
+const petunjuk = ref(null);
+var sect = { 'footer' : footer, 'jadwal': jadwal, 'petunjuk': petunjuk };
+
+console.log(sect);
+const scrollToSection = (key) => {
+    
+    if (screenWidth.value < 768) {
+        
+        toggleMenu();
+    }
+  window.scrollTo({
+    top: sect[key].value.offsetTop,
+    behavior: 'smooth',
+  });
+};
+</script>
 
 <template>
+<AppHead title="Penerimaan Mahasiswa Baru FISIP UNIGA" />
+
     <div class="bg-gray-50">
 
     
@@ -452,63 +513,6 @@
     </footer>
 </div>    
 </template>
-  
-<script setup>
 
-
-import BaseIcon from "@/components/BaseIcon.vue";
-
-import { mdiWhatsapp, mdiCellphone, mdiEmail, mdiGithub } from "@mdi/js";
-import { Head, Link } from '@inertiajs/vue3';
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-const props = defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    }
-});
-
-console.log(props.canLogin);
-const screenWidth = ref(window.innerWidth);
-const screenHeight = ref(window.innerHeight);
-
-const updateScreenSize = () => {
-  screenWidth.value = window.innerWidth;
-  screenHeight.value = window.innerHeight;
-};
-
-onMounted(() => {
-  window.addEventListener('resize', updateScreenSize);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateScreenSize);
-});
-const menuVisible = ref(false);
-
-const toggleMenu = () => {
-    menuVisible.value = !menuVisible.value;
-};
-
-const footer = ref(null);
-const jadwal = ref(null);
-const petunjuk = ref(null);
-var sect = { 'footer' : footer, 'jadwal': jadwal, 'petunjuk': petunjuk };
-
-console.log(sect);
-const scrollToSection = (key) => {
-    
-    if (screenWidth.value < 768) {
-        
-        toggleMenu();
-    }
-  window.scrollTo({
-    top: sect[key].value.offsetTop,
-    behavior: 'smooth',
-  });
-};
-</script>
   
 

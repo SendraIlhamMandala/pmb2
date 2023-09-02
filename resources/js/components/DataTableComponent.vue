@@ -14,7 +14,7 @@ import { router } from '@inertiajs/vue3'
 
 DataTable.use(DataTablesLib);
 DataTablesLib.Buttons.jszip(jszip);
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 DataTablesLib.Buttons.pdfMake(pdfmake);
 
 const options = {

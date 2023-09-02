@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('jalur_daftars', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('test');
             $table->foreignIdFor(Shift::class);
             $table->timestamps();
         });

@@ -34,12 +34,14 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $users = User::latest()->first();
-        // dd($users);
-        try {
+        
             $tahun = Tahun::latest()->where('status', 'aktif')->first();
-        } catch (\Throwable $th) {
-            return redirect()->back()->withErrors($th->getMessage());
-        }
+            if ($tahun == null) {
+                # code...
+                return redirect()->back()->withErrors('maaf pendaftaran belum dibuka');
+            }
+            // dd($tahun);
+        
 
         // dd($users->dataDaftar->tahun,$tahun,$tahun->no_utama+1);
         $request->validate([
@@ -47,6 +49,7 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+        // dd($users->dataDaftar->tahun,$tahun,$users->dataDaftar->tahun == $tahun);
 
         $user = User::create([
             'name' => $request->name,

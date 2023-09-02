@@ -60,7 +60,7 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formStatusSubmit = () => {
-    form.put(route('roles.update', props.tahun.id))
+    form.put(route('tahuns.update', props.tahun.id))
 };
 
 

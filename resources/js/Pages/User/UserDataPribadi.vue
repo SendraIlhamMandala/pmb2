@@ -242,9 +242,8 @@ console.log(props.user);
                                 <div v-if="previewImage" class="flex justify-center h-40" >
                                     <img :src="previewImage" alt="Preview foto" class="h-40" />
                                 </div>
-                                <div v-else>
-                                    <img class="shrink"
-                                        :src="'https://media.istockphoto.com/vectors/default-profile-picture-foto-photo-placeholder-vector-illustration-vector-id1223671392?k=6&m=1223671392&s=170667a&w=0&h=zP3l7WJinOFaGb2i1F4g8IS2ylw0FlIaa6x3tP9sebU='"
+                                <div v-else class="flex justify-center h-40" >
+                                    <img :src="''"
                                         alt="" />
                                 </div>
                                 <div class="grid grid-row-2 gap-4 col-span-2 justify-center">

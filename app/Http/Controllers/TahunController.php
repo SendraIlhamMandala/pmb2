@@ -84,7 +84,7 @@ class TahunController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Tahun $tahun) : RedirectResponse
-    {
+    {   
         //update tahun
         $tahun->update($request->all());
         return redirect(route('tahuns.index'));

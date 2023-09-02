@@ -17,4 +17,10 @@ export default defineConfig({
             },
         }),
     ],
+
+    optimizeDeps: {
+        include: ['pdfmake/*'],
+      },
 });
+
+

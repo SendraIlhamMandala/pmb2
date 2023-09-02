@@ -6,6 +6,7 @@ use App\Models\Alamat;
 use App\Models\AsalSekolah;
 use App\Models\DataDaftar;
 use App\Models\DataPribadi;
+use App\Models\JalurDaftar;
 use App\Models\Orangtua;
 use App\Models\Pindahan;
 use App\Models\ProgramStudi;
@@ -163,7 +164,8 @@ class UserController extends Controller
         $validJalur = ['Jalur ranking', 'Prestasi non akademik'];
         if (in_array($jaluruser, $validJalur)) {
             $validator6 = Validator::make($request->tambahan, [
-                "isi_data" => 'required', "foto_bukti" => 'required|image|mimes:jpeg,png,jpg|max:4096',]);
+                "isi_data" => 'required', "foto_bukti" => 'required|image|mimes:jpeg,png,jpg|max:4096',
+            ]);
             if ($validator6->fails()) {
                 return back()->withErrors($validator6);
             }
@@ -201,13 +203,13 @@ class UserController extends Controller
 
         if (in_array($jaluruser, $validJalur)) {
 
-        $foto_bukti = $tambahan['foto_bukti'];
-        $foto_bukti_name = date('Y-m-d') . $foto_bukti->getClientOriginalName();
-        $foto_bukti_path = 'foto_bukti/' . $foto_bukti_name;
-        Storage::disk('public')->put($foto_bukti_path, file_get_contents($foto_bukti));
-        $tambahan['foto_bukti'] =  $foto_bukti_name;
-        $tambahan_input = new Tambahan($tambahan);
-        $user->tambahan()->save($tambahan_input);
+            $foto_bukti = $tambahan['foto_bukti'];
+            $foto_bukti_name = date('Y-m-d') . $foto_bukti->getClientOriginalName();
+            $foto_bukti_path = 'foto_bukti/' . $foto_bukti_name;
+            Storage::disk('public')->put($foto_bukti_path, file_get_contents($foto_bukti));
+            $tambahan['foto_bukti'] =  $foto_bukti_name;
+            $tambahan_input = new Tambahan($tambahan);
+            $user->tambahan()->save($tambahan_input);
         }
         $sekolah_input = new AsalSekolah($sekolah);
         $dataPribadi_input = new DataPribadi($dataPribadi);
@@ -243,6 +245,7 @@ class UserController extends Controller
             return back()->withErrors($validator);
         }
 
+
         $user = $id;
         $user->dataDaftar->status = $request->status;
         $user->dataDaftar->shift = $request->shift;
@@ -250,6 +253,9 @@ class UserController extends Controller
         $user->dataDaftar->program_studi = $request->program_studi;
         // dd($request->all(),$user->dataDaftar,$user);
         $user->done_setup = 'pribadi';
+        if (JalurDaftar::where('name', $request->jalur)->first()->test) {
+            $user->status = 'sedang mengikuti test';
+        }
         $user->dataDaftar->save();
         $user->save();
         return redirect(route('user.data-pribadi'));
@@ -259,10 +265,13 @@ class UserController extends Controller
     //showDataPribadi
     public function dataPribadi()
     {
+        if (Auth()->user()->status == 'sedang mengikuti test') {
+            return redirect(route('verifikasiPembayaran'));
+        }
         if (Auth()->user()->done_setup == 'not_done') {
             return redirect(route('user.data-jalur'));
         } elseif (Auth()->user()->done_setup == 'done') {
-            return redirect(route('user-dashboard'));
+            return redirect(route('welcome'));
         }
         $user = Auth()->user();
         $user->dataDaftar;
@@ -273,10 +282,14 @@ class UserController extends Controller
 
     public function dataJalur()
     {
+
+        if (Auth()->user()->status == 'sedang mengikuti test') {
+            return redirect(route('verifikasiPembayaran'));
+        }
         if (Auth()->user()->done_setup == 'pribadi') {
             return redirect(route('user.data-pribadi'));
         } elseif (Auth()->user()->done_setup == 'done') {
-            return redirect(route('user-dashboard'));
+            return redirect(route('welcome'));
         }
 
         $user = Auth()->user();
@@ -288,5 +301,22 @@ class UserController extends Controller
             'shifts' => $shifts,
             'prodi' => $prodi
         ]);
+    }
+
+    //function verifikasiPembayaran
+    public function verifikasiPembayaran()
+    {
+        $user = Auth()->user();
+        $shifts = Shift::all();
+        $shifts->load('jalurDaftars');
+        $prodi = ProgramStudi::all();
+        return inertia(
+            'User/VerifikasiPembayaran',
+            [
+                'user' => $user,
+                'shifts' => $shifts,
+                'prodi' => $prodi
+            ]
+        );
     }
 }

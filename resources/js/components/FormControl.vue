@@ -40,6 +40,10 @@ const props = defineProps({
         type: String,
         default: "text",
     },
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
     modelValue: {
         type: [String, Number, Boolean, Array, Object],
         default: "",
@@ -155,6 +159,23 @@ if (props.ctrlKFocus) {
             :required="required"
         />
         <input
+            v-else-if="disabled"
+            :id="id"
+            ref="inputEl"
+            v-model="computedValue"
+            :name="name"
+            :maxlength="maxlength"
+            :inputmode="inputmode"
+            :autocomplete="autocomplete"
+            :required="required"
+            :placeholder="placeholder"
+            :type="computedType"
+            :class="inputElClass"
+            min="0"
+            disabled
+            
+        />
+        <input
             v-else
             :id="id"
             ref="inputEl"
@@ -168,6 +189,7 @@ if (props.ctrlKFocus) {
             :type="computedType"
             :class="inputElClass"
             min="0"
+            
         />
         <FormControlIcon v-if="icon" :icon="icon" :h="controlIconH" />
     </div>

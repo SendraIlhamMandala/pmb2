@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alamat;
 use App\Models\AsalSekolah;
+use App\Models\Biaya;
 use App\Models\DataDaftar;
 use App\Models\DataPribadi;
 use App\Models\JalurDaftar;
@@ -304,19 +305,38 @@ class UserController extends Controller
     }
 
     //function verifikasiPembayaran
-    public function verifikasiPembayaran()
+    public function halamanVerifikasiPembayaran()
     {
         $user = Auth()->user();
         $shifts = Shift::all();
         $shifts->load('jalurDaftars');
         $prodi = ProgramStudi::all();
+        $biaya = Biaya::all();
+        // dd($user, $shifts, $prodi, $biaya);
         return inertia(
             'User/VerifikasiPembayaran',
             [
                 'user' => $user,
                 'shifts' => $shifts,
-                'prodi' => $prodi
+                'prodi' => $prodi,
+                'biaya' => $biaya
             ]
         );
+    }
+
+    public function verifikasiPembayaran(Request $request, User $id): RedirectResponse
+    {
+     dd($request->all(), $id);
+    }
+
+    public function verifikasiVoucher(Request $request): RedirectResponse
+    {
+        if ($request->kode ==1 ) {
+            dd($request->all());
+            return redirect()->back();
+        }else
+        {
+            return redirect()->back();
+        }
     }
 }

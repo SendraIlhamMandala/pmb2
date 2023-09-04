@@ -141,7 +141,9 @@ Route::middleware('auth', 'verified')->group(function () {
   Route::post('/data-jalur/{id}', [UserController::class, 'setDataJalur'])->name('user.set-data-jalur');
   Route::get('/data-pribadi', [UserController::class, 'dataPribadi'])->name('user.data-pribadi');
   Route::get('/data-jalur', [UserController::class, 'dataJalur'])->name('user.data-jalur');
-  Route::get('/verifikasi-pembayaran', [UserController::class, 'verifikasiPembayaran'])->name('verifikasiPembayaran');
+  Route::get('/verifikasi-pembayaran', [UserController::class, 'halamanVerifikasiPembayaran'])->name('HalamanVerifikasiPembayaran');
+  Route::post('/verifikasi-pembayaran/{id}', [UserController::class, 'verifikasiPembayaran'])->name('verifikasiPembayaran');
+  Route::post('/verifikasi-voucher', [UserController::class, 'verifikasiVoucher'])->name('verifikasiVoucher');
 
   Route::get('/cat', [Controller::class, 'cat']);
   Route::get('/datapribadicek', function () {

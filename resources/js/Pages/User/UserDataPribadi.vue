@@ -243,7 +243,7 @@ console.log(props.user);
                                     <img :src="previewImage" alt="Preview foto" class="h-40" />
                                 </div>
                                 <div v-else class="flex justify-center h-40" >
-                                    <img :src="''"
+                                    <img :src="'/image/profile.png'"
                                         alt="" />
                                 </div>
                                 <div class="grid grid-row-2 gap-4 col-span-2 justify-center">

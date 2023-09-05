@@ -74,6 +74,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
 
 
+  Route::get('verifikasi-pembayaran-user', [UserController::class, 'verifikasiPembayaranUser'])->name('verifikasiPembayaranUser');
+  
 
   Route::resource('roles', RoleController::class);
   Route::get('/roles/delete/{id}', [RoleController::class, 'deleteOne'])->name('roles.deleteOne');
@@ -144,6 +146,7 @@ Route::middleware('auth', 'verified')->group(function () {
   Route::get('/verifikasi-pembayaran', [UserController::class, 'halamanVerifikasiPembayaran'])->name('HalamanVerifikasiPembayaran');
   Route::post('/verifikasi-pembayaran/{id}', [UserController::class, 'verifikasiPembayaran'])->name('verifikasiPembayaran');
   Route::post('/verifikasi-voucher', [UserController::class, 'verifikasiVoucher'])->name('verifikasiVoucher');
+  Route::get('/tunggu-verifikasi', [UserController::class, 'tungguVerifikasi'])->name('tungguVerifikasi');
 
   Route::get('/cat', [Controller::class, 'cat']);
   Route::get('/datapribadicek', function () {

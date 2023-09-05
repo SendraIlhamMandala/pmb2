@@ -7,13 +7,16 @@ use App\Models\AsalSekolah;
 use App\Models\Biaya;
 use App\Models\DataDaftar;
 use App\Models\DataPribadi;
+use App\Models\Faktur;
 use App\Models\JalurDaftar;
 use App\Models\Orangtua;
 use App\Models\Pindahan;
 use App\Models\ProgramStudi;
 use App\Models\Shift;
+use App\Models\Tahun;
 use App\Models\Tambahan;
 use App\Models\User;
+use App\Models\Voucher;
 use ArrayObject;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -246,7 +249,6 @@ class UserController extends Controller
             return back()->withErrors($validator);
         }
 
-
         $user = $id;
         $user->dataDaftar->status = $request->status;
         $user->dataDaftar->shift = $request->shift;
@@ -267,8 +269,13 @@ class UserController extends Controller
     public function dataPribadi()
     {
         if (Auth()->user()->status == 'sedang mengikuti test') {
-            return redirect(route('verifikasiPembayaran'));
+            return redirect(route('HalamanVerifikasiPembayaran'));
         }
+
+        if (Auth()->user()->status == 'menuggu verifikasi') {
+            return redirect(route('tungguVerifikasi'));
+        }
+        
         if (Auth()->user()->done_setup == 'not_done') {
             return redirect(route('user.data-jalur'));
         } elseif (Auth()->user()->done_setup == 'done') {
@@ -285,8 +292,13 @@ class UserController extends Controller
     {
 
         if (Auth()->user()->status == 'sedang mengikuti test') {
-            return redirect(route('verifikasiPembayaran'));
+            return redirect(route('HalamanVerifikasiPembayaran'));
         }
+
+        if (Auth()->user()->status == 'selesai test' ) {
+            return redirect(route('user.data-pribadi'));
+        }
+
         if (Auth()->user()->done_setup == 'pribadi') {
             return redirect(route('user.data-pribadi'));
         } elseif (Auth()->user()->done_setup == 'done') {
@@ -307,6 +319,14 @@ class UserController extends Controller
     //function verifikasiPembayaran
     public function halamanVerifikasiPembayaran()
     {
+
+        if (Auth()->user()->status == 'selesai test' ) {
+            return redirect(route('user.data-pribadi'));
+        }
+
+        if (Auth()->user()->done_setup == 'done') {
+            return redirect(route('welcome'));
+        }
         $user = Auth()->user();
         $shifts = Shift::all();
         $shifts->load('jalurDaftars');
@@ -326,17 +346,76 @@ class UserController extends Controller
 
     public function verifikasiPembayaran(Request $request, User $id): RedirectResponse
     {
-     dd($request->all(), $id);
+
+    
+        $validator = Validator::make($request->all(), [
+          
+            'no_rekening' => 'required',
+            'tanggal_bayar' => 'required',
+            'jumlah_bayar' => 'required',
+            'foto_bukti' => 'required',
+
+        ], [
+            'required' => ' Harap masukkan :attribute .'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $data_faktur_baru = $request->all();
+
+        if(Voucher::where('code',$request->kode)->first()){
+        $data_faktur_baru['pakai_voucher'] = 1;
+        }
+        
+        unset($data_faktur_baru['kode']);
+        unset($data_faktur_baru['name']);
+        unset($data_faktur_baru['nim']);
+        // $data_faktur_baru['pakai_voucher'] = 0;
+        // dd($request->all(), $data_faktur_baru);
+        $faktur_data = new Faktur($data_faktur_baru);
+        $id->status = 'menuggu verifikasi';
+        $id->dataPribadi()->save($faktur_data);
+        $id->save();
+        return redirect(route('tungguVerifikasi'));
     }
 
     public function verifikasiVoucher(Request $request): RedirectResponse
     {
-        if ($request->kode ==1 ) {
-            dd($request->all());
-            return redirect()->back();
+        if (Voucher::where('code', $request->kode)->first())  {
+            return redirect()->back()->withErrors(['success' => 'Voucher tersedia']);
         }else
         {
-            return redirect()->back();
+            return redirect()->back()->withErrors(['kode' => 'Kode voucher tidak ditemukan']);
         }
+    }
+
+    public function tungguVerifikasi()
+    {
+        return 'halaman tunggu verifikasi';
+        return inertia('User/TungguVerifikasi');
+    }
+
+    public function verifikasiPembayaranUser(){
+        $users = User::where('status', 'menuggu verifikasi')->get();
+
+        $tahun = Tahun::with('dataDaftars.user')->where('status', 'aktif')->first();
+        $users2 = [];
+        foreach ($tahun->dataDaftars as $key => $value) {
+            $users2[$key] = $value->user;
+        }
+       $users3 = collect($users2)
+           ->where('status', 'menuggu verifikasi')
+           ->sortBy('id', SORT_REGULAR, true)
+           ->values();
+        
+
+        return inertia('VerifikasiPembayarans/VerifikasiPembayaransView',
+            [
+                'users' => $users3,
+                'tahun' => $tahun
+
+            ]);
     }
 }

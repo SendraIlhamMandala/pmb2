@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { mdiBallotOutline, mdiAccount, mdiInformation, mdiMail, mdiGithub } from "@mdi/js";
+import { mdiBallotOutline, mdiAccount, mdiInformation, mdiAlert, mdiGithub } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import FormField from "@/components/FormField.vue";
@@ -89,9 +89,9 @@ watch(kodeVoucher, (newKode) => {
 
 
 const cekVoucher = () => {
-    formVoucher.post(route('verifikasiVoucher'),{
+    formVoucher.post(route('verifikasiVoucher'), {
         preserveScroll: true,
-  onSuccess: () => form.reset('kode'),
+        onSuccess: () => form.reset('kode'),
 
     });
 };
@@ -134,11 +134,36 @@ console.log();
 
             <!-- <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable  -->
             <CardBox class=" shadow-2xl md:mx-auto" is-form is-hoverable @submit.prevent="formSubmit">
-                <NotificationBar class="flex flex-col items-center" color="info" :icon="mdiInformation">
+              
+              
+                <CardBox class=" shadow-2xl mb-4" is-form is-hoverable @submit.prevent="cekVoucher">
+                                <label for="voucher" class="block font-bold mb-2">Kode voucher
+                                </label>
+                                <div class="flex ">
+                                    <div class="grow ">
+                                        <FormField id="voucher">
+                                            <FormControl v-model="kodeVoucher" required />
+                                        </FormField>
+                                    </div>
+                                    <div class="self-center">
+
+                                        <BaseButton label="cek voucher" type="submit" color="info" />
+                                    </div>
 
 
-                    <div class="text-center"><b>Biaya pembayaran.</b></div>
-                    <div v-for="biaya_data in biaya" class="text-center">
+                                </div>
+                                <div>
+                                    <p class="text-red-500">{{ errors.kode }}</p>
+                                    <p class="text-green-500">{{ errors.success }}</p>
+                                </div>
+
+                            </CardBox>
+                <NotificationBar class="flex flex-col  " color="info" :icon="mdiInformation">
+
+
+                    <div class=""><b>Biaya Pendaftaran Sebesar {{ errors.success ? 'Rp.150.000' : biaya[0].biaya }} Dibayarkan Melalui Nomor
+                            Rekening (** pilih salah satu):</b></div>
+                    <div v-for="biaya_data in biaya" class="">
                         {{ biaya_data.nama_bank }} {{ biaya_data.no_rekening }} {{ biaya_data.atas_nama }}
                     </div>
 
@@ -150,7 +175,8 @@ console.log();
 
                 <div>
 
-                    <BaseButton @click.prevent="toggleForm" color="info" class=" relative z-50 bg" label="Button" />
+                    <BaseButton @click.prevent="toggleForm" color="info" class=" relative z-50 bg"
+                        label="Kirim bukti pembayaran" />
 
                     <transition name="slide" mode="out-in">
                         <div v-if="showForm" key="form" class=" z-10  p-4 bg-white shadow-md rounded-md">
@@ -194,25 +220,45 @@ console.log();
                                         <progress v-if="form.progress" :value="form.progress.percentage" max="100">
                                             {{ form.progress.percentage }}%
                                         </progress>
-                                        <p>{{ errors.foto_bukti }}</p>
+
+
+                                        <NotificationBar v-if="errors.foto_bukti" color="warning" :icon="mdiAlert" :outline="notificationsOutline">
+                                            <p>{{ errors.foto_bukti }}</p>
+                                            <template #right>
+                                                
+                                            </template>
+                                        </NotificationBar>
+
                                     </div>
                                 </div>
 
                             </FormField>
+                            {{ errors }}
+                            <CardBox class=" shadow-2xl mb-4" is-form is-hoverable @submit.prevent="cekVoucher">
+                                <label for="voucher" class="block font-bold mb-2">Kode voucher
+                                </label>
+                                <div class="flex ">
+                                    <div class="grow ">
+                                        <FormField id="voucher">
+                                            <FormControl v-model="kodeVoucher" required />
+                                        </FormField>
+                                    </div>
+                                    <div class="self-center">
 
-                            <CardBox class=" shadow-2xl" is-form is-hoverable @submit.prevent="cekVoucher">
+                                        <BaseButton label="cek voucher" type="submit" color="info" />
+                                    </div>
 
-                                <FormField label="Kode Voucher" label2="*" label3=" " class="mt-4">
-                                    <FormControl v-model="kodeVoucher" required />
-                                    {{ formVoucher }}
+
+                                </div>
+                                <div>
                                     <p class="text-red-500">{{ errors.kode }}</p>
-                                </FormField>
-                                <BaseButton label="trigger" type="submit" color="info" />
+                                    <p class="text-green-500">{{ errors.success }}</p>
+                                </div>
 
                             </CardBox>
 
 
-                            <BaseButton label="trigger" type="submit" color="info" />
+                            <BaseButton label="Submit" type="submit" color="info" />
                         </div>
                     </transition>
                 </div>

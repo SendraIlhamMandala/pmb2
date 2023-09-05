@@ -11,9 +11,9 @@ class Tahun extends Model
     //guarded
     protected $guarded = [];
 
-    //has one to DataDaftar
-    public function dataDaftar()
+    //has many DataDaftar
+    public function dataDaftars()
     {
-        return $this->hasOne(DataDaftar::class);
+        return $this->hasMany(DataDaftar::class);
     }
 }

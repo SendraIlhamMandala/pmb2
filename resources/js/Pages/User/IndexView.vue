@@ -8,6 +8,7 @@ import { mdiWhatsapp, mdiCellphone, mdiEmail, mdiGithub } from "@mdi/js";
 import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import AppHead from "@/components/AppHead.vue";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
     canLogin: {
@@ -57,6 +58,8 @@ const scrollToSection = (key) => {
     behavior: 'smooth',
   });
 };
+
+
 </script>
 
 <template>
@@ -76,7 +79,7 @@ const scrollToSection = (key) => {
             <ul class="hidden   lg:flex lg:items-center  lg:space-x-2">
                 <!-- Menu Items -->
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " @click="scrollToSection('jadwal')"> <p align="center" > Jadwal Pendaftaran</p></a>
+                    <a class="text-sm text-white select-none " @click="scrollToSection('jadwal')"> <p align="center" > Jadwal Pendaftaran</p></a>
                     
 
                 </li>
@@ -89,7 +92,7 @@ const scrollToSection = (key) => {
                 </li>
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
 
-                    <a class="text-sm text-white " @click="scrollToSection('petunjuk')"><p align="center" >Petunjuk Pendaftaran</p></a>
+                    <a class="text-sm text-white select-none " @click="scrollToSection('petunjuk')"><p align="center" >Petunjuk Pendaftaran</p></a>
                 </li>
                 <li class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"
@@ -100,7 +103,7 @@ const scrollToSection = (key) => {
                 </li>
 
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " @click="scrollToSection('seleksi')"><p align="center" >Jalur Seleksi</p></a>
+                    <a class="text-sm text-white select-none " @click="scrollToSection('seleksi')"><p align="center" >Jalur Seleksi</p></a>
                 </li>
                 <li class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"
@@ -111,7 +114,7 @@ const scrollToSection = (key) => {
                 </li>
 
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " @click="scrollToSection('beasiswa')"><p align="center" >Beasiswa</p></a>
+                    <a class="text-sm text-white select-none " @click="scrollToSection('beasiswa')"><p align="center" >Beasiswa</p></a>
                 </li>
                 <li class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"
@@ -122,7 +125,7 @@ const scrollToSection = (key) => {
                 </li>
 
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " href="#"><p align="center" >Program Studi</p></a>
+                    <a class="text-sm text-white select-none " href="#"><p align="center" >Program Studi</p></a>
                 </li>
                 <li class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"
@@ -133,7 +136,7 @@ const scrollToSection = (key) => {
                 </li>
 
                 <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
-                    <a class="text-sm text-white " href="#"><p align="center" >Hasil tes</p></a>
+                    <a class="text-sm text-white select-none " href="#"><p align="center" >Hasil tes</p></a>
                 </li>
             </ul>
 
@@ -146,6 +149,17 @@ const scrollToSection = (key) => {
                 class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                 >Dashboard
             </Link>
+
+            <Link
+                v-if="$page.props.auth.user"
+    
+                @click.prevent="router.post(route('logout'))"
+                class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                >logout
+            </Link>
+
+
+            
                
 
 

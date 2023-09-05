@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class);
             $table->string('no_rekening');
+            $table->boolean('pakai_voucher');
             $table->date('tanggal_bayar');
             $table->integer('jumlah_bayar');
             $table->text('foto_bukti')->nullable();

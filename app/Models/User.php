@@ -101,6 +101,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Tambahan::class);
     }
 
-    // has one 
+    // has one voucher
+    public function voucher()
+    {
+        return $this->hasOne(Voucher::class);
+    }
 
 }

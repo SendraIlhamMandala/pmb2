@@ -233,7 +233,6 @@ console.log();
                                 </div>
 
                             </FormField>
-                            {{ errors }}
                             <CardBox class=" shadow-2xl mb-4" is-form is-hoverable @submit.prevent="cekVoucher">
                                 <label for="voucher" class="block font-bold mb-2">Kode voucher
                                 </label>

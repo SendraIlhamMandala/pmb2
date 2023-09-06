@@ -338,6 +338,7 @@ console.log(props.users);
                                 <th>tambahan ID</th>
                                 <th>keterangan </th>
                                 <th>surat keterangan</th>
+                                <th>pdf surat keterangan</th>
                                 <th>date created</th>
 
 
@@ -349,6 +350,10 @@ console.log(props.users);
                                 <td>{{ user.tambahan.isi_data }}</td>
                                 <td> <img v-if="!!user.tambahan" :src="'storage/foto_bukti/' + user.tambahan.foto_bukti"
                                         alt="" width="100">
+                                </td>
+                                <td> 
+                                    
+                                    <a v-if="!!user.tambahan" :href="'storage/pdf/' + user.tambahan.pdf"  > <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">download</button> </a>
                                 </td>
                                 <td>{{ new Date(user.alamat.created_at).toLocaleDateString() }}</td>
 

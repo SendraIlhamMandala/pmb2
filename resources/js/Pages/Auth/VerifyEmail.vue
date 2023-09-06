@@ -11,7 +11,18 @@ import BaseButton from "@/components/BaseButton.vue";
 import FormValidationErrors from "@/components/FormValidationErrors.vue";
 import NotificationBarInCard from "@/components/NotificationBarInCard.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
-
+import NotificationBar from "@/components/NotificationBar.vue";
+import {
+  mdiContrastCircle,
+  mdiInformation,
+  mdiCheckCircle,
+  mdiAlert,
+  mdiAlertCircle,
+  mdiOpenInNew,
+  mdiClose,
+  mdiReload,
+  mdiTrendingUp,
+} from "@mdi/js";
 
 
 
@@ -20,6 +31,10 @@ const props = defineProps({
     status: {
         type: String,
     },
+  user: {
+    type: Object,
+    default: null,
+  }
 });
 
 const form = useForm({});
@@ -29,7 +44,9 @@ const submit = () => {
 };
 
 const verificationLinkSent = computed(() => props.status === 'verification-link-sent');
+console.log(props.user);
 </script>
+
 
 <template>
   
@@ -41,16 +58,35 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
         <FormValidationErrors />
 
         <NotificationBarInCard v-if="verificationLinkSent" color="success">
-          A new verification link has been sent to the email address you
-          provided during registration.
+          Link verifikasi baru telah dikirimkan ke {{ user.email }}
         </NotificationBarInCard>
 
         <FormField>
           <div class="mb-4 text-sm text-gray-600">
-            Thanks for signing up! Before getting started, could you verify your
-            email address by clicking on the link we just emailed to you? If you
-            didn't receive the email, we will gladly send you another.
+          <p>
+            <b>
+              
+              Halo {{ user.name  }} !
+            </b>
+          </p>
+          <br>
+
+            Terima kasih telah mendaftar! Sebelum memulai,
+            bisakah Kamu melakukan verifikasi dengan menekan link yang baru saja kami kirimkan ke  <b> {{ user.email }}</b> ?
+            Jika Kamu tidak menerima email tersebut, kami akan dengan senang hati mengirimkannya lagi.
           </div>
+
+          <NotificationBar
+        color="info"
+        :icon="mdiAlert"
+        :outline="notificationsOutline"
+      >
+        <b>Perhatian.</b> Cek folder <b>SPAM</b> di email Kamu jika kamu tidak menerima email dari kami 
+        <template #right>
+        </template>
+      </NotificationBar>
+
+
         </FormField>
 
         <BaseDivider />
@@ -59,7 +95,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
           <BaseButton
             type="submit"
             color="info"
-            label="Resend Verification Email"
+            label="Kirim ulang Email Verifikasi"
             :class="{ 'opacity-25': form.processing }"
             :disabled="form.processing"
           />

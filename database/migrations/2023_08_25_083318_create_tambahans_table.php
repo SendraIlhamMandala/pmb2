@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('jalur');
             $table->json('isi_data')->nullable();
             $table->text('foto_bukti')->nullable();
+            $table->text('pdf')->nullable();
             $table->timestamps();
         });
     }

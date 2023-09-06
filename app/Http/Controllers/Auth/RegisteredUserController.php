@@ -42,6 +42,10 @@ class RegisteredUserController extends Controller
             }
             // dd($tahun);
         
+            $userTahun = User::orderBy('created_at', 'desc')->with(['dataDaftar.tahun'])->whereHas('dataDaftar.tahun', function ($query) {
+                $query->where('status', 'aktif');
+            })->first();
+
 
         // dd($users->dataDaftar->tahun,$tahun,$tahun->no_utama+1);
         $request->validate([
@@ -58,15 +62,13 @@ class RegisteredUserController extends Controller
         ]);
         $user->syncRoles(['user']);
 
-        if ($users->dataDaftar->tahun == $tahun) {
-            
-        $user->nim = $users->nim+1;
+        if (!empty($userTahun)) {
+
+        $user->nim = $userTahun->nim+1;
 
         }else{
-
             $user->nim = $tahun->no_utama+1;
         }
-        // dd($user->nim,$tahun->no_utama,$users->nim);
 
         $data_daftar_list= [
             'shift' => '-',
@@ -77,7 +79,7 @@ class RegisteredUserController extends Controller
         ];
         $data_daftar = new DataDaftar($data_daftar_list);
     
-        $tahun->dataDaftar()->save($data_daftar);
+        $tahun->dataDaftars()->save($data_daftar);
         $user->dataDaftar()->save($data_daftar);
         $data_daftar->save();
         $user->save();

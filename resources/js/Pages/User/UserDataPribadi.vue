@@ -127,14 +127,14 @@ const form = useForm({
         tempat_lahir_ayah: '',
         tanggal_lahir_ayah: '',
         no_hp_ayah: '',
-        pekerjaan_ayah: null,
+        pekerjaan_ayah: '',
         penghasilan_ayah: '',
         nama_ibu: '',
         ktp_ibu: '',
         tempat_lahir_ibu: '',
         tanggal_lahir_ibu: '',
         no_hp_ibu: '',
-        pekerjaan_ibu: null,
+        pekerjaan_ibu: '',
         penghasilan_ibu: '',
 
     },
@@ -148,6 +148,7 @@ const form = useForm({
         jalur: '',
         isi_data: '',
         foto_bukti: '',
+        pdf: '',
 
     }
 
@@ -237,17 +238,17 @@ console.log(props.user);
                                     {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data pribadi" }}</span>
                             </NotificationBarInCard>
                         </div>
-                        <FormField label="Foto" class="mx-auto" >
+                        <FormField label="Foto" class="mx-auto">
                             <div class="">
-                                <div v-if="previewImage" class="flex justify-center h-40" >
+                                <div v-if="previewImage" class="flex justify-center h-40">
                                     <img :src="previewImage" alt="Preview foto" class="h-40" />
                                 </div>
-                                <div v-else class="flex justify-center h-40" >
-                                    <img :src="'/image/profile.png'"
-                                        alt="" />
+                                <div v-else class="flex justify-center h-40">
+                                    <img :src="'/image/profile.png'" alt="" />
                                 </div>
                                 <div class="grid grid-row-2 gap-4 col-span-2 justify-center">
-                                    <div class=" text-2xl justify-center mx-auto ">{{ user.name[0].toUpperCase() + user.name.slice(1) }}</div>
+                                    <div class=" text-2xl justify-center mx-auto ">{{ user.name[0].toUpperCase() +
+                                        user.name.slice(1) }}</div>
                                     <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChange"
                                         @input="form.dataPribadi.foto = $event.target.files[0]" label="Upload"
                                         class="w-full" required />
@@ -492,6 +493,8 @@ console.log(props.user);
 
                         <FormField label="Pekerjaan ayah">
                             <FormControl v-model="pilihan_pekerjaan_ayah" :options="selectOptionsPekerjaan" required />
+                            <p>{{ errors.pekerjaan_ayah }}</p>
+                        
                         </FormField>
 
                         <FormField v-if="pilihan_pekerjaan_ayah == 'lainnya'" label="Pekerjaan ayah">
@@ -553,6 +556,7 @@ console.log(props.user);
 
                         <FormField label="Pekerjaan Ibu">
                             <FormControl v-model="pilihan_pekerjaan_ibu" :options="selectOptionsPekerjaan" required />
+                            <p>{{ errors.pekerjaan_ibu }}</p>
                         </FormField>
 
                         <FormField v-if="pilihan_pekerjaan_ibu == 'lainnya'" label="Pekerjaan Ibu">
@@ -624,8 +628,10 @@ console.log(props.user);
                         <FormField label="Surat Keterangan Ranking" class=" justify-center ">
                             <div class="">
                                 <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeRanking"
-                                    @input="form.tambahan.foto_bukti = $event.target.files[0]" label="Upload" class="w-full" />
-                                <progress v-if="form.tambahan.progress" :value="form.tambahan.progress.percentage" max="100">
+                                    @input="form.tambahan.foto_bukti = $event.target.files[0]" label="Upload"
+                                    class="w-full" />
+                                <progress v-if="form.tambahan.progress" :value="form.tambahan.progress.percentage"
+                                    max="100">
                                     {{ form.tambahan.progress.percentage }}%
                                 </progress>
                                 <p>{{ errors.foto_bukti }}</p>
@@ -639,15 +645,115 @@ console.log(props.user);
                         </FormField>
 
                         <FormField label="keterangan ranking ">
-                            <FormControl v-model="form.tambahan.isi_data" type="text" placeholder="Keterangan"
-                                required />
+                            <FormControl v-model="form.tambahan.isi_data" type="text" placeholder="Keterangan" required />
                             <p>{{ errors.tambahan }}</p>
                         </FormField>
 
-                  
+
 
                     </div>
-                    <div>11</div>
+
+
+                    <div v-if="user.data_daftar.jalur == 'Prestasi non akademik'">
+
+                        <!-- Repeat similar code for other fields -->
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Tambahan"
+                                    }}</span>
+                            </NotificationBarInCard>
+                        </div>
+                        <FormField label="Foto Surat Keterangan Ranking" class=" justify-center ">
+                            <div class="">
+                                <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeRanking"
+                                    @input="form.tambahan.foto_bukti = $event.target.files[0]" label="Upload"
+                                    class="w-full" />
+                                <progress v-if="form.tambahan.progress" :value="form.tambahan.progress.percentage"
+                                    max="100">
+                                    {{ form.tambahan.progress.percentage }}%
+                                </progress>
+                                <p>{{ errors.foto_bukti }}</p>
+                            </div>
+                            <div v-if="previewImageRanking">
+                                <img width="100" height="100" :src="previewImageRanking" alt="Preview foto" />
+                            </div>
+                            <div v-else>
+                            </div>
+
+                        </FormField>
+
+                        
+                        <FormField label="PDF Surat Keterangan " class=" justify-center ">
+                            <div class="">
+                                <FormFilePicker accept=".pdf" 
+                                    @input="form.tambahan.pdf = $event.target.files[0]" label="Upload"
+                                    class="w-full" />
+                                <progress v-if="form.tambahan.progress" :value="form.tambahan.progress.percentage"
+                                    max="100">
+                                    {{ form.tambahan.progress.percentage }}%
+                                </progress>
+                                <p>{{ errors.pdf }}</p>
+                            </div>
+
+                        </FormField>
+
+                        <FormField label="keterangan ranking ">
+                            <FormControl v-model="form.tambahan.isi_data" type="text" placeholder="Keterangan" required />
+                            <p>{{ errors.tambahan }}</p>
+                        </FormField>
+
+
+
+                    </div>
+
+
+                    <div v-if="user.data_daftar.jalur == 'Undangan'">
+
+                        <!-- Repeat similar code for other fields -->
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Tambahan"
+                                    }}</span>
+                            </NotificationBarInCard>
+                        </div>
+                        <FormField label="Foto Surat Keterangan " class=" justify-center ">
+                            <div class="">
+                                <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeRanking"
+                                    @input="form.tambahan.foto_bukti = $event.target.files[0]" label="Upload"
+                                    class="w-full" />
+                                <progress v-if="form.tambahan.progress" :value="form.tambahan.progress.percentage"
+                                    max="100">
+                                    {{ form.tambahan.progress.percentage }}%
+                                </progress>
+                                <p>{{ errors.foto_bukti }}</p>
+                            </div>
+                            <div v-if="previewImageRanking">
+                                <img width="100" height="100" :src="previewImageRanking" alt="Preview foto" />
+                            </div>
+                            <div v-else>
+                            </div>
+
+                        </FormField>
+
+
+                        <FormField label="keterangan ">
+                            <FormControl v-model="form.tambahan.isi_data" type="text" placeholder="Keterangan" required />
+                            <p>{{ errors.tambahan }}</p>
+                        </FormField>
+
+
+
+                    </div>
+
+
                 </div>
 
 

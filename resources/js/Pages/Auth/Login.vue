@@ -53,7 +53,7 @@ const submit = () => {
                 <FormField
                     label="Email"
                     label-for="email"
-                    help="Please enter your email"
+                    help="Masukkan alamat email anda"
                 >
                     <FormControl
                         v-model="form.email"
@@ -68,7 +68,7 @@ const submit = () => {
                 <FormField
                     label="Password"
                     label-for="password"
-                    help="Please enter your password"
+                    help="Masukkan kata sandi anda"
                 >
                     <FormControl
                         v-model="form.password"
@@ -102,7 +102,7 @@ const submit = () => {
                             route-name="password.request"
                             color="info"
                             outline
-                            label="Remind"
+                            label="Lupa Password"
                         />
                     </BaseButtons>
                     <Link :href="route('register')"> Register </Link>

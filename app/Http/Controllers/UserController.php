@@ -176,7 +176,7 @@ class UserController extends Controller
         }
 
 
-        // dd($request->all(),$request->alamat);
+        // dd($request->all());
 
         $user = $id;
 
@@ -186,7 +186,6 @@ class UserController extends Controller
         $orangtua = $request->orangtua;
         $pindahan = $request->pindahan;
         $tambahan = $request->tambahan;
-
         $fotopribadi = $dataPribadi['foto'];
         $fotopribadi_name = date('Y-m-d') . $fotopribadi->getClientOriginalName();
         $foto_path = 'avatar/' . $fotopribadi_name;
@@ -212,7 +211,17 @@ class UserController extends Controller
             $foto_bukti_path = 'foto_bukti/' . $foto_bukti_name;
             Storage::disk('public')->put($foto_bukti_path, file_get_contents($foto_bukti));
             $tambahan['foto_bukti'] =  $foto_bukti_name;
+            
+
+
+            
+            $pdf = $tambahan['pdf'];
+            $pdf_name = date('Y-m-d') . $pdf->getClientOriginalName();
+            $pdf_path = 'pdf/' . $pdf_name;
+            Storage::disk('public')->put($pdf_path, file_get_contents($pdf));
+            $tambahan['pdf'] =  $pdf_name;
             $tambahan_input = new Tambahan($tambahan);
+
             $user->tambahan()->save($tambahan_input);
         }
         $sekolah_input = new AsalSekolah($sekolah);
@@ -323,6 +332,10 @@ class UserController extends Controller
         if (Auth()->user()->status == 'selesai test' ) {
             return redirect(route('user.data-pribadi'));
         }
+        if (Auth()->user()->status == 'menuggu verifikasi' ) {
+            return redirect(route('tungguVerifikasi'));
+        }
+        
 
         if (Auth()->user()->done_setup == 'done') {
             return redirect(route('welcome'));
@@ -347,7 +360,7 @@ class UserController extends Controller
     public function verifikasiPembayaran(Request $request, User $id): RedirectResponse
     {
 
-    
+        
         $validator = Validator::make($request->all(), [
           
             'no_rekening' => 'required',
@@ -374,6 +387,15 @@ class UserController extends Controller
         unset($data_faktur_baru['nim']);
         // $data_faktur_baru['pakai_voucher'] = 0;
         // dd($request->all(), $data_faktur_baru);
+
+        $foto_bukti = $data_faktur_baru['foto_bukti'];
+        $foto_bukti_name = date('Y-m-d') . $foto_bukti->getClientOriginalName();
+        $foto_bukti_path = 'foto_bukti/' . $foto_bukti_name;
+        Storage::disk('public')->put($foto_bukti_path, file_get_contents($foto_bukti));
+        $data_faktur_baru['foto_bukti'] =  $foto_bukti_name;
+
+
+
         $faktur_data = new Faktur($data_faktur_baru);
         $id->status = 'menuggu verifikasi';
         $id->dataPribadi()->save($faktur_data);
@@ -398,23 +420,17 @@ class UserController extends Controller
     }
 
     public function verifikasiPembayaranUser(){
-        $users = User::where('status', 'menuggu verifikasi')->get();
-
-        $tahun = Tahun::with('dataDaftars.user')->where('status', 'aktif')->first();
-        $users2 = [];
-        foreach ($tahun->dataDaftars as $key => $value) {
-            $users2[$key] = $value->user;
-        }
-       $users3 = collect($users2)
-           ->where('status', 'menuggu verifikasi')
-           ->sortBy('id', SORT_REGULAR, true)
-           ->values();
-        
-
+      
+        $users4 = User::with(['dataDaftar.tahun', 'faktur'])
+            ->orderBy('created_at', 'desc')
+            ->whereHas('dataDaftar.tahun', function ($query) {
+                $query->where('status', 'aktif');
+            })
+            ->where('status', 'menuggu verifikasi')
+            ->get();
         return inertia('VerifikasiPembayarans/VerifikasiPembayaransView',
             [
-                'users' => $users3,
-                'tahun' => $tahun
+                'users' => $users4,
 
             ]);
     }

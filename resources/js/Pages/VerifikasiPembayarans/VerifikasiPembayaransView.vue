@@ -94,8 +94,9 @@ const dataExcel = {
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: ""
+    verifikasi: ""
 });
+
 
 // Membuat referensi reaktif untuk status form dengan header
 const formStatusWithHeader = ref(true);
@@ -123,9 +124,6 @@ const formStatusSubmit = () => {
 };
 
 // Mendefinisikan kolom-kolom untuk tabel data
-
-
-
 const buttons_data = ['copy', dataExcel, 'pdf',
     {
         text: 'Toggle action',
@@ -140,9 +138,6 @@ const buttons_data = ['copy', dataExcel, 'pdf',
         }
     }
 ];
-
-
-
 const isModalOpen = ref(false);
 const modalData = ref([]);
 const openModal = (data) => {
@@ -173,6 +168,17 @@ document.addEventListener('mousedown', (event) => {
 
 console.log(props.users);
 
+
+const verifikasiPembayaranUser = (id, request) => {
+    // Add your code here
+    form.verifikasi = request;
+    form.post(route('verifikasiPembayaranUser', id));
+
+    // Example: 
+    console.log(request, id);
+};
+
+
 </script>
 
 <template>
@@ -182,28 +188,11 @@ console.log(props.users);
         <SectionMain>
             <SectionTitle>Form with status example</SectionTitle>
 
-            <CardBox is-form is-hoverable @submit.prevent="formStatusSubmit">
-                <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span><b class="capitalize">{{
-                        formStatusOptions[formStatusCurrent]
-                    }}</b>
-                        {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Tambah role" }}</span>
-                </NotificationBarInCard>
-                <FormField label="Name">
-                    <FormControl v-model="form.name" :icon-left="mdiAccount" help="Role name" placeholder="Role name"
-                        required />
-                </FormField>
-
-
-
-                <template #footer>
-                    <BaseButton label="Tambah" type="submit" color="info" />
-                </template>
-            </CardBox>
+        
             <CardBox class="mt-6">
 
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Game</span>
+                    <span>Tabel verifikasi user</span>
                 </NotificationBarInCard>
 
                 <DataTable ref="table" class="display table" width="100%" :options="{
@@ -231,7 +220,9 @@ console.log(props.users);
                             <td>{{ new Date(data.created_at).getFullYear() + "-" + new Date(data.created_at).getMonth() +
                                 "-" + new Date(data.created_at).getDate() }}</td>
                             <td>
-                                <BaseButton color="warning" :small="true" :rounded-full="true" :label="data.status" />
+                                <BaseButton v-if="data.faktur.validasi==1" color="success" :small="true" :rounded-full="true" :label="'sudah di verifikasi'" />
+                                <BaseButton v-else-if="data.faktur.validasi==2" color="danger" :small="true" :rounded-full="true" :label="'di tolak'" />
+                                <BaseButton v-else color="warning" :small="true" :rounded-full="true" :label="'belum di verifikasi'" />
                             </td>
                             <td>
                                 <BaseButton v-if="!!data.faktur && data.faktur.pakai_voucher" color="success" :small="true"
@@ -248,6 +239,10 @@ console.log(props.users);
 
                     </tbody>
                 </DataTable>
+
+                
+             
+
             </CardBox>
 
             <div>
@@ -295,9 +290,12 @@ console.log(props.users);
                                 <!--Footer-->
                                 <div class="flex justify-end pt-2">
                                     <button
+                                    @click="verifikasiPembayaranUser(modalData.id,'terima')"
                                         class="px-4 bg-green-500 p-3 rounded-lg text-white hover:bg-green-400 hover:text-white mr-2">Verifikasi
                                         Pembayaran</button>
                                     <button
+                                    @click="verifikasiPembayaranUser(modalData.id,'tolak')"
+
                                         class="px-4 bg-red-500 p-3 rounded-lg text-white hover:bg-red-400 hover:text-white mr-2">Tolak
                                         Pembayaran</button>
                                     <button @click="closeModal"

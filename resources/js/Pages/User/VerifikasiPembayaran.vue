@@ -71,7 +71,7 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formSubmit = () => {
-    form.post(route('verifikasiPembayaran', props.user.id));
+    form.post(route('uploadVerifikasiPembayaran', props.user.id));
 };
 
 const formVoucher = useForm(

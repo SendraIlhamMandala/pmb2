@@ -74,8 +74,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
 
 
-  Route::get('verifikasi-pembayaran-user', [UserController::class, 'verifikasiPembayaranUser'])->name('verifikasiPembayaranUser');
-  
+  Route::get('verifikasi-pembayaran-user', [UserController::class, 'verifikasiPembayaranUserIndex'])->name('verifikasiPembayaranUserIndex');
 
   Route::resource('roles', RoleController::class);
   Route::get('/roles/delete/{id}', [RoleController::class, 'deleteOne'])->name('roles.deleteOne');
@@ -144,9 +143,11 @@ Route::middleware('auth', 'verified')->group(function () {
   Route::get('/data-pribadi', [UserController::class, 'dataPribadi'])->name('user.data-pribadi');
   Route::get('/data-jalur', [UserController::class, 'dataJalur'])->name('user.data-jalur');
   Route::get('/verifikasi-pembayaran', [UserController::class, 'halamanVerifikasiPembayaran'])->name('HalamanVerifikasiPembayaran');
-  Route::post('/verifikasi-pembayaran/{id}', [UserController::class, 'verifikasiPembayaran'])->name('verifikasiPembayaran');
+  Route::post('/verifikasi-pembayaran/{id}', [UserController::class, 'uploadVerifikasiPembayaran'])->name('uploadVerifikasiPembayaran');
+  Route::post('/verifikasi-pembayaran-user/{id}', [UserController::class, 'verifikasiPembayaranUser'])->name('verifikasiPembayaranUser');
   Route::post('/verifikasi-voucher', [UserController::class, 'verifikasiVoucher'])->name('verifikasiVoucher');
   Route::get('/tunggu-verifikasi', [UserController::class, 'tungguVerifikasi'])->name('tungguVerifikasi');
+  Route::get('/verifikasi-diterima', [UserController::class, 'diterimaVerifikasi'])->name('diterimaVerifikasi');
 
   Route::get('/cat', [Controller::class, 'cat']);
   Route::get('/datapribadicek', function () {

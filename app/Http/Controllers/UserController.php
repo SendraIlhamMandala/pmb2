@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserController extends Controller
 {
@@ -211,10 +212,10 @@ class UserController extends Controller
             $foto_bukti_path = 'foto_bukti/' . $foto_bukti_name;
             Storage::disk('public')->put($foto_bukti_path, file_get_contents($foto_bukti));
             $tambahan['foto_bukti'] =  $foto_bukti_name;
-            
 
 
-            
+
+
             $pdf = $tambahan['pdf'];
             $pdf_name = date('Y-m-d') . $pdf->getClientOriginalName();
             $pdf_path = 'pdf/' . $pdf_name;
@@ -266,8 +267,9 @@ class UserController extends Controller
         // dd($request->all(),$user->dataDaftar,$user);
         $user->done_setup = 'pribadi';
         if (JalurDaftar::where('name', $request->jalur)->first()->test) {
-            $user->status = 'sedang mengikuti test';
+            $user->done_setup = 'pembayaran';
         }
+
         $user->dataDaftar->save();
         $user->save();
         return redirect(route('user.data-pribadi'));
@@ -277,14 +279,18 @@ class UserController extends Controller
     //showDataPribadi
     public function dataPribadi()
     {
-        if (Auth()->user()->status == 'sedang mengikuti test') {
+        if (Auth()->user()->done_setup == 'pembayaran') {
             return redirect(route('HalamanVerifikasiPembayaran'));
         }
 
-        if (Auth()->user()->status == 'menuggu verifikasi') {
+        if (Auth()->user()->done_setup == 'sedang mengikuti test') {
+            return redirect(route('diterimaVerifikasi'));
+        }
+
+        if (Auth()->user()->done_setup == 'menunggu verifikasi') {
             return redirect(route('tungguVerifikasi'));
         }
-        
+
         if (Auth()->user()->done_setup == 'not_done') {
             return redirect(route('user.data-jalur'));
         } elseif (Auth()->user()->done_setup == 'done') {
@@ -299,21 +305,25 @@ class UserController extends Controller
 
     public function dataJalur()
     {
+        $redirectRoutes = [
+            'pembayaran' => 'HalamanVerifikasiPembayaran',
+            'sedang mengikuti test' => 'HalamanVerifikasiPembayaran',
+            'menunggu verifikasi' => 'HalamanVerifikasiPembayaran',
+            'selesai test' => 'user.data-pribadi',
+            'pribadi' => 'user.data-pribadi',
+            'done' => 'welcome',
+            'sedang mengikuti test' => 'diterimaVerifikasi',
+        ];
 
-        if (Auth()->user()->status == 'sedang mengikuti test') {
-            return redirect(route('HalamanVerifikasiPembayaran'));
+        $doneSetup = Auth()->user()->done_setup;
+
+        if (isset($redirectRoutes[$doneSetup])) {
+            return redirect(route($redirectRoutes[$doneSetup]));
+        } else {
+            // Handle the case when $doneSetup is not found in the redirectRoutes array
+            // You can redirect to a default page or show an error message
+            return redirect(route('404'));
         }
-
-        if (Auth()->user()->status == 'selesai test' ) {
-            return redirect(route('user.data-pribadi'));
-        }
-
-        if (Auth()->user()->done_setup == 'pribadi') {
-            return redirect(route('user.data-pribadi'));
-        } elseif (Auth()->user()->done_setup == 'done') {
-            return redirect(route('welcome'));
-        }
-
         $user = Auth()->user();
         $shifts = Shift::all();
         $shifts->load('jalurDaftars');
@@ -329,13 +339,14 @@ class UserController extends Controller
     public function halamanVerifikasiPembayaran()
     {
 
-        if (Auth()->user()->status == 'selesai test' ) {
+
+        if (Auth()->user()->done_setup != 'pembayaran') {
             return redirect(route('user.data-pribadi'));
         }
-        if (Auth()->user()->status == 'menuggu verifikasi' ) {
+        if (Auth()->user()->done_setup == 'menunggu verifikasi') {
             return redirect(route('tungguVerifikasi'));
         }
-        
+
 
         if (Auth()->user()->done_setup == 'done') {
             return redirect(route('welcome'));
@@ -357,12 +368,11 @@ class UserController extends Controller
         );
     }
 
-    public function verifikasiPembayaran(Request $request, User $id): RedirectResponse
+    public function uploadVerifikasiPembayaran(Request $request, User $id): RedirectResponse
     {
 
-        
         $validator = Validator::make($request->all(), [
-          
+
             'no_rekening' => 'required',
             'tanggal_bayar' => 'required',
             'jumlah_bayar' => 'required',
@@ -378,10 +388,10 @@ class UserController extends Controller
 
         $data_faktur_baru = $request->all();
 
-        if(Voucher::where('code',$request->kode)->first()){
-        $data_faktur_baru['pakai_voucher'] = 1;
+        if (Voucher::where('code', $request->kode)->first()) {
+            $data_faktur_baru['pakai_voucher'] = 1;
         }
-        
+
         unset($data_faktur_baru['kode']);
         unset($data_faktur_baru['name']);
         unset($data_faktur_baru['nim']);
@@ -397,7 +407,7 @@ class UserController extends Controller
 
 
         $faktur_data = new Faktur($data_faktur_baru);
-        $id->status = 'menuggu verifikasi';
+        $id->done_setup = 'menunggu verifikasi';
         $id->dataPribadi()->save($faktur_data);
         $id->save();
         return redirect(route('tungguVerifikasi'));
@@ -405,33 +415,90 @@ class UserController extends Controller
 
     public function verifikasiVoucher(Request $request): RedirectResponse
     {
-        if (Voucher::where('code', $request->kode)->first())  {
+        if (Voucher::where('code', $request->kode)->first()) {
             return redirect()->back()->withErrors(['success' => 'Voucher tersedia']);
-        }else
-        {
+        } else {
             return redirect()->back()->withErrors(['kode' => 'Kode voucher tidak ditemukan']);
         }
     }
 
     public function tungguVerifikasi()
     {
-        return 'halaman tunggu verifikasi';
+        if (!Auth()->user()->faktur) {
+            return redirect('/');
+        }
+        if (Auth()->user()->faktur && Auth()->user()->faktur->validasi == 1) {
+            dd('terima');
+        } else if (Auth()->user()->faktur && Auth()->user()->faktur->validasi === 2) {
+            dd('tolak');
+        }
+
+        $user = Auth()->user();
+        return inertia('User/UserTunggu', [
+            'user' => $user,
+        ]);
+
         return inertia('User/TungguVerifikasi');
     }
 
-    public function verifikasiPembayaranUser(){
-      
+    public function diterimaVerifikasi()
+    {
+        if (!Auth()->user()->faktur) {
+            return redirect('/');
+        }
+        if (Auth()->user()->faktur && Auth()->user()->faktur->validasi === 2) {
+            dd('tolak');
+        }
+
+        $user = Auth()->user();
+        return inertia('User/UserDiterima', [
+            'user' => $user,
+        ]);
+
+    
+    }
+
+
+    public function verifikasiPembayaranUserIndex(): Response
+    {
+
         $users4 = User::with(['dataDaftar.tahun', 'faktur'])
             ->orderBy('created_at', 'desc')
             ->whereHas('dataDaftar.tahun', function ($query) {
                 $query->where('status', 'aktif');
             })
-            ->where('status', 'menuggu verifikasi')
+            ->where('done_setup', 'menunggu verifikasi')
             ->get();
-        return inertia('VerifikasiPembayarans/VerifikasiPembayaransView',
+        return inertia(
+            'VerifikasiPembayarans/VerifikasiPembayaransView',
             [
                 'users' => $users4,
 
-            ]);
+            ]
+        );
+    }
+
+    //function verifikasiPembayaranUser
+    public function verifikasiPembayaranUser(User $id, Request $request)
+    {
+        $validasiValues = [
+            'terima' => 1,
+            'tolak' => 2,
+        ];
+
+
+        $id->faktur->validasi = $validasiValues[$request->verifikasi] ?? 0;
+
+        if ($validasiValues[$request->verifikasi] == 1) {
+            $id->done_setup = 'sedang mengikuti test';
+        } else if ($validasiValues[$request->verifikasi] == 2) {
+            $id->done_setup = 'menunggu verifikasi';
+            $id->status = 'pembayaran ditolak';
+        } else {
+            $id->done_setup = 'menunggu verifikasi';
+        }
+        $id->faktur->save();
+        $id->save();
+        return Inertia::location('/verifikasi-pembayaran-user');
     }
 }

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('tanggal_bayar');
             $table->integer('jumlah_bayar');
             $table->text('foto_bukti')->nullable();
-            $table->boolean('validasi')->default(0);
+            $table->int('validasi')->default(0);
             $table->timestamps();
         });
     }

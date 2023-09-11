@@ -1,6 +1,6 @@
 <script setup>
 import { mdiForwardburger, mdiBackburger, mdiMenu } from "@mdi/js";
-import { ref } from "vue";
+import { ref , watch } from "vue";
 // import { useRouter } from "vue-router";
 import { router } from "@inertiajs/vue3";
 
@@ -31,6 +31,16 @@ const menuClick = (event, item) => {
     router.post(route("logout"));
   }
 };
+
+const emit = defineEmits(['expanded'])
+
+// emit with argument
+watch(isAsideMobileExpanded, (val) => {
+console.log(val);
+  
+})
+
+
 </script>
 
 <template>

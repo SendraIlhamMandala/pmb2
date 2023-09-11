@@ -21,7 +21,7 @@ const toggleScale = () => {
 };
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["game", "user", "errors"]);
+var props = defineProps(["game", "user", "token", "errors"]);
 
 
 
@@ -66,7 +66,7 @@ const formSubmit = () => {
             <div>Password</div>
             <div>: {{ user.nim }}</div>
             <div>Token</div>
-            <div>: token</div>
+            <div>: {{token}}</div>
 
 
           </div>

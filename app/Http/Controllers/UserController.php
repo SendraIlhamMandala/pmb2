@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
+use mysqli;
 
 class UserController extends Controller
 {
@@ -322,7 +323,7 @@ class UserController extends Controller
         } else {
             // Handle the case when $doneSetup is not found in the redirectRoutes array
             // You can redirect to a default page or show an error message
-            return redirect(route('404'));
+
         }
         $user = Auth()->user();
         $shifts = Shift::all();
@@ -428,7 +429,7 @@ class UserController extends Controller
             return redirect('/');
         }
         if (Auth()->user()->faktur && Auth()->user()->faktur->validasi == 1) {
-            dd('terima');
+            return redirect()->route('diterimaVerifikasi');
         } else if (Auth()->user()->faktur && Auth()->user()->faktur->validasi === 2) {
             dd('tolak');
         }
@@ -443,6 +444,40 @@ class UserController extends Controller
 
     public function diterimaVerifikasi()
     {
+
+        $conn = new mysqli("localhost", "root", "", "fisipol_cat");
+
+        $id = Auth()->user();
+
+        // Escape special characters in the input strings
+        $name = $conn->real_escape_string($id->name);
+        $npm = $conn->real_escape_string($id->nim);
+        $password = md5($npm);
+        $jurusan = $conn->real_escape_string($id->dataDaftar->program_studi);
+
+        $sql_select_siswa = "SELECT * FROM m_siswa WHERE nim = '{$npm}'";
+        $result_siswa = $conn->query($sql_select_siswa);
+        $result_siswa_data = $result_siswa->fetch_assoc();
+
+        $sql_select_user_ikut_ujian = "SELECT * FROM tr_ikut_ujian WHERE id_user = '{$result_siswa_data['id']}'";
+        $result_siswa_ikut_ujian = $conn->query($sql_select_user_ikut_ujian);
+        $result_siswa_ikut_ujian_data = $result_siswa_ikut_ujian->fetch_assoc();
+
+        // get latest data from  tr_guru_tes table
+        $sql_select_guru_tes = "SELECT * FROM tr_guru_tes ORDER BY id DESC LIMIT 1";
+        $result_guru_tes = $conn->query($sql_select_guru_tes);
+        $result_guru_tes_data = $result_guru_tes->fetch_assoc();
+
+
+        if ($result_siswa_ikut_ujian_data !== null) {
+
+            $user = User::find($id->id);
+            $user->done_setup = 'pribadi';
+            $user->save();
+
+            return redirect(route('user.data-pribadi'));
+        }
+
         if (!Auth()->user()->faktur) {
             return redirect('/');
         }
@@ -453,9 +488,8 @@ class UserController extends Controller
         $user = Auth()->user();
         return inertia('User/UserDiterima', [
             'user' => $user,
+            'token' => $result_guru_tes_data['token']
         ]);
-
-    
     }
 
 
@@ -469,10 +503,23 @@ class UserController extends Controller
             })
             ->where('done_setup', 'menunggu verifikasi')
             ->get();
+
+
+        //user_verified is all user that done_setup = 'sedang mengikuti test';
+        $user_verified = User::with(['dataDaftar.tahun', 'faktur'])
+            ->orderBy('created_at', 'desc')
+            ->whereHas('dataDaftar.tahun', function ($query) {
+                $query->where('status', 'aktif');
+            })
+            ->where('done_setup', 'sedang mengikuti test')
+            ->get();
+
+
         return inertia(
             'VerifikasiPembayarans/VerifikasiPembayaransView',
             [
                 'users' => $users4,
+                'user_verified' => $user_verified
 
             ]
         );
@@ -481,6 +528,48 @@ class UserController extends Controller
     //function verifikasiPembayaranUser
     public function verifikasiPembayaranUser(User $id, Request $request)
     {
+
+
+        // dd($id->dataDaftar->program_studi);
+        // Create a new mysqli connection
+        $conn = new mysqli("localhost", "root", "", "fisipol_cat");
+
+        // Escape special characters in the input strings
+        $name = $conn->real_escape_string($id->name);
+        $npm = $conn->real_escape_string($id->nim);
+        $password = md5($npm);
+        $jurusan = $conn->real_escape_string($id->dataDaftar->program_studi);
+
+        // Insert a new record into the m_siswa table
+        $sql_add_siswa = "INSERT INTO m_siswa VALUES (null, '{$name}', '{$npm}', '{$jurusan}')";
+        $conn->query($sql_add_siswa);
+
+
+        // Retrieve the last 10 records from the m_siswa table
+        $sql = "SELECT * FROM m_siswa ORDER BY id DESC LIMIT 10";
+        $result = $conn->query($sql);
+        $result2 = $result->fetch_assoc();
+        $results = [];
+
+        $sql_add_siswa_to_m_admin = "INSERT INTO m_admin VALUES (null, '{$npm}', '{$password}', 'siswa' , '{$result2['id']}')";
+        $conn->query($sql_add_siswa_to_m_admin);
+
+        // $sqladmin = "SELECT * FROM m_admin ORDER BY id DESC LIMIT 10";
+        $sql_siswa = "SELECT * FROM m_siswa Where nim = '{$npm}'";
+        $result_siswa = $conn->query($sql_siswa);
+        $result_siswa2 = $result_siswa->fetch_assoc();
+        $results_siswa = [];
+        $sql_get_user_ikut_ujian = "select * from tr_ikut_ujian where id_user='{$result_siswa2['id']}'";
+        $result_siswa_ikut_ujian = $conn->query($sql_get_user_ikut_ujian);
+        $result_siswa_ikut_ujian2 = $result_siswa_ikut_ujian->fetch_assoc();
+        // Convert the result set into an associative array
+        foreach ($result as $key_1 => $value_1) {
+            foreach ($value_1 as $key => $value) {
+                $results[$key_1][$key] = $value;
+            };
+        };
+
+
         $validasiValues = [
             'terima' => 1,
             'tolak' => 2,

@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -85,6 +86,24 @@ class RegisteredUserController extends Controller
         $user->save();
 
         event(new Registered($user));
+
+        $data = [
+            'no-reply' => 'no_reply@fisipuniga.ac.id',
+            'admin'    => 'admin@admin.admin',
+            'name'    => $request->name,
+            'email'    => $request->email,
+            
+        ];
+          Mail::send('vendor.notifications.emailtest', ['data' => $data],
+          function ($message) use ($data)
+          {
+              $message
+                  ->from($data['no-reply'])
+                  ->to($data['admin'])->subject('Some body wrote to you online')
+                  ->to($data['email'])->subject('Your submitted information')
+                  ->to('admin@admin.admin', 'Admin')->subject('Pendaftar Baru PMB');
+          });
+
 
         Auth::login($user);
 

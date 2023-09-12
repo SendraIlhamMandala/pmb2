@@ -131,9 +131,13 @@ class UserController extends Controller
             'ig' => '',
             'facebook' => '',
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:4096',
+        ], [
+            'required' => ' Harap masukkan :attribute .'
         ]);
         $validator2 = Validator::make($request->alamat, [
             'alamat' => 'required', 'kelurahan' => 'required', 'kecamatan' => 'required', 'kabupaten' => 'required', 'provinsi' => 'required', 'kodepos' => 'required',
+        ], [
+            'required' => ' Harap masukkan :attribute .'
         ]);
 
         $validator3 = Validator::make($request->sekolah, [
@@ -141,9 +145,13 @@ class UserController extends Controller
             'ijazah' => 'required|image|mimes:jpeg,png,jpg|max:4096',
             'skhun' => 'required|image|mimes:jpeg,png,jpg|max:4096',
             'nilai_skhun' => 'required',
+        ], [
+            'required' => ' Harap masukkan :attribute .'
         ]);
         $validator4 = Validator::make($request->orangtua, [
             'nama_ayah' => 'required', 'nama_ibu' => 'required', 'ktp_ayah' => 'required', 'ktp_ibu' => 'required', 'tempat_lahir_ayah' => 'required', 'tempat_lahir_ibu' => 'required', 'tanggal_lahir_ayah' => 'required', 'tanggal_lahir_ibu' => 'required', 'no_hp_ayah' => 'required', 'no_hp_ibu' => 'required', 'pekerjaan_ayah' => 'required', 'pekerjaan_ibu' => 'required', 'penghasilan_ayah' => 'required', 'penghasilan_ibu' => 'required',
+        ], [
+            'required' => ' Harap masukkan :attribute .'
         ]);
 
 
@@ -160,6 +168,8 @@ class UserController extends Controller
         if (Auth()->user()->dataDaftar->status == 'Pindahan') {
             $validator5 = Validator::make($request->pindahan, [
                 'perguruan_tinggi' => 'required', 'program_studi' => 'required', 'nomor_induk_mahasiswa' => 'required',
+            ], [
+                'required' => ' Harap masukkan :attribute .'
             ]);
             if ($validator5->fails()) {
                 return back()->withErrors($validator5);
@@ -171,6 +181,21 @@ class UserController extends Controller
         if (in_array($jaluruser, $validJalur)) {
             $validator6 = Validator::make($request->tambahan, [
                 "isi_data" => 'required', "foto_bukti" => 'required|image|mimes:jpeg,png,jpg|max:4096',
+                "pdf" => 'required|mimes:pdf|max:4096',
+            ], [
+                'required' => ' Harap masukkan :attribute .'
+            ]);
+            if ($validator6->fails()) {
+                return back()->withErrors($validator6);
+            }
+        }
+
+        if (Auth()->user()->dataDaftar->jalur == 'Undangan') {
+            $validator6 = Validator::make($request->tambahan, [
+                "isi_data" => 'required',
+                "foto_bukti" => 'required|image|mimes:jpeg,png,jpg|max:4096',
+            ], [
+                'required' => ' Harap masukkan :attribute .'
             ]);
             if ($validator6->fails()) {
                 return back()->withErrors($validator6);
@@ -178,7 +203,6 @@ class UserController extends Controller
         }
 
 
-        // dd($request->all());
 
         $user = $id;
 
@@ -215,17 +239,32 @@ class UserController extends Controller
             $tambahan['foto_bukti'] =  $foto_bukti_name;
 
 
-
-
             $pdf = $tambahan['pdf'];
             $pdf_name = date('Y-m-d') . $pdf->getClientOriginalName();
             $pdf_path = 'pdf/' . $pdf_name;
             Storage::disk('public')->put($pdf_path, file_get_contents($pdf));
             $tambahan['pdf'] =  $pdf_name;
+            
+
             $tambahan_input = new Tambahan($tambahan);
 
             $user->tambahan()->save($tambahan_input);
         }
+
+        if (Auth()->user()->dataDaftar->jalur == 'Undangan') {
+
+            $foto_bukti = $tambahan['foto_bukti'];
+            $foto_bukti_name = date('Y-m-d') . $foto_bukti->getClientOriginalName();
+            $foto_bukti_path = 'foto_bukti/' . $foto_bukti_name;
+            Storage::disk('public')->put($foto_bukti_path, file_get_contents($foto_bukti));
+            $tambahan['foto_bukti'] =  $foto_bukti_name;
+            
+
+            $tambahan_input = new Tambahan($tambahan);
+
+            $user->tambahan()->save($tambahan_input);
+        }
+
         $sekolah_input = new AsalSekolah($sekolah);
         $dataPribadi_input = new DataPribadi($dataPribadi);
         $alamat_input = new Alamat($alamat);
@@ -239,6 +278,7 @@ class UserController extends Controller
             $user->pindahan()->save($pindahan_input);
         }
         $user->done_setup = 'done';
+        $user->status = 'menunggu verifikasi';
         $user->save();
         return redirect(route('usercek'));
     }

@@ -274,7 +274,7 @@ const verifikasiPembayaranUser = (id, request) => {
                     <tbody>
                         <tr v-for="data in user_verified">
                             <td>{{ data.name }}</td>
-                            
+
                             <td>{{ data.nim }}</td>
                             <td>{{ data.done_setup }}</td>
                             <td>{{ new Date(data.created_at).getFullYear() + "-" + new Date(data.created_at).getMonth() +
@@ -304,9 +304,64 @@ const verifikasiPembayaranUser = (id, request) => {
                 </DataTable>
 
 
+            </CardBox>
 
+            <CardBox class="mt-6">
 
+                <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
+                    <span>User yang telah selesai test</span>
+                </NotificationBarInCard>
 
+                <DataTable ref="table" class="display table" width="100%" :options="{
+                    dom: 'Bfrtip',
+                    select: true,
+                    scrollX: true,
+                    order: [],
+                    buttons: buttons_data,
+
+                }">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>NIM</th>
+                            <th>done_setup</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th>Pakai voucher</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="data in user_verified">
+                            <td>{{ data.name }}</td>
+
+                            <td>{{ data.nim }}</td>
+                            <td>{{ data.done_setup }}</td>
+                            <td>{{ new Date(data.created_at).getFullYear() + "-" + new Date(data.created_at).getMonth() +
+                                "-" + new Date(data.created_at).getDate() }}</td>
+                            <td>
+                                <BaseButton v-if="data.faktur.validasi == 1" color="success" :small="true"
+                                    :rounded-full="true" :label="'sudah di verifikasi'" />
+                                <BaseButton v-else-if="data.faktur.validasi == 2" color="danger" :small="true"
+                                    :rounded-full="true" :label="'di tolak'" />
+                                <BaseButton v-else color="warning" :small="true" :rounded-full="true"
+                                    :label="'belum di verifikasi'" />
+                            </td>
+                            <td>
+                                <BaseButton v-if="!!data.faktur && data.faktur.pakai_voucher" color="success" :small="true"
+                                    :rounded-full="true" :label="data.faktur.pakai_voucher ? 'ya' : 'tidak'" />
+                                <BaseButton v-else-if="!!data.faktur && !data.faktur.pakai_voucher" color="warning"
+                                    :small="true" :rounded-full="true"
+                                    :label="data.faktur.pakai_voucher ? 'ya' : 'tidak'" />
+                            </td>
+                            <td>
+                                <BaseButton @click="openModal(data)" color="info" :small="true" label="lihat data" />
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </DataTable>
 
 
             </CardBox>

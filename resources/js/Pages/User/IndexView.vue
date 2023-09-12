@@ -6,7 +6,7 @@ import BaseIcon from "@/components/BaseIcon.vue";
 
 import { mdiWhatsapp, mdiCellphone, mdiEmail, mdiGithub } from "@mdi/js";
 import { Head, Link } from '@inertiajs/vue3';
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted , onUnmounted, onBeforeUnmount } from 'vue';
 import AppHead from "@/components/AppHead.vue";
 import { router } from "@inertiajs/vue3";
 
@@ -37,9 +37,31 @@ onBeforeUnmount(() => {
 });
 const menuVisible = ref(false);
 
-const toggleMenu = () => {
-    menuVisible.value = !menuVisible.value;
+
+
+const toggleMenu2 = (e) => {
+  menuVisible.value = !menuVisible.value;
 };
+
+const toggleMenu = (e) => {
+  e.stopPropagation(); // Prevent click event from propagating to document click handler
+  menuVisible.value = !menuVisible.value;
+};
+
+const closeMenuOnOutsideClick = (e) => {
+  if (menuVisible.value && !e.target.closest('.navbar-menu')) {
+    menuVisible.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', closeMenuOnOutsideClick);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', closeMenuOnOutsideClick);
+});
+
 
 const footer = ref(null);
 const jadwal = ref(null);
@@ -55,10 +77,10 @@ const scrollToSection = (key) => {
 
     if (screenWidth.value < 768) {
 
-        toggleMenu();
+        toggleMenu2();
     }
     window.scrollTo({
-        top: sect[key].value.offsetTop,
+        top: sect[key].value.offsetTop-200,
         behavior: 'smooth',
     });
 };
@@ -170,11 +192,6 @@ const scrollToSection = (key) => {
                         </Link>
 
 
-
-
-
-
-
                         <div class="flex" v-else>
                             <a class="hidden lg:inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 href="/login">login</a>
@@ -195,50 +212,51 @@ const scrollToSection = (key) => {
             </nav>
 
 
-            <div v-if="menuVisible" class="navbar-menu fixed inset-x-0 relative z-50">
-                <div class="navbar-backdrop fixed inset-x-0 bg-gray-800 opacity-25" @click="toggleMenu"></div>
+            
+            <transition name="slide" mode="out-in">
+            <div v-if="menuVisible" class="navbar-menu fixed inset-x-0 z-50">
 
-                <nav
-                    class="fixed inset-x-0 top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
+                <div class="fixed inset-x-0  flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
                     <!-- Mobile Menu Content -->
-                    <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
+                    <div class=" ">
                         <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
                             @click="scrollToSection('jadwal')">Jadwal Pendaftaran</a>
-                    </li>
+                    </div>
 
-                    <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
+                    <div class=" ">
 
                         <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
                             @click="scrollToSection('petunjuk')">Petunjuk Pendaftaran</a>
-                    </li>
+                    </div>
 
 
-                    <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
+                    <div class=" ">
                         <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                            @click="scrollToSection('seleksi')">Jalur
+                            @click="scrollToSection('jalur')">Jalur
                             Seleksi</a>
-                    </li>
+                    </div>
 
-                    <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
+                    <div class=" ">
 
                         <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
                             @click="scrollToSection('beasiswa')">Beasiswa</a>
-                    </li>
+                    </div>
 
 
-                    <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
+                    <div class=" ">
                         <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                            @click="scrollToSection('program_studi')">Program Studi</a>
-                    </li>
+                            @click="scrollToSection('prodi')">Program Studi</a>
+                    </div>
 
 
-                    <li class="transition  ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 ">
+                    <div class=" ">
                         <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
                             href="#">Hasil
                             tes</a>
-                    </li>
-                </nav>
+                    </div>
+                </div>
             </div>
+            </transition>
         </section>
 
 
@@ -355,19 +373,18 @@ const scrollToSection = (key) => {
                 <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
                     <img src="image/jadwal.png" alt="image" class="w-full" />
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
-                        <h3>
-                            <a href="javascript:void(0)"
-                                class="text-dark justify-start  hover:text-primary mb-4 block text-xl font-semibold sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px]">
-                                Jadwal pendaftaran 2024
-                            </a>
-                        </h3>
-                        <p class="text-body-color mb-7 ">
-                        <ul class="text-left">
-                            <li> Jadwal Pendaftaran </li>
-                            <li> Jadwal Seleksi </li>
-                            <li> Jadwal Tes </li>
-                        </ul>
-                        </p>
+                        <div class="card-body">
+    <div class="text-wrap p-lg-6">
+        <h5 class=" uppercase font-bold text-blue-500">Jadwal Pendaftaran</h5>
+        <hr class="border-0 h-1 bg-gradient-to-r from-gray-200 via-gray-500 to-gray-200">
+        <br>
+        <p class="text-left"><strong>Gelombang 1</strong> : 1 Februari 2023 - 31 Maret 2023</p>
+        <p class="text-left"><strong>Gelombang 2</strong> : 1 April 2023 - 31 Mei 2023</p>
+        <p class="text-left"><strong>Gelombang 3</strong> : 1 Juni 2023 - 31 Juli 2023</p>
+        <p class="text-left"><strong>Gelombang 4</strong> : 1 Agustus 2023 - 30 September 2023</p>
+    </div>
+</div>
+
                         <a href="javascript:void(0)"
                             class="text-body-color hover:border-primary hover:bg-primary inline-block rounded-full border border-[#E5E7EB] py-2 px-7 text-base font-medium transition hover:text-white">
                             View Details
@@ -727,3 +744,23 @@ const scrollToSection = (key) => {
         </footer>
     </div>
 </template>
+<style>
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.5s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+    opacity: 0;
+    transform: translateY(-5%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+    transform: translateX(0);
+    opacity: 100;
+}
+</style>
+  
+

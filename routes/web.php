@@ -11,9 +11,11 @@ use App\Http\Controllers\TahunController;
 use App\Http\Controllers\UserController;
 use App\Models\DataPribadi;
 use App\Models\ProgramStudi;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,7 +27,6 @@ use Inertia\Inertia;
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
-|
 */
 
 // Route::get('/', function () {
@@ -182,6 +183,41 @@ Route::get('/getadmin', [Controller::class, 'getAdmin']);
 Route::get('/createadmin', [Controller::class, 'createAdmin']);
 Route::get('/link', function () {
   Artisan::call('storage:link');
+});
+
+Route::get('/testmail', function () {
+  // Mail::to(User::find(197))
+  $data = [
+    'no-reply' => 'contact-from-web@nomail.com',
+    'admin'    => 'mohamedsasa201042@yahoo.com',
+    'name'    => Auth::user()->name,
+    'email'    => Auth::user()->email,
+    'phone'    => Auth::user()->dataPribadi->no_hp,
+    'order'    => 'Order',
+];
+  Mail::send('vendor.notifications.emailtest', ['data' => $data],
+  function ($message) use ($data)
+  {
+      $message
+          ->from($data['no-reply'])
+          ->to($data['admin'])->subject('Some body wrote to you online')
+          ->to($data['email'])->subject('Your submitted information')
+          ->to('elbiheiry2@gmail.com', 'elbiheiry')->subject('Pendaftar Baru PMB');
+  });
+
+});
+
+Route::get('/testmail2', function () {
+  return view('vendor.notifications.emailtest2',
+  [
+    'no-reply' => 'contact-from-web@nomail.com',
+    'admin'    => 'mohamedsasa201042@yahoo.com',
+    'name'    => Auth::user()->name,
+    'email'    => Auth::user()->email,
+    'phone'    => Auth::user()->dataPribadi->no_hp,
+    'order'    => 'Order',
+
+  ]);
 });
 
 

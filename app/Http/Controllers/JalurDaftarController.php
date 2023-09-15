@@ -56,9 +56,15 @@ class JalurDaftarController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(JalurDaftar $jalurDaftar)
+    public function edit($id)
     {
-        //
+        $jalurDaftar = JalurDaftar::find($id);
+        
+            //edit page
+            return Inertia::render('Jalurs/JalurEdit', [
+                'jalurDaftar' => $jalurDaftar
+            ]);
+    
     }
 
     /**

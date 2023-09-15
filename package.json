@@ -31,8 +31,10 @@
         "datatables.net-scroller": "^2.2.0",
         "datatables.net-select": "^1.7.0",
         "datatables.net-vue3": "^2.1.2",
+        "html-to-pdfmake": "^2.4.25",
         "jquery": "^3.7.0",
         "jszip": "^3.10.1",
-        "pdfmake": "^0.2.7"
+        "pdfmake": "^0.2.7",
+        "pdfmake-utils": "^0.5.1"
     }
 }

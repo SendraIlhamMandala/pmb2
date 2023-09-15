@@ -13,14 +13,15 @@ class ProgramStudiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index():Response
+    public function index(): Response
     {
         // dd(123123);
-    $prodis = ProgramStudi::orderBy('created_at', 'desc')->get();
+        $prodis = ProgramStudi::orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Prodis/ProdisView', [
             'prodis' => $prodis,
-            'status' => session('status'),]);
+            'status' => session('status'),
+        ]);
     }
 
     /**
@@ -52,17 +53,26 @@ class ProgramStudiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProgramStudi $programStudi)
+    public function edit($id)
     {
-        //
+        $programStudi = ProgramStudi::find($id);
+
+        //edit page
+        return Inertia::render('Prodis/ProdiEdit', [
+            'programStudi' => $programStudi
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProgramStudi $programStudi)
+    public function update(Request $request, $id)
     {
         //
+        $programStudi = ProgramStudi::find($id);
+
+        $programStudi->update($request->all());
+        return redirect(route('prodis.index'));
     }
 
     /**
@@ -88,8 +98,7 @@ class ProgramStudiController extends Controller
             $prodis[$key] = ProgramStudi::find($value_id);
             $prodis[$key]->delete();
         }
-        
+
         return redirect(route('prodis.index'));
-        
     }
 }

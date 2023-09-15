@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\JalurDaftarController;
@@ -28,15 +29,6 @@ use Inertia\Inertia;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 */
-
-// Route::get('/', function () {
-//   return Inertia::render('Welcome', [
-//     'canLogin' => Route::has('login'),
-//     'canRegister' => Route::has('register'),
-//     'laravelVersion' => Application::VERSION,
-//     'phpVersion' => PHP_VERSION,
-//   ]);
-// })->name('welcome');
 
 
 Route::get('/', function () {
@@ -73,9 +65,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     return Inertia::render('FormsView');
   })->name('forms');
 
+  Route::get('/lihat-user/{id}', [UserController::class, 'lihatuser'] )->name('lihatuser');
+
+
 
 
   Route::get('verifikasi-pembayaran-user', [UserController::class, 'verifikasiPembayaranUserIndex'])->name('verifikasiPembayaranUserIndex');
+  Route::get('verifikasi-user', [UserController::class, 'verifikasiUser'])->name('verifikasiUser');
 
   Route::resource('roles', RoleController::class);
   Route::get('/roles/delete/{id}', [RoleController::class, 'deleteOne'])->name('roles.deleteOne');
@@ -84,6 +80,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
   Route::resource('shifts', ShiftController::class);
   Route::get('/shifts/delete/{id}', [ShiftController::class, 'deleteOne'])->name('shifts.deleteOne');
   Route::get('/shifts/deletemultiple/{id}', [ShiftController::class, 'deleteMultiple'])->name('shifts.deleteMultiple');
+
+  Route::resource('articles', ArticleController::class);
+  Route::get('/articles/delete/{id}', [ArticleController::class, 'deleteOne'])->name('articles.deleteOne');
+  Route::get('/articles/deletemultiple/{id}', [ArticleController::class, 'deleteMultiple'])->name('articles.deleteMultiple');
+
 
   Route::resource('jalurs', JalurDaftarController::class);
   Route::get('/jalurs/delete/{id}', [JalurDaftarController::class, 'deleteOne'])->name('jalurs.deleteOne');
@@ -147,7 +148,9 @@ Route::middleware('auth', 'verified')->group(function () {
   Route::post('/verifikasi-pembayaran/{id}', [UserController::class, 'uploadVerifikasiPembayaran'])->name('uploadVerifikasiPembayaran');
   Route::post('/verifikasi-pembayaran-user/{id}', [UserController::class, 'verifikasiPembayaranUser'])->name('verifikasiPembayaranUser');
   Route::post('/verifikasi-voucher', [UserController::class, 'verifikasiVoucher'])->name('verifikasiVoucher');
-  Route::get('/tunggu-verifikasi', [UserController::class, 'tungguVerifikasi'])->name('tungguVerifikasi');
+  Route::get('/tunggu-verifikasi', [UserController::class, 'tungguVerifikasiPembayaran'])->name('tungguVerifikasiPembayaran');
+  Route::get('/tunggu-verifikasi-user', [UserController::class, 'tungguVerifikasi'])->name('tungguVerifikasi');
+  Route::get('/verifikasi-user-selesai', [UserController::class, 'verifikasiSelesai'])->name('verifikasiSelesai');
   Route::get('/verifikasi-diterima', [UserController::class, 'diterimaVerifikasi'])->name('diterimaVerifikasi');
 
   Route::get('/cat', [Controller::class, 'cat']);
@@ -172,10 +175,6 @@ Route::middleware('auth', 'verified')->group(function () {
     ]);
   })->name('usercek');
  
-
-  // Route::get('/user-dashboard', function () {
-  //   return 123123;
-  // })->name('user-dashboard');
 });
 
 
@@ -192,30 +191,24 @@ Route::get('/testmail', function () {
     'admin'    => 'mohamedsasa201042@yahoo.com',
     'name'    => Auth::user()->name,
     'email'    => Auth::user()->email,
-    'phone'    => Auth::user()->dataPribadi->no_hp,
-    'order'    => 'Order',
 ];
-  Mail::send('vendor.notifications.emailtest', ['data' => $data],
+  Mail::send('vendor.notifications.emailverifypembayaran', ['data' => $data],
   function ($message) use ($data)
   {
       $message
           ->from($data['no-reply'])
-          ->to($data['admin'])->subject('Some body wrote to you online')
-          ->to($data['email'])->subject('Your submitted information')
-          ->to('elbiheiry2@gmail.com', 'elbiheiry')->subject('Pendaftar Baru PMB');
+          ->to($data['email'])->subject('Pembayaran PMB FISIP telah diverifikasi');
   });
-
+return 'success';
 });
 
 Route::get('/testmail2', function () {
-  return view('vendor.notifications.emailtest2',
+  return view('vendor.notifications.emailverifypembayaran',
   [
     'no-reply' => 'contact-from-web@nomail.com',
     'admin'    => 'mohamedsasa201042@yahoo.com',
     'name'    => Auth::user()->name,
     'email'    => Auth::user()->email,
-    'phone'    => Auth::user()->dataPribadi->no_hp,
-    'order'    => 'Order',
 
   ]);
 });

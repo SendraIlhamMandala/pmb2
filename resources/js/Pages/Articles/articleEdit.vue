@@ -24,13 +24,13 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["jalurDaftar"]);
+var props = defineProps(["role"]);
 
 
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: props.jalurDaftar.name,
+    name: props.role.name,
 });
 
 // Membuat referensi reaktif untuk status form dengan header
@@ -53,7 +53,7 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formStatusSubmit = () => {
-    form.put(route('jalurDaftars.update', props.jalurDaftar.id))
+    form.put(route('roles.update', props.role.id))
 };
 
 
@@ -62,7 +62,7 @@ const formStatusSubmit = () => {
 
 <template>
 
-<AppHead :title="'Edit jalurDaftar '+jalurDaftar.id" />
+<AppHead :title="'Edit role '+role.id" />
     <LayoutAuthenticated>
         
         <SectionMain>

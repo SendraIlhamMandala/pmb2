@@ -6,7 +6,7 @@ import BaseIcon from "@/components/BaseIcon.vue";
 
 import { mdiWhatsapp, mdiCellphone, mdiEmail, mdiGithub } from "@mdi/js";
 import { Head, Link } from '@inertiajs/vue3';
-import { ref, onMounted , onUnmounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onUnmounted, onBeforeUnmount } from 'vue';
 import AppHead from "@/components/AppHead.vue";
 import { router } from "@inertiajs/vue3";
 
@@ -26,6 +26,7 @@ const screenHeight = ref(window.innerHeight);
 const updateScreenSize = () => {
     screenWidth.value = window.innerWidth;
     screenHeight.value = window.innerHeight;
+    console.log(screenWidth.value);
 };
 
 onMounted(() => {
@@ -40,26 +41,26 @@ const menuVisible = ref(false);
 
 
 const toggleMenu2 = (e) => {
-  menuVisible.value = !menuVisible.value;
+    menuVisible.value = !menuVisible.value;
 };
 
 const toggleMenu = (e) => {
-  e.stopPropagation(); // Prevent click event from propagating to document click handler
-  menuVisible.value = !menuVisible.value;
+    e.stopPropagation(); // Prevent click event from propagating to document click handler
+    menuVisible.value = !menuVisible.value;
 };
 
 const closeMenuOnOutsideClick = (e) => {
-  if (menuVisible.value && !e.target.closest('.navbar-menu')) {
-    menuVisible.value = false;
-  }
+    if (menuVisible.value && !e.target.closest('.navbar-menu')) {
+        menuVisible.value = false;
+    }
 };
 
 onMounted(() => {
-  document.addEventListener('click', closeMenuOnOutsideClick);
+    document.addEventListener('click', closeMenuOnOutsideClick);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', closeMenuOnOutsideClick);
+    document.removeEventListener('click', closeMenuOnOutsideClick);
 });
 
 
@@ -80,7 +81,7 @@ const scrollToSection = (key) => {
         toggleMenu2();
     }
     window.scrollTo({
-        top: sect[key].value.offsetTop-200,
+        top: sect[key].value.offsetTop - 200,
         behavior: 'smooth',
     });
 };
@@ -181,22 +182,47 @@ const scrollToSection = (key) => {
 
                 <div class="lg:flex">
                     <div v-if="canLogin" class="">
-                        <Link v-if="$page.props.auth.user" :href="route('dashboard')"
-                            class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                        Dashboard
-                        </Link>
 
-                        <Link v-if="$page.props.auth.user" @click.prevent="router.post(route('logout'))"
-                            class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                        logout
-                        </Link>
+                        <!-- Fixed links container at the bottom-center -->
+                        <div v-if="screenWidth < 1024" class="fixed bottom-0 left-0 w-full flex justify-center py-4">
+                            <a v-if="$page.props.auth.user"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                href="/dashboard">
+                                Dashboard
+                            </a>
+                            <a v-if="$page.props.auth.user"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                @click.prevent="router.post(route('logout'))">
+                                Logout
+                            </a>
+                        </div>
+                        <div v-if="screenWidth < 1024" class="fixed bottom-0 left-0 w-full flex justify-center py-4">
+                            <a v-if="!$page.props.auth.user" class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                href="/login">login</a>
+                            <a v-if="!$page.props.auth.user" class="inline-block py-2 px-6 border bg-green-400 border-white text-white hover:bg-white hover:text-green-500 text-sm font-bold rounded-xl transition duration-200"
+                                href="/register">Daftar</a>
+                        </div>
 
 
-                        <div class="flex" v-else>
+                        <div class="flex" v-if="!$page.props.auth.user">
                             <a class="hidden lg:inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 href="/login">login</a>
                             <a class="hidden lg:inline-block py-2 px-6 border bg-green-400 border-white text-white hover:bg-white hover:text-green-500 text-sm font-bold rounded-xl transition duration-200"
                                 href="/register">Daftar</a>
+                        </div>
+                        <div class="flex" v-else-if="screenWidth > 1024">
+
+                            <a v-if="$page.props.auth.user"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                href="/dashboard">
+                                Dashboard
+                            </a>
+                            <a v-if="$page.props.auth.user"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                @click.prevent="router.post(route('logout'))">
+                                Logout
+                            </a>
+
                         </div>
                     </div>
 
@@ -212,50 +238,51 @@ const scrollToSection = (key) => {
             </nav>
 
 
-            
+
             <transition name="slide" mode="out-in">
-            <div v-if="menuVisible" class="navbar-menu fixed inset-x-0 z-50">
+                <div v-if="menuVisible" class="navbar-menu fixed inset-x-0 z-50">
 
-                <div class="fixed inset-x-0  flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
-                    <!-- Mobile Menu Content -->
-                    <div class=" ">
-                        <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                            @click="scrollToSection('jadwal')">Jadwal Pendaftaran</a>
-                    </div>
+                    <div style="height:100%;"
+                        class="fixed inset-x-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
+                        <!-- Mobile Menu Content -->
+                        <div class=" ">
+                            <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
+                                @click="scrollToSection('jadwal')">Jadwal Pendaftaran</a>
+                        </div>
 
-                    <div class=" ">
+                        <div class=" ">
 
-                        <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                            @click="scrollToSection('petunjuk')">Petunjuk Pendaftaran</a>
-                    </div>
-
-
-                    <div class=" ">
-                        <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                            @click="scrollToSection('jalur')">Jalur
-                            Seleksi</a>
-                    </div>
-
-                    <div class=" ">
-
-                        <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                            @click="scrollToSection('beasiswa')">Beasiswa</a>
-                    </div>
+                            <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
+                                @click="scrollToSection('petunjuk')">Petunjuk Pendaftaran</a>
+                        </div>
 
 
-                    <div class=" ">
-                        <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                            @click="scrollToSection('prodi')">Program Studi</a>
-                    </div>
+                        <div class=" ">
+                            <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
+                                @click="scrollToSection('jalur')">Jalur
+                                Seleksi</a>
+                        </div>
+
+                        <div class=" ">
+
+                            <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
+                                @click="scrollToSection('beasiswa')">Beasiswa</a>
+                        </div>
 
 
-                    <div class=" ">
-                        <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                            href="#">Hasil
-                            tes</a>
+                        <div class=" ">
+                            <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
+                                @click="scrollToSection('prodi')">Program Studi</a>
+                        </div>
+
+
+                        <div class=" ">
+                            <a class="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
+                                href="#">Hasil
+                                tes</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             </transition>
         </section>
 
@@ -268,6 +295,27 @@ const scrollToSection = (key) => {
                     <div class="col">
                         <!-- <h2 class="display-4 text-center font-semibold">Lorem ipsum dolor sit amet</h2> -->
                     </div>
+                </div>
+                <div class="grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1   ">
+
+                    <div class="  mx-auto ">
+                        <div class="rounded overflow-hidden">
+                            <div class="relative mx-auto overflow-hidden">
+                                <img class=" mx-auto shadow-lg md:hidden " src="image/splash_m.png" alt="phone feature 1"
+                                    loading="lazy" />
+                                <img class=" mx-auto shadow-lg hidden md:block  " src="image/splash.png"
+                                    alt="phone feature 1" loading="lazy" />
+                                <div class="w-full h-full">
+
+                                    <div class="w-full h-full absolute bg-blue-300 z-[-2]"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
                 </div>
                 <div
                     class="grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-3 grid-rows-1 gap-4  ">
@@ -374,16 +422,16 @@ const scrollToSection = (key) => {
                     <img src="image/jadwal.png" alt="image" class="w-full" />
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
                         <div class="card-body">
-    <div class="text-wrap p-lg-6">
-        <h5 class=" uppercase font-bold text-blue-500">Jadwal Pendaftaran</h5>
-        <hr class="border-0 h-1 bg-gradient-to-r from-gray-200 via-gray-500 to-gray-200">
-        <br>
-        <p class="text-left"><strong>Gelombang 1</strong> : 1 Februari 2023 - 31 Maret 2023</p>
-        <p class="text-left"><strong>Gelombang 2</strong> : 1 April 2023 - 31 Mei 2023</p>
-        <p class="text-left"><strong>Gelombang 3</strong> : 1 Juni 2023 - 31 Juli 2023</p>
-        <p class="text-left"><strong>Gelombang 4</strong> : 1 Agustus 2023 - 30 September 2023</p>
-    </div>
-</div>
+                            <div class="text-wrap p-lg-6">
+                                <h5 class=" uppercase font-bold text-blue-500">Jadwal Pendaftaran</h5>
+                                <hr class="border-0 h-1 bg-gradient-to-r from-gray-200 via-gray-500 to-gray-200">
+                                <br>
+                                <p class="text-left"><strong>Gelombang 1</strong> : 1 Februari 2023 - 31 Maret 2023</p>
+                                <p class="text-left"><strong>Gelombang 2</strong> : 1 April 2023 - 31 Mei 2023</p>
+                                <p class="text-left"><strong>Gelombang 3</strong> : 1 Juni 2023 - 31 Juli 2023</p>
+                                <p class="text-left"><strong>Gelombang 4</strong> : 1 Agustus 2023 - 30 September 2023</p>
+                            </div>
+                        </div>
 
                         <a href="javascript:void(0)"
                             class="text-body-color hover:border-primary hover:bg-primary inline-block rounded-full border border-[#E5E7EB] py-2 px-7 text-base font-medium transition hover:text-white">
@@ -605,13 +653,13 @@ const scrollToSection = (key) => {
 
                     <div class="mt-8 grid grid-cols-2 gap-2 lg:mt-0 lg:grid-cols-4 lg:gap-y-16">
 
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 md:mt-8 sm:col-span-1">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.3512869616084!2d107.88690587424747!3d-7.200701670684401!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68b0f14a76712d%3A0x5925220d57b5f0b!2sFISIP%20UNIGA!5e0!3m2!1sid!2sid!4v1692775090905!5m2!1sid!2sid"
                                 width="250" height="300" style="border:0;" allowfullscreen="" loading="lazy"
                                 referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 mt-8 sm:col-span-1">
                             <p class="font-medium text-gray-900">Alamat</p>
 
                             <ul class="mt-6 space-y-4 text-sm">
@@ -626,7 +674,7 @@ const scrollToSection = (key) => {
                             </ul>
                         </div>
 
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 mt-8 sm:col-span-1">
                             <p class="font-medium text-gray-900">Kontak</p>
 
                             <ul class="mt-6 space-y-4 text-sm">
@@ -649,7 +697,7 @@ const scrollToSection = (key) => {
                             </ul>
                         </div>
 
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 mt-8 sm:col-span-1">
                             <p class="font-medium text-gray-900">Email</p>
 
                             <ul class="mt-6 space-y-4 text-sm">
@@ -674,7 +722,7 @@ const scrollToSection = (key) => {
 
 
 
-                        <ul class="col-span-2 flex justify-start gap-6 lg:col-span-5 lg:justify-end">
+                        <ul class="col-span-2 mt-8 flex justify-start gap-6 lg:col-span-5 lg:justify-end">
                             <li>
                                 <a href="https://www.facebook.com/unigafisip/" rel="noreferrer" target="_blank"
                                     class="text-gray-700 transition hover:opacity-75">
@@ -747,18 +795,21 @@ const scrollToSection = (key) => {
 <style>
 .slide-enter-active,
 .slide-leave-active {
+    height: 100%;
     transition: all 0.5s ease;
 }
 
 .slide-enter-from,
 .slide-leave-to {
+    height: 100%;
     opacity: 0;
-    transform: translateY(-5%);
+    transform: translateX(-50%);
 }
 
 .slide-enter-to,
 .slide-leave-from {
-    transform: translateX(0);
+    height: 100%;
+    transform: translateX(0%);
     opacity: 100;
 }
 </style>

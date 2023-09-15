@@ -21,7 +21,7 @@ const toggleScale = () => {
 };
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["game", "user", "token", "errors"]);
+var props = defineProps(["game", "user", "errors"]);
 
 
 
@@ -45,7 +45,7 @@ const formSubmit = () => {
       <SectionTitle>
 
         <div @click="toggleScale" :class="{ 'scaled': isScaled }" class=" relative mx-auto rounded-lg overflow-hidden">
-          <img src="/image/tes_online.png" alt="Image with Bounce Effect" />
+          <img src="/image/tunggu_verfif.png" alt="Image with Bounce Effect" />
         </div>
 
       </SectionTitle>
@@ -53,36 +53,31 @@ const formSubmit = () => {
 
 
 
-      <CardBox class=" shadow-2xl justify-center md:mx-auto mx-auto h-full " is-form is-hoverable
-        @submit.prevent="formSubmit">
+      <CardBox class=" shadow-2xl md:mx-auto mx-auto h-full " is-form is-hoverable @submit.prevent="formSubmit">
 
         <div class="text-center">
 
-          Dimohon Untuk Segera Lakukan Tes Online, Dengan Login Akun:
+          <p>
 
-          <br>
-          <br>
+            Tunggu Proses Verifikasi Data Dari Admin Kami Ya.
+          </p>
+          <p>
+            atau hubungi langsung admin kami melalui
+  </p>  
+  <p>
+            <a href="https://api.whatsapp.com/send?phone=6282219291520" target="_blank"
+              class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-0 px-4 rounded">
+              klik disini
+            </a>
 
-          <div class="flex text-left  mx-0 md:mx-auto grid grid-cols-2 md:grid-cols-2 md:w-1/4">
-            <div class="text-right md:text-left" >Username</div>
-            <div >: {{ user.nim }}</div>
-            <div class="text-right md:text-left">Password</div>
-            <div >: {{ user.nim }}</div>
-            <div class="text-right md:text-left">Token</div>
-            <div >: {{token}}</div>
 
 
-          </div>
+          </p>
         </div>
 
         <!-- Repeat similar code for other fields -->
-        <div class="text-center my-4" >
 
-          <a href="http://pmb.fisipuniga.ac.id/cat/adm/login"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Test Online
-          </a>
-        </div>
+
       </CardBox>
 
       <!-- <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable  -->

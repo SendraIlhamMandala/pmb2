@@ -33,8 +33,6 @@ let props = defineProps({
 
 function exportHTML() {
 
-
-
     axios.get('/gethtmlpage').then(response => {
         var sourceHTML = '';
         sourceHTML = response.data;

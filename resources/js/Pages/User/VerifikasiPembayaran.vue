@@ -179,7 +179,7 @@ console.log();
                         label="Kirim bukti pembayaran" />
 
                     <transition name="slide" mode="out-in">
-                        <div v-if="showForm" key="form" class=" z-10  p-4 bg-white shadow-md rounded-md">
+                        <div v-if="showForm" key="form" class=" z-10  p-4 dark:bg-gray-800 bg-white shadow-md rounded-md">
                             <!-- Your form fields go here -->
 
                             <FormField label="Nama Lengkap" class="">

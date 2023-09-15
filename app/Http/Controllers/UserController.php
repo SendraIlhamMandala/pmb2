@@ -22,6 +22,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -82,6 +83,20 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
+    }
+
+    public function lihatuser(User $id)
+    {
+        
+        $id->load('dataDaftar');
+        $id->load('dataPribadi');
+        $id->load('alamat');
+        $id->load('asalSekolah');
+        $id->load('orangtua');
+        $id->load('tambahan');
+        return Inertia::render('Users/UserShow', [
+            'user' => $id,
+        ]);
     }
 
     /**
@@ -244,7 +259,7 @@ class UserController extends Controller
             $pdf_path = 'pdf/' . $pdf_name;
             Storage::disk('public')->put($pdf_path, file_get_contents($pdf));
             $tambahan['pdf'] =  $pdf_name;
-            
+
 
             $tambahan_input = new Tambahan($tambahan);
 
@@ -258,7 +273,7 @@ class UserController extends Controller
             $foto_bukti_path = 'foto_bukti/' . $foto_bukti_name;
             Storage::disk('public')->put($foto_bukti_path, file_get_contents($foto_bukti));
             $tambahan['foto_bukti'] =  $foto_bukti_name;
-            
+
 
             $tambahan_input = new Tambahan($tambahan);
 
@@ -329,13 +344,13 @@ class UserController extends Controller
         }
 
         if (Auth()->user()->done_setup == 'menunggu verifikasi') {
-            return redirect(route('tungguVerifikasi'));
+            return redirect(route('tungguVerifikasiPembayaran'));
         }
 
         if (Auth()->user()->done_setup == 'not_done') {
             return redirect(route('user.data-jalur'));
         } elseif (Auth()->user()->done_setup == 'done') {
-            return redirect(route('welcome'));
+            return redirect(route('tungguVerifikasi'));
         }
         $user = Auth()->user();
         $user->dataDaftar;
@@ -385,7 +400,7 @@ class UserController extends Controller
             return redirect(route('user.data-pribadi'));
         }
         if (Auth()->user()->done_setup == 'menunggu verifikasi') {
-            return redirect(route('tungguVerifikasi'));
+            return redirect(route('tungguVerifikasiPembayaran'));
         }
 
 
@@ -451,7 +466,7 @@ class UserController extends Controller
         $id->done_setup = 'menunggu verifikasi';
         $id->dataPribadi()->save($faktur_data);
         $id->save();
-        return redirect(route('tungguVerifikasi'));
+        return redirect(route('tungguVerifikasiPembayaran'));
     }
 
     public function verifikasiVoucher(Request $request): RedirectResponse
@@ -463,13 +478,15 @@ class UserController extends Controller
         }
     }
 
-    public function tungguVerifikasi()
+    public function tungguVerifikasiPembayaran()
     {
         if (!Auth()->user()->faktur) {
             return redirect('/');
         }
         if (Auth()->user()->faktur && Auth()->user()->faktur->validasi == 1) {
-            return redirect()->route('diterimaVerifikasi');
+            if (Auth()->user()->done_setup != 'done') {
+                return redirect()->route('diterimaVerifikasi');
+            }
         } else if (Auth()->user()->faktur && Auth()->user()->faktur->validasi === 2) {
             dd('tolak');
         }
@@ -479,7 +496,7 @@ class UserController extends Controller
             'user' => $user,
         ]);
 
-        return inertia('User/TungguVerifikasi');
+        return inertia('User/tungguVerifikasiPembayaran');
     }
 
     public function diterimaVerifikasi()
@@ -628,6 +645,86 @@ class UserController extends Controller
         }
         $id->faktur->save();
         $id->save();
+
+
+        $data = [
+            'no-reply' => 'noreply@fisip.uniga.ac.id',
+            'name'    => $id->name,
+            'email'    => $id->email,
+        ];
+
+        if ($request->verifikasi == 'terima') {
+            Mail::send(
+                'vendor.notifications.emailverifypembayaran',
+                ['data' => $data],
+                function ($message) use ($data) {
+                    $message
+                        ->from($data['no-reply'])
+                        ->to($data['email'])->subject('Verifikasi pembayaran PMB diterima');
+                }
+            );
+        } else if ($request->verifikasi == 'tolak') {
+            Mail::send(
+                'vendor.notifications.emailverifypembayaran',
+                ['data' => $data],
+                function ($message) use ($data) {
+                    $message
+                        ->from($data['no-reply'])
+                        ->to($data['email'])->subject('Verifikasi pembayaran PMB ditolak');
+                }
+            );
+        }
+
+
         return Inertia::location('/verifikasi-pembayaran-user');
+    }
+
+
+    public function tungguVerifikasi()
+    {
+        if (!Auth()->user()->faktur) {
+            return redirect('/');
+        }
+
+        $user = Auth()->user();
+        return inertia('User/UserTungguVerifikasi', [
+            'user' => $user,
+        ]);
+
+        return inertia('User/tungguVerifikasiPembayaran');
+    }
+
+    public function verifikasiSelesai()
+    {
+        if (!Auth()->user()->faktur) {
+            return redirect('/');
+        }
+
+        $user = Auth()->user();
+        return inertia('User/UserVerifikasiSelesai', [
+            'user' => $user,
+        ]);
+    }
+
+    public function verifikasiUser(): Response
+    {
+
+        $users4 = User::with(['dataDaftar.tahun', 'faktur'])
+            ->orderBy('created_at', 'desc')
+            ->whereHas('dataDaftar.tahun', function ($query) {
+                $query->where('status', 'aktif');
+            })
+            ->where('status', 'menunggu verifikasi')
+            ->get();
+
+ 
+
+        return inertia(
+            'Users/VerifikasiUser',
+            [
+                'users' => $users4,
+
+            ]
+        );
     }
 }

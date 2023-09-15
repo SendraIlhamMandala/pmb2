@@ -18,6 +18,13 @@ import DataTable from "datatables.net-vue3";
 import Select from "datatables.net-select";
 import DataTablesLib from "datatables.net";
 import DataTables from "datatables.net-select";
+import axios from "axios";
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import htmlToPdfmake from 'html-to-pdfmake';
+
+// Set the font files for pdfMake
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 // Import DataTables library
@@ -59,6 +66,45 @@ const getFormStatusColor = computed(() => {
         return formStatusOptions[0]; // Return info status color
     }
 });
+
+function exportHTML() {
+
+// axios.get('/gethtmlpage').then(response => {
+//     var sourceHTML = '';
+//     sourceHTML = response.data;
+//     console.log(response.data);
+//     var fileDownload = document.createElement("a");
+//     var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+
+//     document.body.appendChild(fileDownload);
+//     fileDownload.href = source;
+//     fileDownload.download = 'document.doc';
+//     fileDownload.click();
+// })
+
+axios.get('/gethtmlpage').then(response => {
+    var sourceHTML = response.data;
+
+    // Convert the HTML content to a PDF document definition
+    var documentDefinition = {
+        content: [
+            htmlToPdfmake(sourceHTML)
+        ]
+    };
+
+    console.log(htmlToPdfmake(sourceHTML));
+    // Create the PDF
+    var pdf = pdfMake.createPdf(documentDefinition);
+
+    // Download the PDF file
+    pdf.download('document.pdf');
+});
+
+
+}
+
+
+
 
 // Function to handle form submission
 const formStatusSubmit = () => {
@@ -127,7 +173,8 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             }, {
                 text: 'Export doc',
                 action: function () {
-                    exportHTML();
+                    window.open('/gethtmlpage', '_blank');
+
                 }
             }
         ];

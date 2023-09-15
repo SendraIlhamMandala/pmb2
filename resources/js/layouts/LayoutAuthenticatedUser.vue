@@ -49,7 +49,9 @@ console.log(val);
         :class="[
           layoutAsidePadding,
           { 'ml-60 lg:ml-0': isAsideMobileExpanded },
+          { dark: styleStore.darkMode }
         ]"
+        
         @menu-click="menuClick"
       >
       

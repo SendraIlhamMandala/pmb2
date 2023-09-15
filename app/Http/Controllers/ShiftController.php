@@ -58,6 +58,12 @@ class ShiftController extends Controller
     public function edit(Shift $shift)
     {
         //
+        
+            //edit page
+            return Inertia::render('Shifts/ShiftEdit', [
+                'shift' => $shift
+            ]);
+    
     }
 
     /**
@@ -66,6 +72,10 @@ class ShiftController extends Controller
     public function update(Request $request, Shift $shift)
     {
         //
+           //update shift
+           $shift->update($request->all());
+           return redirect(route('shifts.index'));
+   
     }
 
     /**

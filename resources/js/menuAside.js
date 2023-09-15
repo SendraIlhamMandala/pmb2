@@ -35,6 +35,11 @@ export default [
         icon: mdiTable,
     },
     {
+        route: "verifikasiPembayaranUserIndex",
+        label: "Verifikasi Pembayaran",
+        icon: mdiTable,
+    },
+    {
         route: "roles.index",
         label: "Roles",
         icon: mdiTable,
@@ -42,6 +47,11 @@ export default [
     {
         route: "shifts.index",
         label: "Shifts",
+        icon: mdiTable,
+    },
+    {
+        route: "articles.index",
+        label: "Articles",
         icon: mdiTable,
     },
     {

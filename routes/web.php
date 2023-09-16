@@ -71,7 +71,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
 
   Route::get('verifikasi-pembayaran-user', [UserController::class, 'verifikasiPembayaranUserIndex'])->name('verifikasiPembayaranUserIndex');
-  Route::get('verifikasi-user', [UserController::class, 'verifikasiUser'])->name('verifikasiUser');
+  Route::get('verifikasi-user', [UserController::class, 'verifikasiUserShow'])->name('verifikasiUserShow');
+  Route::get('verifikasi/{user}', [UserController::class, 'verifikasiUser'])->name('verifikasiUser');
 
   Route::resource('roles', RoleController::class);
   Route::get('/roles/delete/{id}', [RoleController::class, 'deleteOne'])->name('roles.deleteOne');

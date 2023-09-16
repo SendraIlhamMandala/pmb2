@@ -184,249 +184,303 @@ console.log(props.user);
 <template>
     <AppHead title="Users" />
     <LayoutAuthenticated>
-
+        <div class="fixed bottom-0 left-0 w-full flex justify-center py-4 z-50">
+            <Link
+                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                :href="route('verifikasiUser', user.id)">
+            Verifikasi
+            </Link>
+            <a v-if="$page.props.auth.user"
+                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                @click.prevent="router.post(route('logout'))">
+                Tolak
+            </a>
+        </div>
         <SectionMain>
             <SectionTitle>Form with status example</SectionTitle>
 
-            <CardBox hasTable="false" class="mt-6">
+            <CardBox class="mt-6 bg-opacity-0  ">
 
-                <div class="grid grid-cols-3 grid-rows-1 gap-2">
+                <div class="grid grid-cols-3 gap-2">
                     <div>
 
-                        <div class="grid grid-cols-1 grid-rows-3 gap-1">
-                            <div>
-                                <CardBox hasTable="false">
-                                    {{ user.name }}
+                        <div class="grid grid-cols-1 grid-rows-[200px_minmax(200px,_1fr)_100px] gap-1">
+                            <div class="">
+                                <CardBox>
+
+                                    <div className="grid grid-cols-2 grid-rows-1 gap-4">
+                                        <div class="m-auto">
+                                            <img class="h-40 rounded" :src="'/storage/avatar/' + user.data_pribadi.foto"
+                                                alt="" />
+                                        </div>
+                                        <div>
+                                            <div class="font-bold">
+                                                {{ user.name }}
+                                            </div>
+                                            <div class=" text-gray-500">
+                                                {{ user.nim }}
+                                            </div>
+                                            <div>
+                                                <button>
+                                                    <Link href="">
+                                                    Edit
+                                                    </Link>
+
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
 
                                 </CardBox>
                             </div>
                             <div>
-                                <CardBox hasTable="false">
-                                    
-                                    <div class=" font-bold mb-2" >
-                                        Jalur Pendaftaran anda
-                                    </div>
-                                   
-                                    <FormField label="Shift Kelas" class="">
+                                <CardBox>
+
+                                    <NotificationBarInCard :color="getFormStatusColor"
+                                        :is-placed-with-header="formStatusWithHeader">
+                                        <span>
+                                            {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Jalur Pendaftaran"
+                                            }}</span>
+                                    </NotificationBarInCard>
+                                    <FormField label="Shift Kelas" class=" mb-1">
                                         <FormControl v-model="user.data_daftar.shift" type="text" :disabled="true" />
                                     </FormField>
-                                    <FormField label="Jalur Pendaftaran" class="">
+                                    <FormField label="Jalur Pendaftaran" class=" mb-1">
                                         <FormControl v-model="user.data_daftar.jalur" type="text" :disabled="true" />
                                     </FormField>
-                                    <FormField label="Status Pendaftaran" class="">
+                                    <FormField label="Status Pendaftaran" class=" mb-1">
                                         <FormControl v-model="user.data_daftar.status" type="text" :disabled="true" />
                                     </FormField>
-                                    <FormField label="Program Studi" class="">
-                                        <FormControl v-model="user.data_daftar.program_studi" type="text" :disabled="true" />
+                                    <FormField label="Program Studi" class=" mb-1">
+                                        <FormControl v-model="user.data_daftar.program_studi" type="text"
+                                            :disabled="true" />
                                     </FormField>
 
                                 </CardBox>
                             </div>
-                            <div>3</div>
+                            <div>
+
+                                <CardBox>
+                                    <NotificationBarInCard :color="getFormStatusColor"
+                                        :is-placed-with-header="formStatusWithHeader">
+                                        <span>
+                                            {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Status Pengisian Formulir Pendaftaran" }}</span>
+                                    </NotificationBarInCard>
+                                    <div class="card-body text-center ">
+                                        <a href="formulir.php?id=MjAyNDEwMDE1&&DataDiri"
+                                            class="btn my-4 bg-blue-500 rounded-full text-white hover:bg-blue-600 hover:text-white block w-full">Data
+                                            Diri</a>
+                                        <a href="formulir.php?id=MjAyNDEwMDE1&&DataSekolah"
+                                            class="btn my-4 bg-blue-500 rounded-full text-white hover:bg-blue-600 hover:text-white block w-full">Data
+                                            Asal Sekolah</a>
+                                        <a href="formulir.php?id=MjAyNDEwMDE1&&DataOrangtua"
+                                            class="btn my-4 bg-blue-500 rounded-full text-white hover:bg-blue-600 hover:text-white block w-full">Data
+                                            Orang Tua Wali</a>
+                                        <a v-if="!!user.data_kerja" href="formulir.php?id=MjAyNDEwMDE1&&DataOrangtua"
+                                            class="btn my-4 bg-blue-500 rounded-full text-white hover:bg-blue-600 hover:text-white block w-full">Data
+                                            Data Pekrjaan</a>
+                                        <a href="formulir.php?id=MjAyNDEwMDE1&&DataTambahan"
+                                            class="btn my-4 bg-blue-500 rounded-full text-white hover:bg-blue-600 hover:text-white block w-full">Data
+                                            Tambahan</a>
+                                    </div>
+                                </CardBox>
+
+
+                            </div>
                         </div>
 
-                        <CardBox hasTable="false">
-                            {{ user }}
 
-                        </CardBox>
 
                     </div>
                     <div class="col-span-2  ">
                         <CardBox>
                             <NotificationBarInCard :color="getFormStatusColor"
                                 :is-placed-with-header="formStatusWithHeader">
-                                <span><b class="capitalize">{{
-                                    formStatusOptions[formStatusCurrent]
-                                }}</b>
+                                <span>
                                     {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Diri User" }}</span>
                             </NotificationBarInCard>
                             <div>
                                 <FormField label="Nama" class="">
-                                        <FormControl v-model="user.name" type="text" :disabled="true" />
-                                    </FormField>
+                                    <FormControl v-model="user.name" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Nomor Peserta" class="">
-                                        <FormControl v-model="user.nim" type="text" :disabled="true" />
-                                    </FormField>
+                                    <FormControl v-model="user.nim" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Nomor KTP" class="">
-                                        <FormControl v-model="user.data_pribadi.no_ktp" type="text" :disabled="true" />
-                                    </FormField>
+                                    <FormControl v-model="user.data_pribadi.no_ktp" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Tempat Lahir" class="">
-                                        <FormControl v-model="user.data_pribadi.tempat_lahir" type="text" :disabled="true" />
-                                    </FormField>
-                                    <FormField label="Tanggal Lahir" class="">
-                                        <FormControl v-model="user.data_pribadi.tanggal_lahir" type="text" :disabled="true" />
-                                    </FormField>
+                                    <FormControl v-model="user.data_pribadi.tempat_lahir" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Tanggal Lahir" class="">
+                                    <FormControl v-model="user.data_pribadi.tanggal_lahir" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Jenis Kelamin" class="">
-                                        <FormControl v-model="user.data_pribadi.jenis_kelamin" type="text" :disabled="true" />
-                                    </FormField>
+                                    <FormControl v-model="user.data_pribadi.jenis_kelamin" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Agama" class="">
-                                        <FormControl v-model="user.data_pribadi.agama" type="text" :disabled="true" />
-                                    </FormField>
+                                    <FormControl v-model="user.data_pribadi.agama" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Alamat" class="">
-                                        <FormControl v-model="user.alamat.alamat" type="text" :disabled="true" />
-                                    </FormField>
+                                    <FormControl v-model="user.alamat.alamat" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Email" class="">
-                                        <FormControl v-model="user.email" type="text" :disabled="true" />
-                                    </FormField>
+                                    <FormControl v-model="user.email" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Facebook" class="">
-                                        <FormControl v-model="user.data_pribadi.facebook" type="text" :disabled="true" />
-                                    </FormField>    
+                                    <FormControl v-model="user.data_pribadi.facebook" type="text" :disabled="true" />
+                                </FormField>
                                 <FormField label="Instagram" class="">
-                                        <FormControl v-model="user.data_pribadi.ig" type="text" :disabled="true" />
-                                    </FormField>
-                            
-                            
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        Nama
-                                    </div>
-                                    <div>
-                                        : {{ user.name }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        Nomor Peserta
-                                    </div>
-                                    <div>
-                                        : {{ user.nim }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        Nomor KTP
-                                    </div>
-                                    <div>
-                                        : {{ user.data_pribadi.no_ktp }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        Tempat Lahir
-                                    </div>
-                                    <div>
-                                        : {{ user.data_pribadi.tempat_lahir }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        Tanggal Lahir
-                                    </div>
-                                    <div>
-                                        : {{ user.data_pribadi.tanggal_lahir }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        Jenis Kelamin
-                                    </div>
-                                    <div>
-                                        : {{ user.data_pribadi.jenis_kelamin }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        Agama
-                                    </div>
-                                    <div>
-                                        : {{ user.data_pribadi.agama }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        Alamat
-                                    </div>
-                                    <div>
-                                        : {{ user.alamat.alamat }}
-                                    </div>
-                                </div>
+                                    <FormControl v-model="user.data_pribadi.ig" type="text" :disabled="true" />
+                                </FormField>
 
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        kelurahan
-                                    </div>
-                                    <div>
-                                        : {{ user.alamat.kelurahan }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        kecamatan
-                                    </div>
-                                    <div>
-                                        : {{ user.alamat.kecamatan }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        kabupaten
-                                    </div>
-                                    <div>
-                                        : {{ user.alamat.kabupaten }}
-                                    </div>
 
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        provinsi
-                                    </div>
-                                    <div>
-                                        : {{ user.alamat.provinsi }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        kode_pos
-                                    </div>
-                                    <div>
-                                        : {{ user.alamat.kodepos }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        no_hp
-                                    </div>
-                                    <div>
-                                        : {{ user.data_pribadi.no_hp }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        email
-                                    </div>
-                                    <div>
-                                        : {{ user.email }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        fb
-                                    </div>
-                                    <div>
-                                        : {{ user.data_pribadi.facebook }}
-                                    </div>
-                                </div>
-                                <div class=" flex">
-                                    <div class=" w-1/2">
-                                        ig
-                                    </div>
-                                    <div>
-                                        : {{ user.data_pribadi.ig }}
-                                    </div>
-                                </div>
+
+                            </div>
+                        </CardBox>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="col-span-2  ">
+                        <CardBox>
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Asal Sekolah" }}</span>
+                            </NotificationBarInCard>
+                            <div>
+                                <FormField label="Asal Sekolah" class="">
+                                    <FormControl v-model="user.asal_sekolah.nama_sekolah" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="alamat sekolah" class="">
+                                    <FormControl v-model="user.asal_sekolah.alamat_sekolah" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Tahun Kelulusan" class="">
+                                    <FormControl v-model="user.asal_sekolah.tahun_lulus" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Jurusan Asal" class="">
+                                    <FormControl v-model="user.asal_sekolah.jurusan" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Nilai Skhun" class="">
+                                    <FormControl v-model="user.asal_sekolah.nilai_skhun" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Skhun" class="">
+                                    <img :src="'/storage/skhun/' + user.asal_sekolah.skhun" alt="" />
+                                </FormField>
+                                <FormField label="Ijazah" class="">
+                                    <img :src="'/storage/ijazah/' + user.asal_sekolah.ijazah" alt="" />
+                                </FormField>
+
+
+
+                            </div>
+                        </CardBox>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="col-span-2  ">
+                        <CardBox>
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Orang Tua / Wali (Ayah)"
+                                    }}</span>
+                            </NotificationBarInCard>
+                            <div>
+
+
+                                <FormField label="Nama Ayah" class="">
+                                    <FormControl v-model="user.orangtua.nama_ayah" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="NO.KTP Ayah">
+                                    <FormControl v-model="user.orangtua.ktp_ayah" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Tempat Lahir Ayah">
+                                    <FormControl v-model="user.orangtua.tempat_lahir_ayah" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Tanggal Lahir Ayah">
+                                    <FormControl v-model="user.orangtua.tanggal_lahir_ayah" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Nomor Yang Bisa Dihubungi">
+                                    <FormControl v-model="user.orangtua.no_hp_ayah" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Pekerjaan Ayah">
+                                    <FormControl v-model="user.orangtua.pekerjaan_ayah" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Penghasilan Ayah">
+                                    <FormControl v-model="user.orangtua.penghasilan_ayah" type="text" :disabled="true" />
+                                </FormField>
+
+
+                            </div>
+                        </CardBox>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="col-span-2  ">
+                        <CardBox>
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Orang Tua / Wali (Ibu)"
+                                    }}</span>
+                            </NotificationBarInCard>
+                            <div>
+
+                                <FormField label="Nama ibu" class="">
+                                    <FormControl v-model="user.orangtua.nama_ibu" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="NO.KTP ibu">
+                                    <FormControl v-model="user.orangtua.ktp_ibu" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Tempat Lahir ibu">
+                                    <FormControl v-model="user.orangtua.tempat_lahir_ibu" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Tanggal Lahir ibu">
+                                    <FormControl v-model="user.orangtua.tanggal_lahir_ibu" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Nomor Yang Bisa Dihubungi">
+                                    <FormControl v-model="user.orangtua.no_hp_ibu" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Pekerjaan ibu">
+                                    <FormControl v-model="user.orangtua.pekerjaan_ibu" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Penghasilan ibu">
+                                    <FormControl v-model="user.orangtua.penghasilan_ibu" type="text" :disabled="true" />
+                                </FormField>
+
+                            </div>
+                        </CardBox>
+                    </div>
+                    <div v-if="!!user.tambahan">
+                    </div>
+                    <div v-if="!!user.tambahan" class="col-span-2  ">
+                        <CardBox>
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Tambahan" }}</span>
+                            </NotificationBarInCard>
+                            <div>
+
+                                <FormField label="Keterangan ">
+                                    <FormControl v-model="user.tambahan.isi_data" type="text" :disabled="true" />
+                                </FormField>
+
+                                <FormField label="pdf" class="">
+                                    <embed :src="'/storage/pdf/' + user.tambahan.pdf" class="w-full " height="500" />
+
+                                </FormField>
+
 
                             </div>
                         </CardBox>
                     </div>
                 </div>
 
-                <datatablecomponent :buttons_data="buttons_data" routeTo="users" :dataFrom="usersWithPassword" :form="form"
-                    :columns="columns">
-                </datatablecomponent>
             </CardBox>
         </SectionMain>
     </LayoutAuthenticated>
 </template>
-<style>
-@import "datatables.net-dt";
-</style>
+<style>@import "datatables.net-dt";</style>

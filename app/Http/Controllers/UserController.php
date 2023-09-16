@@ -20,6 +20,7 @@ use App\Models\Voucher;
 use ArrayObject;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
+use Inertia\Ssr\Response as SsrResponse;
 use mysqli;
 
 class UserController extends Controller
@@ -480,9 +482,9 @@ class UserController extends Controller
 
     public function tungguVerifikasiPembayaran()
     {
-        if (!Auth()->user()->faktur) {
-            return redirect('/');
-        }
+        // if (!Auth()->user()->faktur) {
+        //     return redirect('/');
+        // }
         if (Auth()->user()->faktur && Auth()->user()->faktur->validasi == 1) {
             if (Auth()->user()->done_setup != 'done') {
                 return redirect()->route('diterimaVerifikasi');
@@ -682,8 +684,8 @@ class UserController extends Controller
 
     public function tungguVerifikasi()
     {
-        if (!Auth()->user()->faktur) {
-            return redirect('/');
+        if (Auth()->user()->status=='sudah') {
+            return redirect('/verifikasi-user-selesai');
         }
 
         $user = Auth()->user();
@@ -691,14 +693,13 @@ class UserController extends Controller
             'user' => $user,
         ]);
 
-        return inertia('User/tungguVerifikasiPembayaran');
     }
 
     public function verifikasiSelesai()
     {
-        if (!Auth()->user()->faktur) {
-            return redirect('/');
-        }
+        // if (!Auth()->user()->faktur) {
+        //     return redirect('/');
+        // }
 
         $user = Auth()->user();
         return inertia('User/UserVerifikasiSelesai', [
@@ -706,10 +707,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function verifikasiUser(): Response
+    public function verifikasiUserShow(): Response
     {
 
-        $users4 = User::with(['dataDaftar.tahun', 'faktur'])
+        $users_belum = User::with(['dataDaftar.tahun', 'faktur'])
             ->orderBy('created_at', 'desc')
             ->whereHas('dataDaftar.tahun', function ($query) {
                 $query->where('status', 'aktif');
@@ -717,14 +718,33 @@ class UserController extends Controller
             ->where('status', 'menunggu verifikasi')
             ->get();
 
+            
+        $users_sudah = User::with(['dataDaftar.tahun', 'faktur'])
+        ->orderBy('created_at', 'desc')
+        ->whereHas('dataDaftar.tahun', function ($query) {
+            $query->where('status', 'aktif');
+        })
+        ->where('status', 'sudah')
+        ->get();
+
  
 
         return inertia(
             'Users/VerifikasiUser',
             [
-                'users' => $users4,
+                'users' => $users_belum,
+                'users_sudah' => $users_sudah,
 
             ]
         );
+    }
+
+    public function verifikasiUser(User $user)
+    {
+
+        $user->status = 'sudah';
+        $user->save();
+        return redirect()->back();
+        
     }
 }

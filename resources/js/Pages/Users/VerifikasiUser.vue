@@ -49,6 +49,7 @@ const options = {
 
 let props = defineProps({
     users: Object,
+    users_sudah: Object,
     user_verified: Object,
     tahun: Object,
     form: Object,
@@ -223,7 +224,7 @@ const navigateToShowUser = (data) => {
                     </thead>
                     <tbody>
                         <tr v-for="(data, index) in users">
-                            <td>{{ index+1 }}</td>
+                            <td>{{ index + 1 }}</td>
                             <td>{{ data.name }}</td>
                             <td>{{ data.nim }}</td>
                             <td>{{ new Date(data.created_at).getFullYear() + "-" + new Date(data.created_at).getMonth() +
@@ -231,28 +232,91 @@ const navigateToShowUser = (data) => {
                             <td>
                                 <BaseButton v-if="!!data.faktur && data.faktur.validasi == 1" color="success" :small="true"
                                     :rounded-full="true" :label="'sudah di verifikasi'" />
-                                    <BaseButton v-else-if="data.faktur===null" color="lightDark" :small="true"
+                                <BaseButton v-else-if="data.faktur === null" color="lightDark" :small="true"
                                     :rounded-full="true" :label="'tidak mengikuti test'" />
-                                    <BaseButton v-else-if="!!data.faktur && data.faktur.validasi == 2" color="danger" :small="true"
-                                    :rounded-full="true" :label="'di tolak'" />
+                                <BaseButton v-else-if="!!data.faktur && data.faktur.validasi == 2" color="danger"
+                                    :small="true" :rounded-full="true" :label="'di tolak'" />
                                 <BaseButton v-else color="warning" :small="true" :rounded-full="true"
                                     :label="'belum di verifikasi'" />
                             </td>
                             <td>
-                                <BaseButton color="warning" :small="true"
-                                    :rounded-full="true" :label="'menunggu verifikasi'" />
+                                <BaseButton color="warning" :small="true" :rounded-full="true"
+                                    :label="'menunggu verifikasi'" />
                             </td>
 
 
-                           
+
                             <td>
-                                <BaseButton color="info" :small="true" label="lihat data" @click="navigateToShowUser(data.id)" />                            </td>
+                                <BaseButton color="info" :small="true" label="lihat data"
+                                    @click="navigateToShowUser(data.id)" />
+                            </td>
 
                         </tr>
 
                     </tbody>
                 </DataTable>
             </CardBox>
+
+            <CardBox class="mt-6">
+
+                <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
+                    <span>Tabel Verifikasi User</span>
+                </NotificationBarInCard>
+
+                <DataTable ref="table" class="display table" width="100%" :options="{
+                    dom: 'Bfrtip',
+                    select: true,
+                    scrollX: true,
+                    order: [],
+                    buttons: buttons_data,
+
+                }">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>NIM</th>
+                            <th>Tanggal</th>
+                            <th>Status Pembayaran test online</th>
+                            <th>Status Pendaftar</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(data, index) in users_sudah">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.nim }}</td>
+                            <td>{{ new Date(data.created_at).getFullYear() + "-" + new Date(data.created_at).getMonth() +
+                                "-" + new Date(data.created_at).getDate() }}</td>
+                            <td>
+                                <BaseButton v-if="!!data.faktur && data.faktur.validasi == 1" color="success" :small="true"
+                                    :rounded-full="true" :label="'sudah di verifikasi'" />
+                                <BaseButton v-else-if="data.faktur === null" color="lightDark" :small="true"
+                                    :rounded-full="true" :label="'tidak mengikuti test'" />
+                                <BaseButton v-else-if="!!data.faktur && data.faktur.validasi == 2" color="danger"
+                                    :small="true" :rounded-full="true" :label="'di tolak'" />
+                                <BaseButton v-else color="warning" :small="true" :rounded-full="true"
+                                    :label="'belum di verifikasi'" />
+                            </td>
+                            <td>
+                                <BaseButton color="success" :small="true" :rounded-full="true"
+                                    :label="'selesai verifikasi'" />
+                            </td>
+
+
+
+                            <td>
+                                <BaseButton color="info" :small="true" label="lihat data"
+                                    @click="navigateToShowUser(data.id)" />
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </DataTable>
+            </CardBox>
+
 
 
 

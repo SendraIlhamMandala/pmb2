@@ -73,7 +73,7 @@ const printDocument = () => {
           <p>
 
 
-            <BaseButton color="info" label="Button" :icon="mdiPrinter" :small="buttonsSmall" :outline="buttonsOutline"
+            <BaseButton color="info" label="Cetak Formulir" :icon="mdiPrinter" :small="buttonsSmall" :outline="buttonsOutline"
               :disabled="buttonsDisabled" :rounded-full="buttonsRounded" @click="printDocument" />
 
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\TahunController;
 use App\Http\Controllers\UserController;
 use App\Models\DataPribadi;
 use App\Models\ProgramStudi;
+use App\Models\Tahun;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
@@ -42,6 +43,7 @@ Route::get('/', function () {
 
 //get gethtmlpage fromcontroller
 Route::get('/gethtmlpage', [Controller::class, 'gethtmlpage'])->name('gethtmlpage');
+Route::get('/print', [Controller::class, 'print'])->name('print');
 
 
 //create route group
@@ -65,7 +67,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     return Inertia::render('FormsView');
   })->name('forms');
 
-  Route::get('/lihat-user/{id}', [UserController::class, 'lihatuser'] )->name('lihatuser');
+  Route::get('/lihat-user/{id}', [UserController::class, 'lihatuser'])->name('lihatuser');
 
 
 
@@ -77,7 +79,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
   Route::resource('roles', RoleController::class);
   Route::get('/roles/delete/{id}', [RoleController::class, 'deleteOne'])->name('roles.deleteOne');
   Route::get('/roles/deletemultiple/{id}', [RoleController::class, 'deleteMultiple'])->name('roles.deleteMultiple');
-  
+
   Route::resource('shifts', ShiftController::class);
   Route::get('/shifts/delete/{id}', [ShiftController::class, 'deleteOne'])->name('shifts.deleteOne');
   Route::get('/shifts/deletemultiple/{id}', [ShiftController::class, 'deleteMultiple'])->name('shifts.deleteMultiple');
@@ -138,7 +140,57 @@ Route::middleware('auth', 'verified')->group(function () {
       return redirect()->route('user.data-pribadi');
     }
 
-    return Inertia::render('HomeView');
+    $users_tunggu_verifikasi_bayar = User::with(['dataDaftar.tahun', 'faktur'])
+    ->orderBy('created_at', 'desc')
+    ->whereHas('dataDaftar.tahun', function ($query) {
+        $query->where('status', 'aktif');
+    })
+    ->where('done_setup', 'menunggu verifikasi')
+    ->get();
+
+
+//user_verified is all user that done_setup = 'sedang mengikuti test';
+$user_verified_bayar = User::with(['dataDaftar.tahun', 'faktur'])
+    ->orderBy('created_at', 'desc')
+    ->whereHas('dataDaftar.tahun', function ($query) {
+        $query->where('status', 'aktif');
+    })
+    ->where('done_setup', 'sedang mengikuti test')
+    ->get();
+
+
+
+    $users_belum = User::with(['dataDaftar.tahun', 'faktur', 'asalSekolah'])
+      ->orderBy('created_at', 'desc')
+      ->whereHas('dataDaftar.tahun', function ($query) {
+        $query->where('status', 'aktif');
+      })
+      ->where('status', 'menunggu verifikasi')
+      ->get();
+
+
+    $users_sudah = User::with(['dataDaftar.tahun', 'faktur'])
+      ->orderBy('created_at', 'desc')
+      ->whereHas('dataDaftar.tahun', function ($query) {
+        $query->where('status', 'aktif');
+      })
+      ->where('status', 'sudah')
+      ->get();
+
+
+
+    return inertia(
+      'Users/VerifikasiUser',
+      [
+        'users' => $users_belum,
+        'users_sudah' => $users_sudah,
+        'users_tunggu_verifikasi_bayar' => $users_tunggu_verifikasi_bayar,
+        'user_verified_bayar' => $user_verified_bayar,
+        'tahun' => Tahun::where('status', 'aktif')->get(),
+
+
+      ]
+    );
   })->name('dashboard');
 
   Route::post('/data-pribadi/{id}', [UserController::class, 'setDataPribadi'])->name('user.set-data-pribadi');
@@ -175,7 +227,6 @@ Route::middleware('auth', 'verified')->group(function () {
       'users' => $users
     ]);
   })->name('usercek');
- 
 });
 
 
@@ -192,26 +243,30 @@ Route::get('/testmail', function () {
     'admin'    => 'mohamedsasa201042@yahoo.com',
     'name'    => Auth::user()->name,
     'email'    => Auth::user()->email,
-];
-  Mail::send('vendor.notifications.emailverifypembayaran', ['data' => $data],
-  function ($message) use ($data)
-  {
+  ];
+  Mail::send(
+    'vendor.notifications.emailverifypembayaran',
+    ['data' => $data],
+    function ($message) use ($data) {
       $message
-          ->from($data['no-reply'])
-          ->to($data['email'])->subject('Pembayaran PMB FISIP telah diverifikasi');
-  });
-return 'success';
+        ->from($data['no-reply'])
+        ->to($data['email'])->subject('Pembayaran PMB FISIP telah diverifikasi');
+    }
+  );
+  return 'success';
 });
 
 Route::get('/testmail2', function () {
-  return view('vendor.notifications.emailverifypembayaran',
-  [
-    'no-reply' => 'contact-from-web@nomail.com',
-    'admin'    => 'mohamedsasa201042@yahoo.com',
-    'name'    => Auth::user()->name,
-    'email'    => Auth::user()->email,
+  return view(
+    'vendor.notifications.emailverifypembayaran',
+    [
+      'no-reply' => 'contact-from-web@nomail.com',
+      'admin'    => 'mohamedsasa201042@yahoo.com',
+      'name'    => Auth::user()->name,
+      'email'    => Auth::user()->email,
 
-  ]);
+    ]
+  );
 });
 
 

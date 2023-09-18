@@ -51,6 +51,8 @@ let props = defineProps({
     users: Object,
     users_sudah: Object,
     user_verified: Object,
+    users_tunggu_verifikasi_bayar: Object,
+    user_verified_bayar: Object,
     tahun: Object,
     form: Object,
     routeTo: String,
@@ -127,7 +129,8 @@ const formStatusSubmit = () => {
 };
 
 // Mendefinisikan kolom-kolom untuk tabel data
-const buttons_data = ['copy', dataExcel, 'pdf',
+const buttons_data = ['pageLength',
+ 'copy', dataExcel, 'pdf',
     {
         text: 'Toggle action',
         action: function (e, dt, node, config) {
@@ -194,128 +197,265 @@ const navigateToShowUser = (data) => {
     <LayoutAuthenticated>
 
         <SectionMain>
-            <SectionTitle>Verifikasi User</SectionTitle>
+            <SectionTitle>Verifikasi Pendaftaran Tahun {{ tahun[0].tahun }}</SectionTitle>
 
 
-            <CardBox class="mt-6">
+            <div className="grid grid-cols-2 grid-rows-1 gap-4">
+                <div>
 
-                <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Verifikasi User</span>
-                </NotificationBarInCard>
+                    <CardBox class="mt-6">
 
-                <DataTable ref="table" class="display table" width="100%" :options="{
-                    dom: 'Bfrtip',
-                    select: true,
-                    scrollX: true,
-                    order: [],
-                    buttons: buttons_data,
+                        <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
+                            <span>Tabel verifikasi user</span>
+                        </NotificationBarInCard>
 
-                }">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>NIM</th>
-                            <th>Tanggal</th>
-                            <th>Status Pembayaran test online</th>
-                            <th>Status Pendaftar</th>
-                            <th>Data</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(data, index) in users">
-                            <td>{{ index + 1 }}</td>
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.nim }}</td>
-                            <td>{{ new Date(data.created_at).getFullYear() + "-" + new Date(data.created_at).getMonth() +
-                                "-" + new Date(data.created_at).getDate() }}</td>
-                            <td>
-                                <BaseButton v-if="!!data.faktur && data.faktur.validasi == 1" color="success" :small="true"
-                                    :rounded-full="true" :label="'sudah di verifikasi'" />
-                                <BaseButton v-else-if="data.faktur === null" color="lightDark" :small="true"
-                                    :rounded-full="true" :label="'tidak mengikuti test'" />
-                                <BaseButton v-else-if="!!data.faktur && data.faktur.validasi == 2" color="danger"
-                                    :small="true" :rounded-full="true" :label="'di tolak'" />
-                                <BaseButton v-else color="warning" :small="true" :rounded-full="true"
-                                    :label="'belum di verifikasi'" />
-                            </td>
-                            <td>
-                                <BaseButton color="warning" :small="true" :rounded-full="true"
-                                    :label="'menunggu verifikasi'" />
-                            </td>
+                        <DataTable ref="table" class="display table" width="100%" :options="{
+                            dom: 'Bfrtip',
+                            select: true,
+                            scrollX: true,
+                            order: [],
+                            buttons: buttons_data,
+                      
 
 
+                        }">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>NIM</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                    <th>Pakai voucher</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for='(data, index) in users_tunggu_verifikasi_bayar'>
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.nim }}</td>
+                                    <td>{{ new Date(data.created_at).getFullYear() + "-" + new
+                                        Date(data.created_at).getMonth() +
+                                        "-" + new Date(data.created_at).getDate() }}</td>
+                                    <td>
+                                        <BaseButton v-if="data.faktur.validasi == 1" color="success" :small="true"
+                                            :rounded-full="true" :label="'sudah di verifikasi'" />
+                                        <BaseButton v-else-if="data.faktur.validasi == 2" color="danger" :small="true"
+                                            :rounded-full="true" :label="'di tolak'" />
+                                        <BaseButton v-else color="warning" :small="true" :rounded-full="true"
+                                            :label="'belum di verifikasi'" />
+                                    </td>
+                                    <td>
+                                        <BaseButton v-if="!!data.faktur && data.faktur.pakai_voucher" color="success"
+                                            :small="true" :rounded-full="true"
+                                            :label="data.faktur.pakai_voucher ? 'ya' : 'tidak'" />
+                                        <BaseButton v-else-if="!!data.faktur && !data.faktur.pakai_voucher" color="warning"
+                                            :small="true" :rounded-full="true"
+                                            :label="data.faktur.pakai_voucher ? 'ya' : 'tidak'" />
+                                    </td>
+                                    <td>
+                                        <BaseButton @click="openModal(data)" color="info" :small="true"
+                                            label="lihat data" />
+                                    </td>
 
-                            <td>
-                                <BaseButton color="info" :small="true" label="lihat data"
-                                    @click="navigateToShowUser(data.id)" />
-                            </td>
+                                </tr>
 
-                        </tr>
-
-                    </tbody>
-                </DataTable>
-            </CardBox>
-
-            <CardBox class="mt-6">
-
-                <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Verifikasi User</span>
-                </NotificationBarInCard>
-
-                <DataTable ref="table" class="display table" width="100%" :options="{
-                    dom: 'Bfrtip',
-                    select: true,
-                    scrollX: true,
-                    order: [],
-                    buttons: buttons_data,
-
-                }">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>NIM</th>
-                            <th>Tanggal</th>
-                            <th>Status Pembayaran test online</th>
-                            <th>Status Pendaftar</th>
-                            <th>Data</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(data, index) in users_sudah">
-                            <td>{{ index + 1 }}</td>
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.nim }}</td>
-                            <td>{{ new Date(data.created_at).getFullYear() + "-" + new Date(data.created_at).getMonth() +
-                                "-" + new Date(data.created_at).getDate() }}</td>
-                            <td>
-                                <BaseButton v-if="!!data.faktur && data.faktur.validasi == 1" color="success" :small="true"
-                                    :rounded-full="true" :label="'sudah di verifikasi'" />
-                                <BaseButton v-else-if="data.faktur === null" color="lightDark" :small="true"
-                                    :rounded-full="true" :label="'tidak mengikuti test'" />
-                                <BaseButton v-else-if="!!data.faktur && data.faktur.validasi == 2" color="danger"
-                                    :small="true" :rounded-full="true" :label="'di tolak'" />
-                                <BaseButton v-else color="warning" :small="true" :rounded-full="true"
-                                    :label="'belum di verifikasi'" />
-                            </td>
-                            <td>
-                                <BaseButton color="success" :small="true" :rounded-full="true"
-                                    :label="'selesai verifikasi'" />
-                            </td>
+                            </tbody>
+                        </DataTable>
+                    </CardBox>
 
 
+                    <CardBox class="mt-6">
 
-                            <td>
-                                <BaseButton color="info" :small="true" label="lihat data"
-                                    @click="navigateToShowUser(data.id)" />
-                            </td>
+                        <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
+                            <span>Tabel verifikasi user</span>
+                        </NotificationBarInCard>
 
-                        </tr>
+                        <DataTable ref="table" class="display table" width="100%" :options="{
+                            dom: 'Bfrtip',
+                            select: true,
+                            scrollX: true,
+                            order: [],
+                            buttons: buttons_data,
 
-                    </tbody>
-                </DataTable>
-            </CardBox>
+                        }">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>NIM</th>
+                                    <th>done_setup</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                    <th>Pakai voucher</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="( data, index) in user_verified_bayar">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ data.name }}</td>
+
+                                    <td>{{ data.nim }}</td>
+                                    <td>{{ data.done_setup }}</td>
+                                    <td>{{ new Date(data.created_at).getFullYear() + "-" + new
+                                        Date(data.created_at).getMonth() +
+                                        "-" + new Date(data.created_at).getDate() }}</td>
+                                    <td>
+                                        <BaseButton v-if="data.faktur.validasi == 1" color="success" :small="true"
+                                            :rounded-full="true" :label="'sudah di verifikasi'" />
+                                        <BaseButton v-else-if="data.faktur.validasi == 2" color="danger" :small="true"
+                                            :rounded-full="true" :label="'di tolak'" />
+                                        <BaseButton v-else color="warning" :small="true" :rounded-full="true"
+                                            :label="'belum di verifikasi'" />
+                                    </td>
+                                    <td>
+                                        <BaseButton v-if="!!data.faktur && data.faktur.pakai_voucher" color="success"
+                                            :small="true" :rounded-full="true"
+                                            :label="data.faktur.pakai_voucher ? 'ya' : 'tidak'" />
+                                        <BaseButton v-else-if="!!data.faktur && !data.faktur.pakai_voucher" color="warning"
+                                            :small="true" :rounded-full="true"
+                                            :label="data.faktur.pakai_voucher ? 'ya' : 'tidak'" />
+                                    </td>
+                                    <td>
+                                        <BaseButton @click="openModal(data)" color="info" :small="true"
+                                            label="lihat data" />
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </DataTable>
+
+
+                    </CardBox>
+
+
+
+
+                </div>
+                <div>
+                    <CardBox class="mt-6">
+
+                        <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
+                            <span>Tabel Verifikasi User</span>
+                        </NotificationBarInCard>
+
+                        <DataTable ref="table" class="display table" width="100%" :options="{
+                            dom: 'Bfrtip',
+                            select: true,
+                            scrollX: true,
+                            order: [],
+                            buttons: buttons_data,
+
+                        }">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>No.Peserta</th>
+                                    <th>Nama Peserta</th>
+                                    <th>Asal Sekolah</th>
+                                    <th>Jalur Pendaftaran</th>
+                                    <th>Status Pendaftar</th>
+                                    <th>Pilih</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(data, index) in users">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ data.nim }}</td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.asal_sekolah.nama_sekolah }}</td>
+                                    <td>{{ data.data_daftar.jalur }}</td>
+
+                                    <td>
+                                        <BaseButton color="warning" :small="true" :rounded-full="true"
+                                            :label="'menunggu verifikasi'" />
+                                    </td>
+
+
+
+                                    <td>
+                                        <BaseButton color="info" :small="true" label="lihat data"
+                                            @click="navigateToShowUser(data.id)" />
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </DataTable>
+                    </CardBox>
+
+
+                    <CardBox class="mt-6">
+
+                        <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
+                            <span>Tabel Verifikasi User</span>
+                        </NotificationBarInCard>
+
+                        <DataTable ref="table" class="display table" width="100%" :options="{
+                            dom: 'Bfrtip',
+                            select: true,
+                            scrollX: true,
+                            order: [],
+                            buttons: buttons_data,
+
+                        }">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>NIM</th>
+                                    <th>Tanggal</th>
+                                    <th>Status Pembayaran test online</th>
+                                    <th>Status Pendaftar</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(data, index) in users_sudah">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.nim }}</td>
+                                    <td>{{ new Date(data.created_at).getFullYear() + "-" + new
+                                        Date(data.created_at).getMonth() +
+                                        "-" + new Date(data.created_at).getDate() }}</td>
+                                    <td>
+                                        <BaseButton v-if="!!data.faktur && data.faktur.validasi == 1" color="success"
+                                            :small="true" :rounded-full="true" :label="'sudah di verifikasi'" />
+                                        <BaseButton v-else-if="data.faktur === null" color="lightDark" :small="true"
+                                            :rounded-full="true" :label="'tidak mengikuti test'" />
+                                        <BaseButton v-else-if="!!data.faktur && data.faktur.validasi == 2" color="danger"
+                                            :small="true" :rounded-full="true" :label="'di tolak'" />
+                                        <BaseButton v-else color="warning" :small="true" :rounded-full="true"
+                                            :label="'belum di verifikasi'" />
+                                    </td>
+                                    <td>
+                                        <BaseButton color="success" :small="true" :rounded-full="true"
+                                            :label="'selesai verifikasi'" />
+                                    </td>
+
+
+
+                                    <td>
+                                        <BaseButton color="info" :small="true" label="lihat data"
+                                            @click="navigateToShowUser(data.id)" />
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </DataTable>
+                    </CardBox>
+
+
+                </div>
+            </div>
+
+
+
+
 
 
 

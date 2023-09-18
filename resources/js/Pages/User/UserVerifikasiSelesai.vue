@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from "vue";
-import { mdiPrinter } from "@mdi/js";
+import { mdiPrinter, mdiFileWord } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import FormField from "@/components/FormField.vue";
@@ -11,7 +11,7 @@ import LayoutAuthenticatedUser from "@/layouts/LayoutAuthenticatedUser.vue";
 import NotificationBarInCard from "@/components/NotificationBarInCard.vue";
 
 import AppHead from "@/components/AppHead.vue";
-
+import axios from "axios";
 
 
 const isScaled = ref(false);
@@ -36,8 +36,25 @@ const formSubmit = () => {
 };
 
 const printDocument = () => {
-  window.open('/gethtmlpage', '_blank');
+  window.open('/print', '_blank');
 };
+
+function exportDOCX() {
+
+axios.get('/gethtmlpage').then(response => {
+    var sourceDOCX = '';
+    sourceDOCX = response.data;
+    console.log(response.data);
+    var fileDownload = document.createElement("a");
+    var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceDOCX);
+    // console.log(source);
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = 'Formulir Pendaftaran FISIP UNIGA '+ props.user.name.charAt(0).toUpperCase() + props.user.name.slice(1) +'.doc';
+    fileDownload.click();
+})
+}
+
 
 </script>
 
@@ -73,10 +90,13 @@ const printDocument = () => {
           <p>
 
 
-            <BaseButton color="info" label="Cetak Formulir" :icon="mdiPrinter" :small="buttonsSmall" :outline="buttonsOutline"
+            <BaseButton class=" mx-2" color="success" label="Cetak Formulir" :icon="mdiPrinter" :small="buttonsSmall" :outline="buttonsOutline"
               :disabled="buttonsDisabled" :rounded-full="buttonsRounded" @click="printDocument" />
 
 
+              <BaseButton class=" mx-2" color="info" label="Simpan" :icon="mdiFileWord" :small="buttonsSmall" :outline="buttonsOutline"
+              :disabled="buttonsDisabled" :rounded-full="buttonsRounded" @click="exportDOCX" />
+              
 
 
 

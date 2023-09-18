@@ -297,7 +297,7 @@ class UserController extends Controller
         $user->done_setup = 'done';
         $user->status = 'menunggu verifikasi';
         $user->save();
-        return redirect(route('usercek'));
+        return redirect(route('dashboard'));
     }
 
     //set data jalur
@@ -678,7 +678,7 @@ class UserController extends Controller
         }
 
 
-        return Inertia::location('/verifikasi-pembayaran-user');
+        return Inertia::location('/dashboard');
     }
 
 
@@ -710,7 +710,7 @@ class UserController extends Controller
     public function verifikasiUserShow(): Response
     {
 
-        $users_belum = User::with(['dataDaftar.tahun', 'faktur'])
+        $users_belum = User::with(['dataDaftar.tahun', 'faktur', 'asalSekolah'])
             ->orderBy('created_at', 'desc')
             ->whereHas('dataDaftar.tahun', function ($query) {
                 $query->where('status', 'aktif');

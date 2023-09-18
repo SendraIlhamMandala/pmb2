@@ -69,36 +69,36 @@ const getFormStatusColor = computed(() => {
 
 function exportHTML() {
 
-// axios.get('/gethtmlpage').then(response => {
-//     var sourceHTML = '';
-//     sourceHTML = response.data;
-//     console.log(response.data);
-//     var fileDownload = document.createElement("a");
-//     var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-
-//     document.body.appendChild(fileDownload);
-//     fileDownload.href = source;
-//     fileDownload.download = 'document.doc';
-//     fileDownload.click();
-// })
-
 axios.get('/gethtmlpage').then(response => {
-    var sourceHTML = response.data;
+    var sourceHTML = '';
+    sourceHTML = response.data;
+    console.log(response.data);
+    var fileDownload = document.createElement("a");
+    var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    // console.log(source);
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = 'document.doc';
+    fileDownload.click();
+})
 
-    // Convert the HTML content to a PDF document definition
-    var documentDefinition = {
-        content: [
-            htmlToPdfmake(sourceHTML)
-        ]
-    };
+// axios.get('/gethtmlpage').then(response => {
+//     var sourceHTML = response.data;
 
-    console.log(htmlToPdfmake(sourceHTML));
-    // Create the PDF
-    var pdf = pdfMake.createPdf(documentDefinition);
+//     // Convert the HTML content to a PDF document definition
+//     var documentDefinition = {
+//         content: [
+//             htmlToPdfmake(sourceHTML)
+//         ]
+//     };
 
-    // Download the PDF file
-    pdf.download('document.pdf');
-});
+//     console.log(htmlToPdfmake(sourceHTML));
+//     // Create the PDF
+//     var pdf = pdfMake.createPdf(documentDefinition);
+
+//     // Download the PDF file
+//     pdf.download('document.pdf');
+// });
 
 
 }
@@ -173,7 +173,8 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             }, {
                 text: 'Export doc',
                 action: function () {
-                    window.open('/gethtmlpage', '_blank');
+                    // window.open('/gethtmlpage', '_blank');
+                    exportHTML();
 
                 }
             }

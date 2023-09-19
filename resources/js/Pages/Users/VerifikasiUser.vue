@@ -129,20 +129,7 @@ const formStatusSubmit = () => {
 };
 
 // Mendefinisikan kolom-kolom untuk tabel data
-const buttons_data = ['pageLength',
- 'copy', dataExcel, 'pdf',
-    {
-        text: 'Toggle action',
-        action: function (e, dt, node, config) {
-            dt.column(-2).visible(!dt.column(-2).visible());
-            dt.column(-1).visible(!dt.column(-1).visible());
-        }
-    }, {
-        text: 'Export doc',
-        action: function () {
-            exportHTML();
-        }
-    }
+const buttons_data = ['pageLength', dataExcel, 'pdf',
 ];
 const isModalOpen = ref(false);
 const modalData = ref([]);
@@ -200,7 +187,7 @@ const navigateToShowUser = (data) => {
             <SectionTitle>Verifikasi Pendaftaran Tahun {{ tahun[0].tahun }}</SectionTitle>
 
 
-            <div className="grid grid-cols-2 grid-rows-1 gap-4">
+            <div className="grid-rows-1 gap-4">
                 <div>
 
                     <CardBox class="mt-6">
@@ -215,7 +202,7 @@ const navigateToShowUser = (data) => {
                             scrollX: true,
                             order: [],
                             buttons: buttons_data,
-                      
+                        
 
 
                         }">
@@ -285,7 +272,7 @@ const navigateToShowUser = (data) => {
                                     <th>No</th>
                                     <th>Name</th>
                                     <th>NIM</th>
-                                    <th>done_setup</th>
+                                    <th>CAT</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
                                     <th>Pakai voucher</th>

@@ -178,6 +178,16 @@ const buttons_data = ['copy', dataExcel, 'pdf',
         }
     }
 ];
+
+
+
+const isJalurValid = computed(() => {
+  const jalur = props.user.data_daftar.jalur;
+  console.log(jalur);
+  return jalur == 'Prestasi non akademik' ||
+         jalur == 'Jalur ranking';
+});
+
 console.log(props.user);
 </script>
 
@@ -187,12 +197,12 @@ console.log(props.user);
         <div class="fixed bottom-0 left-0 w-full flex justify-center py-4 z-50">
             <Link
                 class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
-                :href="route('verifikasiUser', user.id)">
+                :href="route('verifikasiUser', user.id+','+'terima')">
             Verifikasi
             </Link>
             <a v-if="$page.props.auth.user"
                 class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
-                @click.prevent="router.post(route('logout'))">
+                :href="route('verifikasiUser', user.id+','+'tolak')">
                 Tolak
             </a>
         </div>
@@ -456,7 +466,7 @@ console.log(props.user);
                     <div v-if="!!user.tambahan">
                     </div>
                     <div v-if="!!user.tambahan" class="col-span-2  ">
-                        <CardBox>
+                        <CardBox >
                             <NotificationBarInCard :color="getFormStatusColor"
                                 :is-placed-with-header="formStatusWithHeader">
                                 <span>
@@ -467,10 +477,13 @@ console.log(props.user);
                                 <FormField label="Keterangan ">
                                     <FormControl v-model="user.tambahan.isi_data" type="text" :disabled="true" />
                                 </FormField>
-
-                                <FormField label="pdf" class="">
+                                <FormField v-if="isJalurValid" label="pdf">
+                                <!-- <FormField v-if="user.data_daftar.jalur=='Prestasi non akademik' || user.data_daftar.jalur=='Jalur ranking' || user.data_daftar.jalur=='Undangan'" label="pdf" class=""> -->
                                     <embed :src="'/storage/pdf/' + user.tambahan.pdf" class="w-full " height="500" />
 
+                                </FormField>
+                                <FormField label="Foto Keterangan " class="">
+                                    <img :src="'/storage/foto_bukti/' + user.tambahan.foto_bukti" alt="" />
                                 </FormField>
 
 

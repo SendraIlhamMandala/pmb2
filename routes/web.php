@@ -141,22 +141,22 @@ Route::middleware('auth', 'verified')->group(function () {
     }
 
     $users_tunggu_verifikasi_bayar = User::with(['dataDaftar.tahun', 'faktur'])
-    ->orderBy('created_at', 'desc')
-    ->whereHas('dataDaftar.tahun', function ($query) {
+      ->orderBy('created_at', 'desc')
+      ->whereHas('dataDaftar.tahun', function ($query) {
         $query->where('status', 'aktif');
-    })
-    ->where('done_setup', 'menunggu verifikasi')
-    ->get();
+      })
+      ->where('done_setup', 'menunggu verifikasi')
+      ->get();
 
 
-//user_verified is all user that done_setup = 'sedang mengikuti test';
-$user_verified_bayar = User::with(['dataDaftar.tahun', 'faktur'])
-    ->orderBy('created_at', 'desc')
-    ->whereHas('dataDaftar.tahun', function ($query) {
+    //user_verified is all user that done_setup = 'sedang mengikuti test';
+    $user_verified_bayar = User::with(['dataDaftar.tahun', 'faktur'])
+      ->orderBy('created_at', 'desc')
+      ->whereHas('dataDaftar.tahun', function ($query) {
         $query->where('status', 'aktif');
-    })
-    ->where('done_setup', 'sedang mengikuti test')
-    ->get();
+      })
+      ->where('done_setup', 'sedang mengikuti test')
+      ->get();
 
 
 

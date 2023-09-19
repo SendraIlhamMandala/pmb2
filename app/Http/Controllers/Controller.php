@@ -87,6 +87,7 @@ class Controller extends BaseController
                     </tbody></table>
                     <p align='center'>(Diisi oleh petugas PMB)</p>
                     <hr> 
+                    <br>
                     <table style='text-align: justify-all;'>
                         <tbody><tr>
                             <td style='font-weight: bold;'>JALUR PENDAFTARAN</td> 
@@ -333,6 +334,8 @@ class Controller extends BaseController
                     <h4 style='text-align: left; font-weight: bold;'>Mohon Informasi, darimana Saudara/i memperoleh informasi: Teman di FISIP UNIGA </h4>
                     <h4 style='font-weight: bold;'>DAFTAR CEKLIS KELENGKAPAN PERSYARATAN <br> (DIISI OLEH PETUGAS PENERIMA PENDAFTARAN MAHASISWA BARU) </h4>  
                     <hr>
+                    <br>
+
                     <table style='text-align: justify-all;'>               
                         <tbody><tr>
                             <td><input type='text' size='5'></td>
@@ -388,8 +391,6 @@ class Controller extends BaseController
                     
                                 </body></html> 
 
-
-        
         ";
 
         return $html;

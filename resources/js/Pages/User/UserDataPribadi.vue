@@ -92,6 +92,7 @@ const selectOptionsPenghasilan = ["< Rp.500.000", "Rp.500.000 - Rp.999.999", "Rp
 
 var pilihan_pekerjaan_ibu = ref();
 var pilihan_pekerjaan_ayah = ref();
+var pilihan_pekerjaan_anda = ref();
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
@@ -152,6 +153,10 @@ const form = useForm({
         foto_bukti: '',
         pdf: '',
 
+    },
+    pekerjaan:{
+        nama_pekerjaan: '',
+        nama_instansi: '',
     }
 
 });
@@ -216,6 +221,19 @@ watch(pilihan_pekerjaan_ayah, (newCount) => {
 
     console.log(`new pilihan pekerjaan ayah is: ${newCount}`)
 })
+
+watch(pilihan_pekerjaan_anda, (newCount) => {
+    // yes, console.log() is a side effect
+    if (newCount != 'lainnya') {
+
+        form.pekerjaan.nama_pekerjaan = newCount
+    } else {
+        form.pekerjaan.nama_pekerjaan = ''
+    }
+
+    console.log(`new pilihan pekerjaan ayah is: ${newCount}`)
+})
+
 console.log(props.user);
 </script>
 
@@ -260,12 +278,13 @@ console.log(props.user);
                                         max="100">
                                         {{ form.dataPribadi.progress.percentage }}%
                                     </progress>
-                                    <NotificationBar color="warning" v-if="errors.foto" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.foto }}    <template #right>
-                                    
-                                </template>
-                            </NotificationBar>
-                            
+                                    <NotificationBar color="warning" v-if="errors.foto" :icon="mdiAlert"
+                                        :outline="notificationsOutline">
+                                        <b>Warning</b>.{{ errors.foto }} <template #right>
+
+                                        </template>
+                                    </NotificationBar>
+
                                 </div>
                             </div>
 
@@ -283,93 +302,102 @@ console.log(props.user);
                         <FormField label="No KTP">
                             <FormControl v-model="form.dataPribadi.no_ktp" type="number" class=" appearance-none"
                                 placeholder="No KTP" required />
-                            <NotificationBar color="warning" v-if="errors.no_ktp" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.no_ktp }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.no_ktp" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.no_ktp }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="NISN (Nomor Induk Siswa Nasional)">
                             <FormControl v-model="form.dataPribadi.nisn" type="number" placeholder="NISN" required />
-                            <NotificationBar color="warning" v-if="errors.nisn" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.nisn }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.nisn" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nisn }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Tempat Lahir">
                             <FormControl v-model="form.dataPribadi.tempat_lahir" placeholder="Tempat Lahir" required />
-                            <NotificationBar color="warning" v-if="errors.tempat_lahir" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tempat_lahir }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tempat_lahir" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tempat_lahir }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Tanggal Lahir">
                             <FormControl v-model="form.dataPribadi.tanggal_lahir" type="date" required />
-                            <NotificationBar color="warning" v-if="errors.tanggal_lahir" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tanggal_lahir }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tanggal_lahir" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tanggal_lahir }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="jenis_kelamin">
                             <FormControl v-model="form.dataPribadi.jenis_kelamin" :options="selectOptionsKelamin" />
-                            <NotificationBar color="warning" v-if="errors.jenis_kelamin" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.jenis_kelamin }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.jenis_kelamin" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.jenis_kelamin }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Agama">
                             <FormControl v-model="form.dataPribadi.agama" placeholder="Agama" required />
-                            <NotificationBar color="warning" v-if="errors.agama" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.agama }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.agama" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.agama }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Instagram">
                             <FormControl v-model="form.dataPribadi.ig" placeholder="Instagram" />
-                            <NotificationBar color="warning" v-if="errors.ig" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.ig }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.ig" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.ig }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Facebook">
                             <FormControl v-model="form.dataPribadi.facebook" placeholder="Facebook" />
-                            <NotificationBar color="warning" v-if="errors.facebook" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.facebook }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.facebook" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.facebook }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="No telepon aktif">
                             <FormControl v-model="form.dataPribadi.no_hp" type="number" placeholder="No telepon aktif"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.no_hp" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.no_hp }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.no_hp" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.no_hp }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
                     </div>
                     <div>
@@ -384,62 +412,68 @@ console.log(props.user);
                         </div>
                         <FormField label="Alamat">
                             <FormControl v-model="form.alamat.alamat" type="text" placeholder="Alamat" required />
-                            <NotificationBar color="warning" v-if="errors.alamat" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.alamat }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.alamat" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.alamat }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Kelurahan">
                             <FormControl v-model="form.alamat.kelurahan" type="text" placeholder="Kelurahan" required />
-                            <NotificationBar color="warning" v-if="errors.kelurahan" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.kelurahan }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.kelurahan" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.kelurahan }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Kecamatan">
                             <FormControl v-model="form.alamat.kecamatan" type="text" placeholder="Kecamatan" required />
-                            <NotificationBar color="warning" v-if="errors.kecamatan" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.kecamatan }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.kecamatan" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.kecamatan }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Kabupaten">
                             <FormControl v-model="form.alamat.kabupaten" type="text" placeholder="Kabupaten" required />
-                            <NotificationBar color="warning" v-if="errors.kabupaten" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.kabupaten }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.kabupaten" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.kabupaten }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Provinsi">
                             <FormControl v-model="form.alamat.provinsi" type="text" placeholder="Provinsi" required />
-                            <NotificationBar color="warning" v-if="errors.provinsi" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.provinsi }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.provinsi" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.provinsi }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Kode pos">
                             <FormControl v-model="form.alamat.kodepos" type="text" placeholder="Kode pos" required />
-                            <NotificationBar color="warning" v-if="errors.kodepos" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.kodepos }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.kodepos" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.kodepos }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                     </div>
@@ -458,44 +492,48 @@ console.log(props.user);
                         <FormField label="Nama Sekolah">
                             <FormControl v-model="form.sekolah.nama_sekolah" type="text" placeholder="nama sekolah"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.nama_sekolah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.nama_sekolah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.nama_sekolah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nama_sekolah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Alamat sekolah">
                             <FormControl v-model="form.sekolah.alamat_sekolah" type="text" placeholder="alamat sekolah"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.alamat_sekolah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.alamat_sekolah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.alamat_sekolah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.alamat_sekolah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Tahun lulus">
                             <FormControl v-model="form.sekolah.tahun_lulus" type="text" placeholder="Tahun lulus"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.tahun_lulus" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tahun_lulus }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tahun_lulus" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tahun_lulus }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Jurusan">
                             <FormControl v-model="form.sekolah.jurusan" type="text" placeholder="jurusan" required />
-                            <NotificationBar color="warning" v-if="errors.jurusan" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.jurusan }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.jurusan" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.jurusan }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <!-- <FormField label="SKHUN (Sertifikat Hasil Ujian Nasional)">
@@ -511,12 +549,13 @@ console.log(props.user);
                         <FormField label="Nilai SKHUN (sertifkat hasil ujian nasional) ">
                             <FormControl v-model="form.sekolah.nilai_skhun" type="text" placeholder="nilai_skhun"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.nilai_skhun" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.nilai_skhun }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.nilai_skhun" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nilai_skhun }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
                         <div class="flex gap-4 ">
 
@@ -530,12 +569,13 @@ console.log(props.user);
                                         max="100">
                                         {{ form.sekolah.progress.percentage }}%
                                     </progress>
-                                    <NotificationBar color="warning" v-if="errors.skhun" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.skhun }}    <template #right>
-                                    
-                                </template>
-                            </NotificationBar>
-                            
+                                    <NotificationBar color="warning" v-if="errors.skhun" :icon="mdiAlert"
+                                        :outline="notificationsOutline">
+                                        <b>Warning</b>.{{ errors.skhun }} <template #right>
+
+                                        </template>
+                                    </NotificationBar>
+
                                 </div>
                                 <div v-if="previewImageSKHUN">
                                     <img width="100" height="100" :src="previewImageSKHUN" alt="Preview foto" />
@@ -555,12 +595,13 @@ console.log(props.user);
                                         max="100">
                                         {{ form.sekolah.progress.percentage }}%
                                     </progress>
-                                    <NotificationBar color="warning" v-if="errors.ijazah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.ijazah }}    <template #right>
-                                    
-                                </template>
-                            </NotificationBar>
-                            
+                                    <NotificationBar color="warning" v-if="errors.ijazah" :icon="mdiAlert"
+                                        :outline="notificationsOutline">
+                                        <b>Warning</b>.{{ errors.ijazah }} <template #right>
+
+                                        </template>
+                                    </NotificationBar>
+
                                 </div>
                                 <div v-if="previewImageIjazah">
                                     <img width="100" height="100" :src="previewImageIjazah" alt="Preview foto" />
@@ -588,88 +629,96 @@ console.log(props.user);
                         </div>
                         <FormField label="Nama Ayah">
                             <FormControl v-model="form.orangtua.nama_ayah" type="text" placeholder="Nama Ayah" required />
-                            <NotificationBar color="warning" v-if="errors.nama_ayah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.nama_ayah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.nama_ayah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nama_ayah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="KTP Ayah">
                             <FormControl v-model="form.orangtua.ktp_ayah" type="text" placeholder="KTP Ayah" required />
-                            <NotificationBar color="warning" v-if="errors.ktp_ayah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.ktp_ayah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.ktp_ayah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.ktp_ayah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Tempat Lahir Ayah">
                             <FormControl v-model="form.orangtua.tempat_lahir_ayah" type="text"
                                 placeholder="Tempat Lahir Ayah" required />
-                            <NotificationBar color="warning" v-if="errors.tempat_lahir_ayah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tempat_lahir_ayah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tempat_lahir_ayah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tempat_lahir_ayah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Tanggal Lahir Ayah">
                             <FormControl v-model="form.orangtua.tanggal_lahir_ayah" type="date"
                                 placeholder="Tanggal Lahir Ayah" required />
-                            <NotificationBar color="warning" v-if="errors.tanggal_lahir_ayah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tanggal_lahir_ayah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tanggal_lahir_ayah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tanggal_lahir_ayah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="No. HP Ayah">
                             <FormControl v-model="form.orangtua.no_hp_ayah" type="tel" placeholder="No. HP Ayah" required />
-                            <NotificationBar color="warning" v-if="errors.no_hp_ayah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.no_hp_ayah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.no_hp_ayah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.no_hp_ayah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Pekerjaan ayah">
                             <FormControl v-model="pilihan_pekerjaan_ayah" :options="selectOptionsPekerjaan" required />
-                            <NotificationBar color="warning" v-if="errors.pekerjaan_ayah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.pekerjaan_ayah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.pekerjaan_ayah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.pekerjaan_ayah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
 
                         </FormField>
 
                         <FormField v-if="pilihan_pekerjaan_ayah == 'lainnya'" label="Pekerjaan ayah">
                             <FormControl v-model="form.orangtua.pekerjaan_ayah" type="text" placeholder="Pekerjaan ayah"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.pekerjaan_ayah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.pekerjaan_ayah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.pekerjaan_ayah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.pekerjaan_ayah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
 
                         <FormField label="Penghasilan Ayah">
                             <FormControl v-model="form.orangtua.penghasilan_ayah" :options="selectOptionsPenghasilan"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.penghasilan_ayah" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.penghasilan_ayah }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.penghasilan_ayah" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.penghasilan_ayah }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
                         <!-- 
                         <FormField label="Penghasilan Ayah">
@@ -702,76 +751,83 @@ console.log(props.user);
 
                         <FormField label="Nama Ibu">
                             <FormControl v-model="form.orangtua.nama_ibu" type="text" placeholder="Nama Ibu" required />
-                            <NotificationBar color="warning" v-if="errors.nama_ibu" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.nama_ibu }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.nama_ibu" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nama_ibu }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="KTP Ibu">
                             <FormControl v-model="form.orangtua.ktp_ibu" type="text" placeholder="KTP Ibu" required />
-                            <NotificationBar color="warning" v-if="errors.ktp_ibu" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.ktp_ibu }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.ktp_ibu" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.ktp_ibu }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Tempat Lahir Ibu">
                             <FormControl v-model="form.orangtua.tempat_lahir_ibu" type="text" placeholder="Tempat Lahir Ibu"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.tempat_lahir_ibu" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tempat_lahir_ibu }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tempat_lahir_ibu" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tempat_lahir_ibu }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Tanggal Lahir Ibu">
                             <FormControl v-model="form.orangtua.tanggal_lahir_ibu" type="date"
                                 placeholder="Tanggal Lahir Ibu" required />
-                            <NotificationBar color="warning" v-if="errors.tanggal_lahir_ibu" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tanggal_lahir_ibu }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tanggal_lahir_ibu" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tanggal_lahir_ibu }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="No. HP Ibu">
                             <FormControl v-model="form.orangtua.no_hp_ibu" type="tel" placeholder="No. HP Ibu" required />
-                            <NotificationBar color="warning" v-if="errors.no_hp_ibu" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.no_hp_ibu }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.no_hp_ibu" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.no_hp_ibu }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
 
                         <FormField label="Pekerjaan Ibu">
                             <FormControl v-model="pilihan_pekerjaan_ibu" :options="selectOptionsPekerjaan" required />
-                            <NotificationBar color="warning" v-if="errors.pekerjaan_ibu" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.pekerjaan_ibu }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.pekerjaan_ibu" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.pekerjaan_ibu }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField v-if="pilihan_pekerjaan_ibu == 'lainnya'" label="Pekerjaan Ibu">
                             <FormControl v-model="form.orangtua.pekerjaan_ibu" type="text" placeholder="Pekerjaan Ibu"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.pekerjaan_ibu" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.pekerjaan_ibu }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.pekerjaan_ibu" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.pekerjaan_ibu }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
 
@@ -779,13 +835,14 @@ console.log(props.user);
                             <FormControl v-model="form.orangtua.penghasilan_ibu" :options="selectOptionsPenghasilan"
                                 required />
 
-                            <NotificationBar color="warning" v-if="errors.penghasilan_ibu" :icon="mdiAlert" :outline="notificationsOutline">
+                            <NotificationBar color="warning" v-if="errors.penghasilan_ibu" :icon="mdiAlert"
+                                :outline="notificationsOutline">
                                 <b>Warning</b>.{{ errors.penghasilan_ibu }}
                                 <template #right>
-                                    
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
                         <!-- 
                         <FormField label="Penghasilan Ibu">
@@ -820,34 +877,37 @@ console.log(props.user);
                         <FormField label="Perguruan tinggi ">
                             <FormControl v-model="form.pindahan.perguruan_tinggi" type="text" placeholder="Perguruan tinggi"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.perguruan_tinggi" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.perguruan_tinggi }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.perguruan_tinggi" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.perguruan_tinggi }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Program Studi ">
                             <FormControl v-model="form.pindahan.program_studi" type="text" placeholder="program studi"
                                 required />
-                            <NotificationBar color="warning" v-if="errors.program_studi" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.program_studi }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.program_studi" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.program_studi }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
                         <FormField label="Nomor Induk Siswa (NIM)">
                             <FormControl v-model="form.pindahan.nomor_induk_mahasiswa" type="text"
                                 placeholder="nomor induk mahasiswa" required />
-                            <NotificationBar color="warning" v-if="errors.nomor_induk_mahasiswa" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.nomor_induk_mahasiswa }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.nomor_induk_mahasiswa" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nomor_induk_mahasiswa }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
 
@@ -878,12 +938,13 @@ console.log(props.user);
                                     max="100">
                                     {{ form.tambahan.progress.percentage }}%
                                 </progress>
-                                <NotificationBar color="warning" v-if="errors.foto_bukti" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.foto_bukti }}    <template #right>
-                                    
-                                </template>
-                            </NotificationBar>
-                            
+                                <NotificationBar color="warning" v-if="errors.foto_bukti" :icon="mdiAlert"
+                                    :outline="notificationsOutline">
+                                    <b>Warning</b>.{{ errors.foto_bukti }} <template #right>
+
+                                    </template>
+                                </NotificationBar>
+
                             </div>
                             <div v-if="previewImageRanking">
                                 <img width="100" height="100" :src="previewImageRanking" alt="Preview foto" />
@@ -904,24 +965,26 @@ console.log(props.user);
                                     max="100">
                                     {{ form.tambahan.progress.percentage }}%
                                 </progress>
-                                <NotificationBar color="warning" v-if="errors.pdf" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.pdf }}    <template #right>
-                                    
-                                </template>
-                            </NotificationBar>
-                            
+                                <NotificationBar color="warning" v-if="errors.pdf" :icon="mdiAlert"
+                                    :outline="notificationsOutline">
+                                    <b>Warning</b>.{{ errors.pdf }} <template #right>
+
+                                    </template>
+                                </NotificationBar>
+
                             </div>
 
                         </FormField>
 
                         <FormField label="keterangan ranking ">
                             <FormControl v-model="form.tambahan.isi_data" type="text" placeholder="Keterangan" required />
-                            <NotificationBar color="warning" v-if="errors.tambahan" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tambahan }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tambahan" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tambahan }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
 
@@ -952,12 +1015,13 @@ console.log(props.user);
                                     max="100">
                                     {{ form.tambahan.progress.percentage }}%
                                 </progress>
-                                <NotificationBar color="warning" v-if="errors.foto_bukti" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.foto_bukti }}    <template #right>
-                                    
-                                </template>
-                            </NotificationBar>
-                            
+                                <NotificationBar color="warning" v-if="errors.foto_bukti" :icon="mdiAlert"
+                                    :outline="notificationsOutline">
+                                    <b>Warning</b>.{{ errors.foto_bukti }} <template #right>
+
+                                    </template>
+                                </NotificationBar>
+
                             </div>
                             <div v-if="previewImageRanking">
                                 <img width="100" height="100" :src="previewImageRanking" alt="Preview foto" />
@@ -978,24 +1042,26 @@ console.log(props.user);
                                     max="100">
                                     {{ form.tambahan.progress.percentage }}%
                                 </progress>
-                                <NotificationBar color="warning" v-if="errors.pdf" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.pdf }}    <template #right>
-                                    
-                                </template>
-                            </NotificationBar>
-                            
+                                <NotificationBar color="warning" v-if="errors.pdf" :icon="mdiAlert"
+                                    :outline="notificationsOutline">
+                                    <b>Warning</b>.{{ errors.pdf }} <template #right>
+
+                                    </template>
+                                </NotificationBar>
+
                             </div>
 
                         </FormField>
 
                         <FormField label="keterangan ranking ">
                             <FormControl v-model="form.tambahan.isi_data" type="text" placeholder="Keterangan" required />
-                            <NotificationBar color="warning" v-if="errors.tambahan" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tambahan }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tambahan" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tambahan }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
 
@@ -1012,11 +1078,11 @@ console.log(props.user);
                             <NotificationBarInCard :color="getFormStatusColor"
                                 :is-placed-with-header="formStatusWithHeader">
                                 <span>
-                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Tambahan"
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Tambahan Undangan"
                                     }}</span>
                             </NotificationBarInCard>
                         </div>
-                        <FormField label="Foto Surat Keterangan " class=" justify-center ">
+                        <FormField label="Foto Bukti Keterangan Undangan " class=" justify-center ">
                             <div class="">
                                 <FormFilePicker accept=".jpg,.jpeg,.png" @change="handleFileChangeRanking"
                                     @input="form.tambahan.foto_bukti = $event.target.files[0]" label="Upload"
@@ -1025,12 +1091,13 @@ console.log(props.user);
                                     max="100">
                                     {{ form.tambahan.progress.percentage }}%
                                 </progress>
-                                <NotificationBar color="warning" v-if="errors.foto_bukti" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.foto_bukti }}    <template #right>
-                                    
-                                </template>
-                            </NotificationBar>
-                            
+                                <NotificationBar color="warning" v-if="errors.foto_bukti" :icon="mdiAlert"
+                                    :outline="notificationsOutline">
+                                    <b>Warning</b>.{{ errors.foto_bukti }} <template #right>
+
+                                    </template>
+                                </NotificationBar>
+
                             </div>
                             <div v-if="previewImageRanking">
                                 <img width="100" height="100" :src="previewImageRanking" alt="Preview foto" />
@@ -1043,17 +1110,66 @@ console.log(props.user);
 
                         <FormField label="keterangan ">
                             <FormControl v-model="form.tambahan.isi_data" type="text" placeholder="Keterangan" required />
-                            <NotificationBar color="warning" v-if="errors.tambahan" :icon="mdiAlert" :outline="notificationsOutline">
-                                <b>Warning</b>.{{ errors.tambahan }}    <template #right>
-                                    
+                            <NotificationBar color="warning" v-if="errors.tambahan" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.tambahan }} <template #right>
+
                                 </template>
                             </NotificationBar>
-                            
+
                         </FormField>
 
-
-
                     </div>
+
+                         <div v-if="user.data_daftar.shift == 'Hybrid'">
+
+                        <!-- Repeat similar code for other fields -->
+
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Pekerjaan" }}</span>
+                            </NotificationBarInCard>
+                        </div>
+                        
+                        <FormField label="Pekerjaan Anda">
+                            <FormControl v-model="pilihan_pekerjaan_anda" :options="selectOptionsPekerjaan" required />
+                            <NotificationBar color="warning" v-if="errors.nama_pekerjaan" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nama_pekerjaan }} <template #right>
+
+                                </template>
+                            </NotificationBar>
+
+                        </FormField>
+
+                        <FormField v-if="pilihan_pekerjaan_anda == 'lainnya'" label="Pekerjaan Anda">
+                            <FormControl v-model="form.pekerjaan.nama_pekerjaan" type="text" placeholder="Masukkan Pekerjaan Anda"
+                                required />
+                            <NotificationBar color="warning" v-if="errors.nama_pekerjaan" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nama_pekerjaan }} <template #right>
+
+                                </template>
+                            </NotificationBar>
+
+                        </FormField>
+
+                        <FormField label="Instansi Pekerjaan Anda">
+                            <FormControl v-model="form.pekerjaan.nama_instansi" type="text" placeholder="Masukkan Instansi Pekerjaan Anda"
+                                required />
+                            <NotificationBar color="warning" v-if="errors.nama_instansi" :icon="mdiAlert"
+                                :outline="notificationsOutline">
+                                <b>Warning</b>.{{ errors.nama_instansi }} <template #right>
+
+                                </template>
+                            </NotificationBar>
+
+                        </FormField>
+                    </div>
+
 
 
                 </div>
@@ -1074,6 +1190,4 @@ console.log(props.user);
         </SectionMain>
     </LayoutAuthenticatedUser>
 </template>
-<style>
-@import "datatables.net-dt";
-</style>
+<style>@import "datatables.net-dt";</style>

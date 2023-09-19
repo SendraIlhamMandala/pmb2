@@ -66,7 +66,7 @@ axios.get('/gethtmlpage').then(response => {
       <SectionTitle>
 
         <div @click="toggleScale" :class="{ 'scaled': isScaled }" class=" relative mx-auto rounded-lg overflow-hidden">
-          <img src="/image/tunggu_verfif.png" alt="Image with Bounce Effect" />
+          <img src="/image/1selesai_BLU.png" alt="Image with Bounce Effect" />
         </div>
 
       </SectionTitle>

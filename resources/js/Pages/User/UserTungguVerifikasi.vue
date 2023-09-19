@@ -45,7 +45,7 @@ const formSubmit = () => {
       <SectionTitle>
 
         <div @click="toggleScale" :class="{ 'scaled': isScaled }" class=" relative mx-auto rounded-lg overflow-hidden">
-          <img src="/image/tunggu_verfif.png" alt="Image with Bounce Effect" />
+          <img src="/image/2tunggu-verifikasi-admin.png" alt="Image with Bounce Effect" />
         </div>
 
       </SectionTitle>

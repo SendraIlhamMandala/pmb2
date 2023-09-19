@@ -10,6 +10,7 @@ use App\Models\DataPribadi;
 use App\Models\Faktur;
 use App\Models\JalurDaftar;
 use App\Models\Orangtua;
+use App\Models\Pekerjaan;
 use App\Models\Pindahan;
 use App\Models\ProgramStudi;
 use App\Models\Shift;
@@ -138,6 +139,7 @@ class UserController extends Controller
     //setDataPribadi
     public function setDataPribadi(Request $request, User $id): RedirectResponse
     {
+        
         $validator = Validator::make($request->dataPribadi, [
             'no_ktp' => 'required|numeric',
             'nisn' => 'required|numeric',
@@ -219,7 +221,17 @@ class UserController extends Controller
             }
         }
 
-
+        if (Auth()->user()->dataDaftar->shift=='Hybrid') {
+            $validator7 = Validator::make($request->pekerjaan, [
+                "nama_pekerjaan" => 'required',
+                "nama_instansi" => 'required',
+            ], [
+                'required' => ' Harap masukkan :attribute .'
+            ]);
+            if ($validator7->fails()) {
+                return back()->withErrors($validator7);
+            }
+        }
 
         $user = $id;
 
@@ -280,6 +292,13 @@ class UserController extends Controller
             $tambahan_input = new Tambahan($tambahan);
 
             $user->tambahan()->save($tambahan_input);
+        }
+
+        if (Auth()->user()->dataDaftar->shift == 'Hybrid') {
+
+            $pekerjaan_input = new Pekerjaan($request->pekerjaan);
+
+            $user->pekerjaan()->save($pekerjaan_input);
         }
 
         $sekolah_input = new AsalSekolah($sekolah);
@@ -739,12 +758,20 @@ class UserController extends Controller
         );
     }
 
-    public function verifikasiUser(User $user)
+    public function verifikasiUser( $data)
     {
+        $status = explode(',',$data);
+        $user = User::find($data);
 
-        $user->status = 'sudah';
-        $user->save();
-        return redirect()->back();
+        if ($status[1]=='terima') {
+            $user->status = 'sudah';
+            $user->save();
+        }elseif ($status[1]=='tolak') {
+            $user->status = 'tolak';
+            $user->save();
+        }
+        
+        return redirect(route('dashboard'));
         
     }
 }

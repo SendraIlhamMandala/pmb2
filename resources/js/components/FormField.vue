@@ -23,6 +23,10 @@ defineProps({
     type: String,
     default: null,
   },
+  mb: {
+    type: String,
+    default: 'mb-6',
+  }
 });
 
 const slots = useSlots();
@@ -44,7 +48,7 @@ const wrapperClass = computed(() => {
 </script>
 
 <template>
-  <div class="mb-6 last:mb-0">
+  <div class="last:mb-0" :class="mb" >
     <label v-if="label" :for="labelFor" class="block font-bold mb-2">{{
       label 
     }} <span class="text-red-500 dark:text-slate-400" >{{ label2 }}</span> <span class="text-sm text-gray-400 dark:text-slate-400"> {{ label3 }}</span>  </label>

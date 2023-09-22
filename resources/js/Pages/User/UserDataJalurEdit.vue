@@ -81,7 +81,7 @@ const getFormStatusColor = computed(() => {
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formSubmit = () => {
-    form.post(route('user.set-data-jalur', props.user.id));
+    form.post(route('user.update-data-jalur', props.user.id));
 };
 
 const getJalur = computed
@@ -104,7 +104,7 @@ console.log(selectOptionsShift,props.shifts);
     <LayoutAuthenticatedUser>
 
         <SectionMain>
-            <SectionTitle>Masukkan Jalur Daftar</SectionTitle>
+            <SectionTitle>Edit Jalur Daftar</SectionTitle>
 
             <!-- <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable  -->
             <CardBox class=" shadow-2xl md:mx-auto" is-form is-hoverable @submit.prevent="formSubmit">
@@ -135,12 +135,10 @@ console.log(selectOptionsShift,props.shifts);
                 </FormField>
 
 
-
-
                 <!-- Repeat similar code for other fields -->
 
                 <template #footer>
-                    <BaseButton label="Submit" type="submit" color="info" />
+                    <BaseButton label="Update" type="submit" color="info" />
                 </template>
             </CardBox>
 

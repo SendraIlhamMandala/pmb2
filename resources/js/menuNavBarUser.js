@@ -17,16 +17,15 @@ export default [
   {
     isCurrentUser: true,
     menu: [
-      {
-        icon: mdiAccount,
-        label: "My Profile",
-        route: "profilez",
-      },
-      {
-        icon: mdiCogOutline,
-        label: "Settings",
-      },
-    
+      // {
+      //   icon: mdiAccount,
+      //   label: "My Profile",
+      //   route: "profilez",
+      // },
+      // {
+      //   icon: mdiCogOutline,
+      //   label: "Settings",
+      // },
       {
         isDivider: true,
       },

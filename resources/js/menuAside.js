@@ -19,16 +19,16 @@ export default [
         icon: mdiMonitor,
         label: "Dashboard",
     },
-    {
-        route: "tables",
-        label: "Tables",
-        icon: mdiTable,
-    },
-    {
-        route: "games.index",
-        label: "Games",
-        icon: mdiTable,
-    },
+    // {
+    //     route: "tables",
+    //     label: "Tables",
+    //     icon: mdiTable,
+    // },
+    // {
+    //     route: "games.index",
+    //     label: "Games",
+    //     icon: mdiTable,
+    // },
     {
         route: "users.index",
         label: "Users",
@@ -69,63 +69,65 @@ export default [
         label: "Tahun",
         icon: mdiTable,
     },
+    // {
+    //     route: "forms",
+    //     label: "Forms",
+    //     icon: mdiSquareEditOutline,
+    // },
+    // {
+    //     route: "ui",
+    //     label: "UI",
+    //     icon: mdiTelevisionGuide,
+    // },
+    // {
+    //     route: "responsive",
+    //     label: "Responsive",
+    //     icon: mdiResponsive,
+    // },
+    // {
+    //     route: "styles",
+    //     label: "Styles",
+    //     icon: mdiPalette,
+    // },
+    // {
+    //     route: "profilez",
+    //     label: "Profilez",
+    //     icon: mdiAccountCircle,
+    // },
+    // {
+    //     route: "login",
+    //     label: "Login",
+    //     icon: mdiLock,
+    // },
+    // {
+    //     route: "error",
+    //     label: "Error",
+    //     icon: mdiAlertCircle,
+    // },
     {
-        route: "forms",
-        label: "Forms",
-        icon: mdiSquareEditOutline,
-    },
-    {
-        route: "ui",
-        label: "UI",
-        icon: mdiTelevisionGuide,
-    },
-    {
-        route: "responsive",
-        label: "Responsive",
-        icon: mdiResponsive,
-    },
-    {
-        route: "styles",
-        label: "Styles",
-        icon: mdiPalette,
-    },
-    {
-        route: "profilez",
-        label: "Profilez",
-        icon: mdiAccountCircle,
-    },
-    {
-        route: "login",
-        label: "Login",
-        icon: mdiLock,
-    },
-    {
-        route: "error",
-        label: "Error",
-        icon: mdiAlertCircle,
-    },
-    {
-        label: "Dropdown",
+        label: "Verifikasi",
         icon: mdiViewList,
         menu: [
             {
-                label: "Item One",
+                label: "User",
             },
             {
-                label: "Item Two",
+                label: "Pembayaran",
+                route: "verifikasiPembayaranUserIndex",
+
             },
         ],
     },
-    {
-        href: "https://github.com/justboil/admin-one-vue-tailwind",
-        label: "GitHub",
-        icon: mdiGithub,
-        target: "_blank",
-    },
-    {
-        href: "https://github.com/justboil/admin-one-react-tailwind",
-        label: "React version",
-        icon: mdiReact,
-        target: "_blank",
-    },
+    // {
+    //     href: "https://github.com/justboil/admin-one-vue-tailwind",
+    //     label: "GitHub",
+    //     icon: mdiGithub,
+    //     target: "_blank",
+    // },
+    // {
+    //     href: "https://github.com/justboil/admin-one-react-tailwind",
+    //     label: "React version",
+    //     icon: mdiReact,
+    //     target: "_blank",
+    // },
 ];

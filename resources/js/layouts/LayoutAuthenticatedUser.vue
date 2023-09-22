@@ -44,18 +44,22 @@ console.log(val);
 </script>
 
 <template>
-  <NavBar
+    <NavBar
         :menu="menuNavBar"
-        :class="[
-          layoutAsidePadding,
-          { 'ml-60 lg:ml-0': isAsideMobileExpanded },
-          { dark: styleStore.darkMode }
-        ]"
-        
+        class="bg-gradient-to-r from-sky-500 to-emerald-300 "
         @menu-click="menuClick"
+        bg="bg-gradient-to-r from-sky-500 to-emerald-300"
       >
+       
+       
+        <NavBarItemPlain use-margin>
       
-    </NavBar>
+          
+          <img src="/favicon/logo1.png" class="header-brand-img" width="270" alt="tabler logo">
+
+
+        </NavBarItemPlain>
+      </NavBar>
   <div :class="{ dark: styleStore.darkMode }">
     <div class="bg-gray-50 dark:bg-slate-800 dark:text-slate-100">
       <slot />

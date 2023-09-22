@@ -47,18 +47,18 @@ const submit = () => {
           v-if="status"
           color="info"
         >
-          {{ status }}
+          {{ status == 'We have emailed your password reset link.' ? 'Email reset password telah dikirim' : status }}
         </NotificationBarInCard>
 
         <FormField>
           <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
-          </div>
+            Lupa kata sandi? Tidak masalah. Beri tahu kami alamat email Anda dan kami akan mengirimkan link reset kata sandi melalui email.
+</div>
         </FormField>
 
         <FormField
           label="Email"
-          help="Please enter your email"
+          help="masukkan email "
         >
           <FormControl
             v-model="form.email"
@@ -75,14 +75,14 @@ const submit = () => {
           <BaseButton
             type="submit"
             color="info"
-            label="Email link"
+            label="Kirim email"
             :class="{ 'opacity-25': form.processing }"
             :disabled="form.processing"
           />
           <Link
             :href="route('login')"
           >
-            Back to login
+            Kembali login
           </Link>
         </BaseLevel>
       </CardBox>

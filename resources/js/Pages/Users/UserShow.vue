@@ -490,6 +490,75 @@ console.log(props.user);
                             </div>
                         </CardBox>
                     </div>
+                    <div v-if="!!user.tambahan">
+                    </div>
+                    <div v-if="!!user.tambahan&&!!user.tambahan.survey" class="col-span-2  ">
+                        <CardBox >
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Data Survey" }}</span>
+                            </NotificationBarInCard>
+                            <div>
+
+                                <FormField label="Darimana Anda Memperoleh Informasi Mengenai Penerimaan Mahasiswa Baru FISIP - UNIGA ? ">
+                                    <FormControl v-model="user.tambahan.survey" type="text" :disabled="true" />
+                                </FormField>
+                            
+
+
+                            </div>
+                        </CardBox>
+                    </div>
+                    <div v-if="!!user.pindahan">
+                    </div>
+                    <div v-if="!!user.pindahan" class="col-span-2  ">
+                        <CardBox>
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Perguruan Tinggi Asal" }}</span>
+                            </NotificationBarInCard>
+                            <div>
+
+                                <FormField label="Asal Perguruan Tinggi ">
+                                    <FormControl v-model="user.pindahan.perguruan_tinggi" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Program studi ">
+                                    <FormControl v-model="user.pindahan.program_studi" type="text" :disabled="true" />
+                                </FormField>
+                            
+                                <FormField label="Nomor Induk Mahasiswa ">
+                                    <FormControl v-model="user.pindahan.nomor_induk_mahasiswa" type="text" :disabled="true" />
+                                </FormField>
+
+
+                            </div>
+                        </CardBox>
+                    </div>
+
+                    <div v-if="!!user.pekerjaan">
+                    </div>
+                    <div v-if="!!user.pekerjaan" class="col-span-2  ">
+                        <CardBox>
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Pekerjaan" }}</span>
+                            </NotificationBarInCard>
+                            <div>
+
+                                <FormField label="Pekerjaan ">
+                                    <FormControl v-model="user.pekerjaan.nama_pekerjaan" type="text" :disabled="true" />
+                                </FormField>
+                                <FormField label="Program studi ">
+                                    <FormControl v-model="user.pekerjaan.nama_instansi" type="text" :disabled="true" />
+                                </FormField>
+                            
+
+                            </div>
+                        </CardBox>
+                    </div>
                 </div>
 
             </CardBox>

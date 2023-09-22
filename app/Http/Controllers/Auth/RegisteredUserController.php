@@ -24,7 +24,12 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        $activeTahuns = Tahun::where('status', 'aktif')->first();
+     
+        return Inertia::render('Auth/Register',
+            [
+                'activeTahuns' => !!$activeTahuns
+            ]);
     }
 
     /**

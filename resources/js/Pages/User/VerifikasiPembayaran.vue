@@ -15,6 +15,7 @@ import BaseButtons from "@/components/BaseButtons.vue";
 import NotificationBar from "@/components/NotificationBar.vue";
 import { watch } from "vue";
 import FormFilePicker from "@/components/FormFilePicker.vue";
+import { router } from '@inertiajs/vue3'
 
 
 const previewImage = ref('');
@@ -121,7 +122,9 @@ const submitForm = () => {
 };
 
 const now = computed(() => Date.now())
-
+const jalurEdit = () => {
+    router.get('data-jalur/edit/' + props.user.id);
+};
 console.log();
 </script>
 
@@ -130,10 +133,51 @@ console.log();
     <LayoutAuthenticatedUser>
 
         <SectionMain>
-            <SectionTitle>masukkan data Jalur{{ now }}</SectionTitle>
+            <SectionTitle>Kirim Bukti Pembayaran</SectionTitle>
+            <div class="grid grid-cols-1 md:grid-cols-3 grid-rows-1 gap-4">
+                <div class=" md:fixed  md:-translate-y-10 ">
+                    <CardBox class="shadow-2xl md:mx-auto mx-auto md:w-3/4 lg:w-80  ">
 
-            <!-- <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable  -->
-            <CardBox class=" shadow-2xl md:mx-auto" is-form is-hoverable @submit.prevent="formSubmit">
+                        <div class="w-11/12 mx-auto mt-8">
+
+                            <NotificationBarInCard :color="getFormStatusColor"
+                                :is-placed-with-header="formStatusWithHeader">
+                                <span>
+                                    {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Jalur Pendaftaran Anda"
+                                    }}</span>
+                            </NotificationBarInCard>
+                        </div>
+
+
+                        <FormField mb="mb-0" label="Shift" class="">
+                            <FormControl h="h-6" v-model="user.data_daftar.shift" type="text" :disabled="true" />
+                            <p class="text-red-500">{{ errors.name }}</p>
+                        </FormField>
+                        <FormField mb="mb-0" label="Jalur" class="">
+                            <FormControl h="h-6" v-model="user.data_daftar.jalur" type="text" :disabled="true" />
+                            <p class="text-red-500">{{ errors.name }}</p>
+                        </FormField>
+                        <FormField mb="mb-0" label="Status" class="">
+                            <FormControl h="h-6" v-model="user.data_daftar.status" type="text" :disabled="true" />
+                            <p class="text-red-500">{{ errors.name }}</p>
+                        </FormField>
+                        <FormField mb="mb-0" label="Program Studi" class="">
+                            <FormControl h="h-6" v-model="user.data_daftar.program_studi" type="text" :disabled="true" />
+                            <p class="text-red-500">{{ errors.name }}</p>
+                        </FormField>
+                        <div class="flex mt-4 justify-center items-center">
+                            <BaseButton @click.prevent="jalurEdit" label="Edit Jalur Daftar" type="submit" color="info" />
+                        </div>
+
+
+                    </CardBox>
+                </div>
+            
+            <div>
+
+            </div>
+
+             <CardBox class=" shadow-2xl md:mx-auto col-span-2" is-form is-hoverable @submit.prevent="formSubmit">
               
               
                 <CardBox class=" shadow-2xl mb-4" is-form is-hoverable @submit.prevent="cekVoucher">
@@ -263,7 +307,7 @@ console.log();
                 </div>
 
             </CardBox>
-
+        </div>
 
 
         </SectionMain>

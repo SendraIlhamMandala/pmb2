@@ -97,7 +97,7 @@ const scrollToSection = (key) => {
         <section id="nav">
 
             <nav
-                class="fixed inset-x-0 z-50  px-4 py-4 flex justify-between items-center bg-gradient-to-r from-sky-500 to-green-500 ">
+                class="fixed inset-x-0 z-50  px-4 py-4 flex justify-between items-center bg-gradient-to-r from-sky-500 to-emerald-300 ">
                 <a class="text-3xl font-bold leading-none" href="#">
                     <img src="favicon/logo1.png" class="header-brand-img" width="270" alt="tabler logo">
 
@@ -186,39 +186,39 @@ const scrollToSection = (key) => {
                         <!-- Fixed links container at the bottom-center -->
                         <div v-if="screenWidth < 1024" class="fixed bottom-0 left-0 w-full flex justify-center py-4">
                             <a v-if="$page.props.auth.user"
-                                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-emerald-500 hover:bg-emerald-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 href="/dashboard">
                                 Dashboard
                             </a>
                             <a v-if="$page.props.auth.user"
-                                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-emerald-500 hover:bg-emerald-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 @click.prevent="router.post(route('logout'))">
                                 Logout
                             </a>
                         </div>
                         <div v-if="screenWidth < 1024" class="fixed bottom-0 left-0 w-full flex justify-center py-4">
-                            <a v-if="!$page.props.auth.user" class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                            <a v-if="!$page.props.auth.user" class="inline-block py-2 px-6 mx-6 bg-white text-emerald-500 hover:bg-emerald-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 href="/login">login</a>
-                            <a v-if="!$page.props.auth.user" class="inline-block py-2 px-6 border bg-green-400 border-white text-white hover:bg-white hover:text-green-500 text-sm font-bold rounded-xl transition duration-200"
+                            <a v-if="!$page.props.auth.user" class="inline-block py-2 px-6 border bg-emerald-400 border-white text-white hover:bg-white hover:text-emerald-500 text-sm font-bold rounded-xl transition duration-200"
                                 href="/register">Daftar</a>
                         </div>
 
 
                         <div class="flex" v-if="!$page.props.auth.user">
-                            <a class="hidden lg:inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                            <a class="hidden lg:inline-block py-2 px-6 mx-6 bg-white text-emerald-500 hover:bg-emerald-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 href="/login">login</a>
-                            <a class="hidden lg:inline-block py-2 px-6 border bg-green-400 border-white text-white hover:bg-white hover:text-green-500 text-sm font-bold rounded-xl transition duration-200"
+                            <a class="hidden lg:inline-block py-2 px-6 border bg-emerald-400 border-white text-white hover:bg-white hover:text-emerald-500 text-sm font-bold rounded-xl transition duration-200"
                                 href="/register">Daftar</a>
                         </div>
                         <div class="flex" v-else-if="screenWidth > 1024">
 
                             <a v-if="$page.props.auth.user"
-                                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-emerald-500 hover:bg-emerald-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 href="/dashboard">
                                 Dashboard
                             </a>
                             <a v-if="$page.props.auth.user"
-                                class="inline-block py-2 px-6 mx-6 bg-white text-green-500 hover:bg-green-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-emerald-500 hover:bg-emerald-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 @click.prevent="router.post(route('logout'))">
                                 Logout
                             </a>
@@ -681,7 +681,7 @@ const scrollToSection = (key) => {
                                 <li>
 
                                     <a href="#" class="text-gray-700 transition hover:opacity-75">
-                                        <BaseIcon :path="mdiWhatsapp" class="text-green-500 " />
+                                        <BaseIcon :path="mdiWhatsapp" class="text-emerald-500 " />
                                         +6282219291520
                                     </a>
                                 </li>

@@ -28,7 +28,7 @@ class Controller extends BaseController
 
     #function gethtmlpage
 
-    public static function gethtmldata($width,$ttd){
+    public static function gethtmldata($width,$ttd,$br){
         
         $tahun = Tahun::latest()->where('status', 'aktif')->get();
         $tahunselanjutnya = $tahun[0]->tahun+1;
@@ -331,11 +331,13 @@ class Controller extends BaseController
                         </tr>        
                     </tbody></table>
                     <hr>
-                    <h4 style='text-align: left; font-weight: bold;'>Mohon Informasi, darimana Saudara/i memperoleh informasi: Teman di FISIP UNIGA </h4>
+                    <h4 style='text-align: left; font-weight: bold;'>Mohon Informasi, darimana Saudara/i memperoleh informasi: {$userAuth->tambahan->survey} </h4>
+                    
+                    <br><br>
+                    {$br}
                     <h4 style='font-weight: bold;'>DAFTAR CEKLIS KELENGKAPAN PERSYARATAN <br> (DIISI OLEH PETUGAS PENERIMA PENDAFTARAN MAHASISWA BARU) </h4>  
                     <hr>
-                    <br>
-
+                    
                     <table style='text-align: justify-all;'>               
                         <tbody><tr>
                             <td><input type='text' size='5'></td>
@@ -370,7 +372,7 @@ class Controller extends BaseController
                     </tbody
                     ></table>
                     
-                    <p style='text-align: justify-all; page-break-before: always;'>Demikian formulir isian ini saya buat dengan sebenarnya, dan jika ditermia sebagai mahasiswa Fakultas Ilmu Sosial dan Ilmu Politik, saya bersedia untuk memenuhi dan mengikuti peraturan yang berlaku di Universitas Garut.</p>
+                    <p style='text-align: justify-all;'>Demikian formulir isian ini saya buat dengan sebenarnya, dan jika diterima sebagai mahasiswa Fakultas Ilmu Sosial dan Ilmu Politik, saya bersedia untuk memenuhi dan mengikuti peraturan yang berlaku di Universitas Garut.</p>
                     <br>
                         <p align='center'>Garut,14 September 2023</p>
                     <br>
@@ -399,15 +401,15 @@ class Controller extends BaseController
     public function gethtmlpage(): HttpResponse
     {
 
-        $html = $this->gethtmldata(30, 30);
+        $html = $this->gethtmldata(30, 30 ,'');
 
         return response($html, 200)->header('Content-Type', 'text/html');
     }
 
     public function print(): HttpResponse
     {
-
-        $html = $this->gethtmldata(37, 80);
+        $br ='<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+        $html = $this->gethtmldata(37, 80,$br);
 
 
         return response($html."<script>window.print()</script>", 200)->header('Content-Type', 'text/html');

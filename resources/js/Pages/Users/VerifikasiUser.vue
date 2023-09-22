@@ -353,18 +353,18 @@ const navigateToShowUser = (data) => {
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ data.nim }}</td>
                                     <td>{{ data.name }}</td>
-                                    <td>{{ data.asal_sekolah.nama_sekolah }}</td>
+                                    <td>{{ !!data.asal_sekolah ? data.asal_sekolah.nama_sekolah : 'belum mengisi' }}</td>
                                     <td>{{ data.data_daftar.jalur }}</td>
 
                                     <td>
-                                        <BaseButton color="warning" :small="true" :rounded-full="true"
-                                            :label="'menunggu verifikasi'" />
+                                        <BaseButton v-if="data.status == 'menunggu verifikasi'" color="warning" :small="true" :rounded-full="true" :label="'menunggu verifikasi'" />
+                                        <BaseButton v-else color="contrast" :small="true" :rounded-full="true" :label="'belum selesai pendaftaran'" />
                                     </td>
 
 
 
                                     <td>
-                                        <BaseButton color="info" :small="true" label="lihat data"
+                                        <BaseButton v-if="data.status == 'menunggu verifikasi'" color="info" :small="true" label="lihat data"
                                             @click="navigateToShowUser(data.id)" />
                                     </td>
 

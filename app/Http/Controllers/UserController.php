@@ -97,6 +97,8 @@ class UserController extends Controller
         $id->load('asalSekolah');
         $id->load('orangtua');
         $id->load('tambahan');
+        $id->load('pindahan');
+        $id->load('pekerjaan');
         return Inertia::render('Users/UserShow', [
             'user' => $id,
         ]);
@@ -201,6 +203,7 @@ class UserController extends Controller
             $validator6 = Validator::make($request->tambahan, [
                 "isi_data" => 'required', "foto_bukti" => 'required|image|mimes:jpeg,png,jpg|max:4096',
                 "pdf" => 'required|mimes:pdf|max:4096',
+                "survey" => 'required',
             ], [
                 'required' => ' Harap masukkan :attribute .'
             ]);
@@ -301,6 +304,10 @@ class UserController extends Controller
             $user->pekerjaan()->save($pekerjaan_input);
         }
 
+        $tambahan_input = new Tambahan($tambahan);
+
+        $user->tambahan()->save($tambahan_input);
+
         $sekolah_input = new AsalSekolah($sekolah);
         $dataPribadi_input = new DataPribadi($dataPribadi);
         $alamat_input = new Alamat($alamat);
@@ -352,10 +359,71 @@ class UserController extends Controller
         return redirect(route('user.data-pribadi'));
     }
 
+    public function updateDataJalur(Request $request, User $user): RedirectResponse
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'status' => 'required',
+            'shift' => 'required',
+            'jalur' => 'required',
+            'program_studi' => 'required',
+
+        ], [
+            'required' => ' Harap pilih :attribute .'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+        
+        $user->dataDaftar()->update($request->all());
+
+        $user->done_setup = 'pribadi';
+        if (JalurDaftar::where('name', $request->jalur)->first()->test) {
+        $user->done_setup = 'pembayaran';
+        }
+        $user->dataDaftar->save();
+        $user->save();
+
+        return redirect(route('user.data-pribadi'));
+    }
+
 
     //showDataPribadi
     public function dataPribadi()
     {
+
+        
+        $conn = new mysqli("localhost", "root", "", "fisipol_cat");
+
+        $id = Auth()->user();
+
+        // Escape special characters in the input strings
+        $name = $conn->real_escape_string($id->name);
+        $npm = $conn->real_escape_string($id->nim);
+        $password = md5($npm);
+        $jurusan = $conn->real_escape_string($id->dataDaftar->program_studi);
+
+        $sql_select_siswa = "SELECT * FROM m_siswa WHERE nim = '{$npm}'";
+        $result_siswa = $conn->query($sql_select_siswa);
+        $result_siswa_data = $result_siswa->fetch_assoc();
+
+        if (isset($result_siswa_data)) {
+            # code...
+            $sql_select_user_ikut_ujian = "SELECT * FROM tr_ikut_ujian WHERE id_user = '{$result_siswa_data['id']}'";
+            $result_siswa_ikut_ujian = $conn->query($sql_select_user_ikut_ujian);
+            $result_siswa_ikut_ujian_data = $result_siswa_ikut_ujian->fetch_assoc();
+            
+                    // get latest data from  tr_guru_tes table
+                    $sql_select_guru_tes = "SELECT * FROM tr_guru_tes ORDER BY id DESC LIMIT 1";
+                    $result_guru_tes = $conn->query($sql_select_guru_tes);
+                    $result_guru_tes_data = $result_guru_tes->fetch_assoc();
+                    
+        }else {
+            
+            $result_siswa_ikut_ujian_data = '';
+        }
+
         if (Auth()->user()->done_setup == 'pembayaran') {
             return redirect(route('HalamanVerifikasiPembayaran'));
         }
@@ -376,7 +444,8 @@ class UserController extends Controller
         $user = Auth()->user();
         $user->dataDaftar;
         return inertia('User/UserDataPribadi', [
-            'user' => $user
+            'user' => $user,
+            'cat'=>$result_siswa_ikut_ujian_data 
         ]);
     }
 
@@ -412,6 +481,17 @@ class UserController extends Controller
         ]);
     }
 
+    public function dataJalurEdit(User $user){
+        
+      $shifts = Shift::with('jalurDaftars')->get();
+      $prodi = ProgramStudi::all();
+        return inertia('User/UserDataJalurEdit', [
+            'user' => $user,
+            'shifts' => $shifts,
+            'prodi' => $prodi
+        ]);
+    }
+
     //function verifikasiPembayaran
     public function halamanVerifikasiPembayaran()
     {
@@ -431,6 +511,7 @@ class UserController extends Controller
         $user = Auth()->user();
         $shifts = Shift::all();
         $shifts->load('jalurDaftars');
+        $user->dataDaftar;
         $prodi = ProgramStudi::all();
         $biaya = Biaya::all();
         // dd($user, $shifts, $prodi, $biaya);
@@ -703,7 +784,7 @@ class UserController extends Controller
 
     public function tungguVerifikasi()
     {
-        if (Auth()->user()->status=='sudah') {
+        if (Auth()->user()->status=='sudah' || Auth()->user()->status=='tolak') {
             return redirect('/verifikasi-user-selesai');
         }
 
@@ -716,9 +797,9 @@ class UserController extends Controller
 
     public function verifikasiSelesai()
     {
-        // if (!Auth()->user()->faktur) {
-        //     return redirect('/');
-        // }
+        if (Auth()->user()->status!='sudah') {
+            return Auth()->user()->status  == 'tolak' ? 'pendaftaran ditolak' : 'belum selesai daftar';
+        }
 
         $user = Auth()->user();
         return inertia('User/UserVerifikasiSelesai', [

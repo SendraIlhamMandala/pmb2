@@ -13,6 +13,9 @@ import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import FormValidationErrors from "@/components/FormValidationErrors.vue";
 
+
+const props = defineProps(["activeTahuns"]);
+console.log(props.activeTahuns);
 const form = useForm({
     name: "",
     email: "",
@@ -37,102 +40,66 @@ const submit = () => {
 
 <template>
     <LayoutGuest>
+
         <Head title="Register" />
 
+
         <SectionFullScreen v-slot="{ cardClass }" bg="">
-            <CardBox
-                :class="cardClass"
-                class="my-24"
-                is-form
-                @submit.prevent="submit"
-            >
-                <FormValidationErrors />
+            <div class="min-w-screen min-h-screen flex items-center justify-center px-5 py-5">
+                <div class="text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style="max-width:1000px; max-height:650px">
+                    <div class="md:flex w-full">
+                        <div class="hidden lg:block w-1/2  ">
+                            <img class="" src="/image/3register.jpg" alt="Login" />
 
-                <FormField
-                    label="Nama lengkap"
-                    label-for="name"
-                    help="Masukkan nama lengkap anda"
-                >
-                    <FormControl
-                        v-model="form.name"
-                        id="name"
-                        :icon="mdiAccount"
-                        autocomplete="name"
-                        type="text"
-                        required
-                    />
-                </FormField>
+                        </div>
 
-                <FormField
-                    label="Email"
-                    label-for="email"
-                    help="Masukkan email anda"
-                >
-                    <FormControl
-                        v-model="form.email"
-                        id="email"
-                        :icon="mdiEmail"
-                        autocomplete="email"
-                        type="email"
-                        required
-                    />
-                </FormField>
+                        <CardBox class="w-full lg:w-1/2 py-10 px-5 md:px-10" v-if="activeTahuns" is-form
+                            @submit.prevent="submit">
+                            <FormValidationErrors />
 
-                <FormField
-                    label="Password"
-                    label-for="password"
-                    help="Masukkan password"
-                >
-                    <FormControl
-                        v-model="form.password"
-                        id="password"
-                        :icon="mdiFormTextboxPassword"
-                        type="password"
-                        autocomplete="new-password"
-                        required
-                    />
-                </FormField>
+                            <FormField mb="mb-0" label="Nama lengkap" label-for="name" help="Masukkan nama lengkap anda">
+                                <FormControl v-model="form.name" id="name" :icon="mdiAccount" autocomplete="name"
+                                    type="text" required />
+                            </FormField>
 
-                <FormField
-                    label="Ulangi password"
-                    label-for="password_confirmation"
-                    help="Ulangi password"
-                >
-                    <FormControl
-                        v-model="form.password_confirmation"
-                        id="password_confirmation"
-                        :icon="mdiFormTextboxPassword"
-                        type="password"
-                        autocomplete="new-password"
-                        required
-                    />
-                </FormField>
+                            <FormField mb="mb-0" label="Email" label-for="email" help="Masukkan email anda">
+                                <FormControl v-model="form.email" id="email" :icon="mdiEmail" autocomplete="email"
+                                    type="email" required />
+                            </FormField>
 
-                <FormCheckRadioGroup
-                    v-if="hasTermsAndPrivacyPolicyFeature"
-                    v-model="form.terms"
-                    name="remember"
-                    :options="{ agree: 'I agree to the Terms' }"
-                />
+                            <FormField mb="mb-0" label="Password" label-for="password" help="Masukkan password">
+                                <FormControl v-model="form.password" id="password" :icon="mdiFormTextboxPassword"
+                                    type="password" autocomplete="new-password" required />
+                            </FormField>
 
-                <BaseDivider />
+                            <FormField mb="mb-0" label="Ulangi password" label-for="password_confirmation" help="Ulangi password">
+                                <FormControl v-model="form.password_confirmation" id="password_confirmation"
+                                    :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
+                            </FormField>
 
-                <BaseButtons>
-                    <BaseButton
-                        type="submit"
-                        color="info"
-                        label="Register"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                    />
-                    <BaseButton
-                        route-name="login"
-                        color="info"
-                        outline
-                        label="Login"
-                    />
-                </BaseButtons>
-            </CardBox>
+                            <FormCheckRadioGroup v-if="hasTermsAndPrivacyPolicyFeature" v-model="form.terms" name="remember"
+                                :options="{ agree: 'I agree to the Terms' }" />
+
+                            <BaseDivider />
+
+                            <BaseButtons>
+                                <BaseButton type="submit" color="info" label="Daftar"
+                                    :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
+                                <BaseButton route-name="login" color="info" outline label="Login" />
+                            </BaseButtons>
+                        </CardBox>
+                        <CardBox v-else :class="cardClass" class="my-24" is-form @submit.prevent="submit">
+                            <a href="/">
+                                <img src="/image/logo-uniga.png" alt="logo" class="w-1/2 mx-auto">
+                            </a>
+                            <div class="text-center font-bold ">
+                                <h1 class="text-2xl">Pendaftaran Belum Dibuka</h1>
+
+                            </div>
+                        </CardBox>
+                    </div>
+                </div>
+            </div>
         </SectionFullScreen>
     </LayoutGuest>
 </template>

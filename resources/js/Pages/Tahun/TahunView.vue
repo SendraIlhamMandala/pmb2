@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { mdiBallotOutline, mdiAccount, mdiMail, mdiGithub } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -83,16 +83,17 @@ const columns = [
     { data: "no_utama" },
     { data: "tahun" },
     { data: "gelombang"},
-    { data: "status" },
+    { data: "status" , render: data => data == "aktif" ? `<button class="bg-blue-500 text-white px-4 w-28  rounded">`+data+`</button>`: `<button class="bg-red-500 text-white px-4 w-28 rounded">`+data+`</button>`},
+
     { data: "daritgl" },
     { data: "sampaitgl" },
-    { data: "created_at", render: data => new Date(data).getFullYear() },
+    { data: "created_at", render: data => new Date(data).getFullYear()+"-"+(new Date(data).getMonth()+1)+"-"+new Date(data).getDate()},
     {
         title: "aksi",
         render: function (data, type, row) {
             // Render tautan aksi edit dengan ID baris
             return (
-                "<a class='table-edit' data-id='" + row.id + "' href='/tahuns/" + row.id + "/edit' >EDIT</a>"
+                "<a class='bg-blue-500 text-white px-4  rounded'" + row.id + "' href='/tahuns/" + row.id + "/edit' >EDIT</a>"
             );
         },
     },
@@ -101,7 +102,7 @@ const columns = [
         render: function (data, type, row) {
             // Render tautan aksi hapus dengan ID baris
             return (
-                "<a class='table-edit' href='tahuns/delete/" + row.id + "'' method='delete' ) >HAPUS</a>"
+                "<a class='bg-red-500 text-white px-4  rounded' href='tahuns/delete/" + row.id + "'' method='delete' ) >HAPUS</a>"
             );
         },
     },
@@ -122,6 +123,22 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             }
         ];
 
+
+        
+
+
+const showForm = ref(false);
+
+const toggleForm = () => {
+    showForm.value = !showForm.value;
+};
+
+const submitForm = () => {
+    // Handle form submission logic here
+    console.log('Form submitted');
+};
+
+
 // Menampilkan elemen pertama dari properti gamesEdit ke konsol
 console.log(props.tahun);
 
@@ -134,8 +151,11 @@ console.log(props.tahun);
         
         <SectionMain>
             <SectionTitle>Tahun Penerimaan</SectionTitle>
+            <BaseButton @click.prevent="toggleForm" color="info" class=" relative z-50 bg"
+                        label="Tambah Tahun Penerimaan" />
+            <transition name="slide" mode="out-in">
 
-            <CardBox is-form is-hoverable
+            <CardBox v-if="showForm" key="form" is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span>
@@ -170,14 +190,13 @@ console.log(props.tahun);
                     <BaseButton label="Tambah" type="submit" color="info" />
                 </template>
             </CardBox>
+            </transition>
             <CardBox class="mt-6">
 
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span>
-                        {{form.recentlySuccessful?" Berhasil menambahkan": form.hasErrors?" Data ":  ""}}
-                        tahun penerimaan
-                        {{ form.hasErrors?"yang anda masukkan telah ada": ""}}
-                        {{ form }}
+                        Tahun penerimaan
+                     
                     </span>
 
                 </NotificationBarInCard>
@@ -190,3 +209,25 @@ console.log(props.tahun);
 <style>
 @import "datatables.net-dt";
 </style>
+  
+
+  
+<style>
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.5s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+    opacity: 0;
+    transform: translateY(-5%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+    transform: translateX(0);
+    opacity: 100;
+}
+</style>
+  

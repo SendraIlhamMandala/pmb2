@@ -86,6 +86,12 @@ class TahunController extends Controller
     public function update(Request $request, Tahun $tahun) : RedirectResponse
     {   
         //update tahun
+        if (Tahun::where('status', 'aktif')->exists() && Tahun::where('status', 'aktif')->first()->id != $tahun->id && $request->status == 'aktif') {
+            # code...
+        return redirect()->back()->withErrors(['tahun' => 'Tahun sudah ada yang aktif, mohon nonaktifkan akun yang aktif dahulu']);
+
+
+        }
         $tahun->update($request->all());
         return redirect(route('tahuns.index'));
     }

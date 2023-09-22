@@ -11,6 +11,10 @@ defineProps({
     type: Array,
     required: true,
   },
+  bg: {
+    type: String,
+    default: '',
+  }
 });
 
 const emit = defineEmits(["menu-click"]);
@@ -23,9 +27,12 @@ const isMenuNavBarActive = ref(false);
 </script>
 
 <template>
+
+
   <nav
     class="top-0 inset-x-0 fixed bg-gray-50 dark:bg-gray-500 h-14 z-30 transition-position w-screen lg:w-auto"
-  >
+    :class="bg"
+    >
     <div class="flex lg:items-stretch" :class="containerMaxW">
       <div class="flex flex-1 items-stretch h-14">
         <slot />
@@ -39,7 +46,7 @@ const isMenuNavBarActive = ref(false);
         </NavBarItemPlain>
       </div>
       <div
-        class="max-h-screen-menu overflow-y-auto lg:overflow-visible absolute w-screen top-14 left-0 bg-gray-50 shadow-lg lg:w-auto lg:flex lg:static lg:shadow-none dark:bg-slate-800"
+        class="max-h-screen-menu rounded-lg overflow-y-auto lg:overflow-visible absolute w-screen top-14 left-0 bg-gray-50  shadow-lg lg:w-auto lg:flex lg:static lg:shadow-none dark:bg-slate-800"
         :class="[isMenuNavBarActive ? 'block' : 'hidden']">
         <NavBarMenuList :menu="menu" @menu-click="menuClick"/>
       </div>

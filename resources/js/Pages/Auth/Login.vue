@@ -40,74 +40,51 @@ const submit = () => {
 
 <template>
     <LayoutGuest>
+
         <Head title="Login" />
-
+        
         <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
-            <CardBox :class="cardClass" is-form @submit.prevent="submit">
-                <FormValidationErrors />
+            <div class="min-w-screen min-h-screen flex items-center justify-center px-5 py-5">
+            <div class="text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style="max-width:1000px">
+                <div class="md:flex w-full">
+                    <div class="hidden md:block w-1/2  ">
+                        <img class="" src="/image/2login.png" alt="Login" />
 
-                <NotificationBarInCard v-if="status" color="info">
-                    {{ status }}
-                </NotificationBarInCard>
+                    </div>
+                    <CardBox class="w-full md:w-1/2 py-10 px-5 md:px-10" is-form @submit.prevent="submit">
+                        <FormValidationErrors />
 
-                <FormField
-                    label="Email"
-                    label-for="email"
-                    help="Masukkan alamat email anda"
-                >
-                    <FormControl
-                        v-model="form.email"
-                        :icon="mdiAccount"
-                        id="email"
-                        autocomplete="email"
-                        type="email"
-                        required
-                    />
-                </FormField>
+                        <NotificationBarInCard v-if="status" color="info">
+                            {{ status }}
+                        </NotificationBarInCard>
 
-                <FormField
-                    label="Password"
-                    label-for="password"
-                    help="Masukkan kata sandi anda"
-                >
-                    <FormControl
-                        v-model="form.password"
-                        :icon="mdiAsterisk"
-                        type="password"
-                        id="password"
-                        autocomplete="current-password"
-                        required
-                    />
-                </FormField>
+                        <FormField label="Email" label-for="email" help="Masukkan alamat email anda">
+                            <FormControl v-model="form.email" :icon="mdiAccount" id="email" autocomplete="email"
+                                type="email" required />
+                        </FormField>
 
-                <FormCheckRadioGroup
-                    v-model="form.remember"
-                    name="remember"
-                    :options="{ remember: 'Remember' }"
-                />
+                        <FormField label="Password" label-for="password" help="Masukkan kata sandi anda">
+                            <FormControl v-model="form.password" :icon="mdiAsterisk" type="password" id="password"
+                                autocomplete="current-password" required />
+                        </FormField>
 
-                <BaseDivider />
+                        <FormCheckRadioGroup v-model="form.remember" name="remember" :options="{ remember: 'Remember' }" />
 
-                <BaseLevel>
-                    <BaseButtons>
-                        <BaseButton
-                            type="submit"
-                            color="info"
-                            label="Login"
-                            :class="{ 'opacity-25': form.processing }"
-                            :disabled="form.processing"
-                        />
-                        <BaseButton
-                            v-if="canResetPassword"
-                            route-name="password.request"
-                            color="info"
-                            outline
-                            label="Lupa Password"
-                        />
-                    </BaseButtons>
-                    <Link :href="route('register')"> Register </Link>
-                </BaseLevel>
-            </CardBox>
-        </SectionFullScreen>
-    </LayoutGuest>
-</template>
+                        <BaseDivider />
+
+                        <BaseLevel>
+                            <BaseButtons>
+                                <BaseButton type="submit" color="info" label="Login"
+                                    :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
+                                <BaseButton v-if="canResetPassword" route-name="password.request" color="info" outline
+                                    label="Lupa Password" />
+                            </BaseButtons>
+                            <Link :href="route('register')"> Daftar </Link>
+                        </BaseLevel>
+                    </CardBox>
+                </div>
+            </div>
+        </div>
+
+    </SectionFullScreen>
+</LayoutGuest></template>

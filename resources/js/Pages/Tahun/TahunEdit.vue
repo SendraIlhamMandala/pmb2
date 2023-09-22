@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { mdiBallotOutline, mdiAccount, mdiMail, mdiGithub } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -24,7 +24,7 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["tahun"]);
+var props = defineProps(["tahun","errors"]);
 
 
 
@@ -49,19 +49,37 @@ const formStatusCurrent = ref(0);
 // Mendefinisikan array opsi status form
 const formStatusOptions = ["info", "success", "danger", "warning"];
 
-// Membuat properti terhitung untuk mendapatkan warna status form berdasarkan keberhasilan form
-const getFormStatusColor = computed(() => {
-    if (form.recentlySuccessful) {
-        return formStatusOptions[1]; // Mengembalikan warna status sukses
-    } else {
-        return formStatusOptions[0]; // Mengembalikan warna status info
-    }
-});
+
 
 // Mendefinisikan fungsi untuk menangani pengiriman form
 const formStatusSubmit = () => {
     form.put(route('tahuns.update', props.tahun.id))
 };
+
+const hasMessage = ref(false)
+
+watch(props, (newStatus) => {
+hasMessage.value = true;
+    setTimeout(() => {
+        hasMessage.value = false;
+}, 10000);
+
+});
+
+const getMessage = computed(() => {
+    return hasMessage.value
+} )
+
+// Membuat properti terhitung untuk mendapatkan warna status form berdasarkan keberhasilan form
+const getFormStatusColor = computed(() => {
+    if (getMessage.value) {
+        
+        return formStatusOptions[2]; // Mengembalikan warna status sukses
+    } else {
+        return formStatusOptions[0]; // Mengembalikan warna status info
+    }
+});
+
 
 
 
@@ -73,15 +91,15 @@ const formStatusSubmit = () => {
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
-
+            <SectionTitle>Edit Tahun</SectionTitle>
             <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span><b class="capitalize">{{
-                        formStatusOptions[formStatusCurrent]
+                        
                     }}</b>
-                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
+                        {{ hasMessage ? errors.tahun : "update tahun"}}
+                    </span>
                 </NotificationBarInCard>
                 <FormField label="NameTahun">
                     <FormControl v-model="form.tahun"  :icon-left="mdiAccount" help="Tahun" placeholder="Tahun"

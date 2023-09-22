@@ -165,9 +165,10 @@ Route::middleware('auth', 'verified')->group(function () {
       ->whereHas('dataDaftar.tahun', function ($query) {
         $query->where('status', 'aktif');
       })
-      ->where('status', 'menunggu verifikasi')
-      ->get();
-
+      ->where(function ($query) {
+        $query->where('status', 'menunggu verifikasi')
+            ->orWhere('status', 'belum selesai pendaftaran');
+    })      ->get();
 
     $users_sudah = User::with(['dataDaftar.tahun', 'faktur'])
       ->orderBy('created_at', 'desc')
@@ -195,8 +196,10 @@ Route::middleware('auth', 'verified')->group(function () {
 
   Route::post('/data-pribadi/{id}', [UserController::class, 'setDataPribadi'])->name('user.set-data-pribadi');
   Route::post('/data-jalur/{id}', [UserController::class, 'setDataJalur'])->name('user.set-data-jalur');
+  Route::post('/data-jalur/update/{user}', [UserController::class, 'updateDataJalur'])->name('user.update-data-jalur');
   Route::get('/data-pribadi', [UserController::class, 'dataPribadi'])->name('user.data-pribadi');
   Route::get('/data-jalur', [UserController::class, 'dataJalur'])->name('user.data-jalur');
+  Route::get('/data-jalur/edit/{user}', [UserController::class, 'dataJalurEdit'])->name('user.data-jalur-edit');
   Route::get('/verifikasi-pembayaran', [UserController::class, 'halamanVerifikasiPembayaran'])->name('HalamanVerifikasiPembayaran');
   Route::post('/verifikasi-pembayaran/{id}', [UserController::class, 'uploadVerifikasiPembayaran'])->name('uploadVerifikasiPembayaran');
   Route::post('/verifikasi-pembayaran-user/{id}', [UserController::class, 'verifikasiPembayaranUser'])->name('verifikasiPembayaranUser');

@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('tambahans', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->string('jalur');
+            $table->string('survey')->nullable();
             $table->json('isi_data')->nullable();
             $table->text('foto_bukti')->nullable();
             $table->text('pdf')->nullable();

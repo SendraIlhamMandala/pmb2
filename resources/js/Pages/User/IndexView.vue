@@ -301,9 +301,9 @@ const scrollToSection = (key) => {
                     <div class="  mx-auto ">
                         <div class="rounded overflow-hidden">
                             <div class="relative mx-auto overflow-hidden">
-                                <img class=" mx-auto shadow-lg md:hidden " src="image/splash_m.png" alt="phone feature 1"
+                                <img class=" mx-auto shadow-lg md:hidden " src="image/splash_m3d.jpg" alt="phone feature 1"
                                     loading="lazy" />
-                                <img class=" mx-auto shadow-lg hidden md:block  " src="image/splash.png"
+                                <img class=" mx-auto shadow-lg hidden md:block  " src="image/splash3dnew.jpg"
                                     alt="phone feature 1" loading="lazy" />
                                 <div class="w-full h-full">
 

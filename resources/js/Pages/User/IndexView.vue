@@ -9,6 +9,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted, onBeforeUnmount } from 'vue';
 import AppHead from "@/components/AppHead.vue";
 import { router } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const props = defineProps({
     canLogin: {
@@ -16,6 +17,12 @@ const props = defineProps({
     },
     canRegister: {
         type: Boolean,
+    },
+    pengumumans : {
+        type: Object
+    },
+    articles : {
+        type: Object
     }
 });
 
@@ -86,6 +93,39 @@ const scrollToSection = (key) => {
     });
 };
 
+const isModalOpen = ref(false);
+
+const modalData = ref('');
+
+const openModal = (data) => {
+    isModalOpen.value = true;
+    modalData.value = data;
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+};
+document.onkeydown = (evt) => {
+    evt = evt || window.event;
+    const isEscape = evt.key === 'Escape' || evt.key === 'Esc' || evt.keyCode === 27;
+
+    if (isEscape && isModalOpen.value) {
+        closeModal();
+    }
+};
+
+function get_pengumuman_class() {
+    if (props.pengumumans.length == 1) {
+        return 'grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-1 grid-rows-1 gap-4  ';
+    }else if (props.pengumumans.length == 2) {        
+        return 'grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-2 grid-rows-1 gap-4  ';
+    }else{
+        return 'grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-3 grid-rows-1 gap-4  '
+    }
+    
+ 
+}
+console.log(props.pengumumans.length);
 </script>
 
 <template>
@@ -105,27 +145,27 @@ const scrollToSection = (key) => {
 
                 <ul class="hidden   lg:flex lg:items-center  lg:space-x-2">
                     <!-- Menu Items -->
-                    <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " @click="scrollToSection('jadwal')">
                             <p align="center"> Jadwal Pendaftaran</p>
                         </a>
 
 
                     </li>
-                    <li class="text-white">
+                    <li style="list-style-type: none;" class="text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
                             class="w-4 h-4 current-fill" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                         </svg>
                     </li>
-                    <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
 
                         <a class="text-sm text-white select-none " @click="scrollToSection('petunjuk')">
                             <p align="center">Petunjuk Pendaftaran</p>
                         </a>
                     </li>
-                    <li class="text-white">
+                    <li style="list-style-type: none;" class="text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
                             class="w-4 h-4 current-fill" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -133,12 +173,12 @@ const scrollToSection = (key) => {
                         </svg>
                     </li>
 
-                    <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " @click="scrollToSection('jalur')">
                             <p align="center">Jalur Seleksi</p>
                         </a>
                     </li>
-                    <li class="text-white">
+                    <li style="list-style-type: none;" class="text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
                             class="w-4 h-4 current-fill" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -146,12 +186,12 @@ const scrollToSection = (key) => {
                         </svg>
                     </li>
 
-                    <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " @click="scrollToSection('beasiswa')">
                             <p align="center">Beasiswa</p>
                         </a>
                     </li>
-                    <li class="text-white">
+                    <li style="list-style-type: none;" class="text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
                             class="w-4 h-4 current-fill" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -159,12 +199,12 @@ const scrollToSection = (key) => {
                         </svg>
                     </li>
 
-                    <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " @click="scrollToSection('prodi')">
                             <p align="center">Program Studi</p>
                         </a>
                     </li>
-                    <li class="text-white">
+                    <li style="list-style-type: none;" class="text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
                             class="w-4 h-4 current-fill" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -172,7 +212,7 @@ const scrollToSection = (key) => {
                         </svg>
                     </li>
 
-                    <li class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " href="#">
                             <p align="center">Hasil tes</p>
                         </a>
@@ -296,14 +336,14 @@ const scrollToSection = (key) => {
                         <!-- <h2 class="display-4 text-center font-semibold">Lorem ipsum dolor sit amet</h2> -->
                     </div>
                 </div>
-                <div class="grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1   ">
+                <div class="grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 ">
 
                     <div class="  mx-auto ">
                         <div class="rounded overflow-hidden">
                             <div class="relative mx-auto overflow-hidden">
-                                <img class=" mx-auto shadow-lg md:hidden " src="image/splash_m3d.jpg" alt="phone feature 1"
+                                <img class=" mx-auto shadow-lg md:hidden " src="image/block_splash_m.jpg" alt="phone feature 1"
                                     loading="lazy" />
-                                <img class=" mx-auto shadow-lg hidden md:block  " src="image/splash3dnew.jpg"
+                                <img class=" mx-auto shadow-lg hidden md:block  " src="image/block_splash.jpg"
                                     alt="phone feature 1" loading="lazy" />
                                 <div class="w-full h-full">
 
@@ -317,98 +357,23 @@ const scrollToSection = (key) => {
 
 
                 </div>
-                <div
-                    class="grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-3 grid-rows-1 gap-4  ">
+                <div  :class="get_pengumuman_class()">
 
-                    <div class="col md:w-10/12  mx-auto my-6">
-                        <div class="rounded overflow-hidden">
-                            <div class="relative overflow-hidden">
-                                <img class=" shadow-lg " src="image/aab.png" alt="phone feature 1" loading="lazy" />
-                                <div class="w-full h-full">
-                                    <div class="z-index:-1 relative">
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[120px] h-[120px] left-[-30px] top-[-10px]">
-                                        </div>
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[140px] h-[140px] right-[-30px] bottom-[80px]">
-                                        </div>
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[60px] h-[60px] left-[20%] bottom-[30px]">
-                                        </div>
-                                    </div>
-                                    <div class="w-full h-full absolute bg-blue-300 z-[-2]"></div>
-                                </div>
-                            </div>
-                            <div class="bg-blue-50">
-                                <div class="flex justify-center mb-4">
-                                    <i class="fa text-3xl fa-globe text-primary my-auto"></i>
-                                    <h3 class="">Pengumuman</h3>
-                                </div>
-                                <p class="py-2 font-semibolder text-center text-muted">pengumuman penerimaan mahasiswa baru.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col md:w-10/12 self-auto mx-auto my-6">
-                        <div class="rounded overflow-hidden">
-                            <div class="relative overflow-hidden">
-                                <img class=" shadow-lg " src="image/aab.png" alt="phone feature 1" loading="lazy" />
-                                <div class="w-full h-full">
-                                    <div class="z-index:-1 relative">
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[120px] h-[120px] left-[-30px] top-[-10px]">
-                                        </div>
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[140px] h-[140px] right-[-30px] bottom-[80px]">
-                                        </div>
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[60px] h-[60px] left-[20%] bottom-[30px]">
-                                        </div>
-                                    </div>
-                                    <div class="w-full h-full absolute bg-blue-300 z-[-2]"></div>
-                                </div>
-                            </div>
-                            <div class="bg-blue-50">
-                                <div class="flex justify-center mb-4">
-                                    <i class="fa text-3xl fa-globe text-primary my-auto"></i>
-                                    <h3 class="ml-6">Lorem Ipsum</h3>
-                                </div>
-                                <p class="py-2 font-semibolder text-center text-muted">Lorem ipsum dolor sit amet,
-                                    consectetur
-                                    adipiscing elit. Donec tempus auctor.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col md:w-10/12  mx-auto my-6">
-                        <div class="rounded overflow-hidden">
-                            <div class="relative overflow-hidden">
-                                <img class=" shadow-lg " src="image/aab.png" alt="phone feature 1" loading="lazy" />
-                                <div class="w-full h-full">
-                                    <div class="z-index:-1 relative">
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[120px] h-[120px] left-[-30px] top-[-10px]">
-                                        </div>
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[140px] h-[140px] right-[-30px] bottom-[80px]">
-                                        </div>
-                                        <div
-                                            class="absolute bg-blue rounded-full w-[60px] h-[60px] left-[20%] bottom-[30px]">
-                                        </div>
-                                    </div>
-                                    <div class="w-full h-full absolute bg-blue-300 z-[-2]"></div>
-                                </div>
-                            </div>
-                            <div class="bg-blue-50">
-                                <div class="flex justify-center mb-4">
-                                    <i class="fa text-3xl fa-globe text-primary my-auto"></i>
-                                    <h3 class="ml-6">Lorem Ipsum</h3>
-                                </div>
-                                <p class="py-2 font-semibolder text-center text-muted">Lorem ipsum dolor sit amet,
-                                    consectetur
-                                    adipiscing elit. Donec tempus auctor.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div v-for="pengumuman in pengumumans" class="col md:w-10/12 mx-auto my-6">
+  <div class="rounded overflow-hidden">
+    <div class="relative flex items-center justify-center">
+      <img class="" :src="'storage/gambar/'+pengumuman.gambar" @click="openModal('storage/gambar/'+pengumuman.gambar)" alt="phone feature 1" loading="lazy" />
+    </div>
+    <div class=" my-8 ">
+      <div class="flex justify-center mb-4">
+        <i class="fa text-3xl fa-globe text-primary my-auto"></i>
+        <h3>{{ pengumuman.judul }}</h3>
+      </div>
+      <p class="py-2 font-semibold text-center text-muted">{{ pengumuman.isi }}</p>
+    </div>
+  </div>
+</div>
+                
 
 
                 </div>
@@ -423,6 +388,8 @@ const scrollToSection = (key) => {
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
                         <div class="card-body">
                             <div class="text-wrap p-lg-6">
+                                
+
                                 <h5 class=" uppercase font-bold text-blue-500">Jadwal Pendaftaran</h5>
                                 <hr class="border-0 h-1 bg-gradient-to-r from-gray-200 via-gray-500 to-gray-200">
                                 <br>
@@ -433,10 +400,7 @@ const scrollToSection = (key) => {
                             </div>
                         </div>
 
-                        <a href="javascript:void(0)"
-                            class="text-body-color hover:border-primary hover:bg-primary inline-block rounded-full border border-[#E5E7EB] py-2 px-7 text-base font-medium transition hover:text-white">
-                            View Details
-                        </a>
+                        
                     </div>
                 </div>
             </div>
@@ -455,10 +419,7 @@ const scrollToSection = (key) => {
                             </a>
                         </h3>
                         <img src="image/petunjuk_daftar.jpg" alt="image" class="w-full" />
-                        <a href="javascript:void(0)"
-                            class="text-body-color hover:border-primary hover:bg-primary inline-block rounded-full border border-[#E5E7EB] py-2 px-7 text-base font-medium transition hover:text-white">
-                            View Details
-                        </a>
+                        
                     </div>
                 </div>
             </div>
@@ -478,6 +439,11 @@ const scrollToSection = (key) => {
                             <ol class="pl-6">
                                 <li class="text-justify">
                                     <br>
+                                    <div v-if="articles" v-for="article in articles" >
+       
+        <div v-html="article.isi" >            
+        </div>
+    </div>
                                     <h4 class="text-justify font-bold">Jalur Rangking</h4>
                                     Jalur Rapor yaitu jalur pendaftaran yang terbuka bagi siswa/siswi tingkat SMA/SMK/MA
                                     kelas XII berlaku untuk semua jurusan, tanpa harus mengikuti tes ujian saringan masuk,
@@ -573,10 +539,7 @@ const scrollToSection = (key) => {
                             <p class="mt-4">&nbsp;</p>
                         </div>
 
-                        <a href="javascript:void(0)"
-                            class="text-body-color hover:border-primary hover:bg-primary inline-block rounded-full border border-[#E5E7EB] py-2 px-7 text-base font-medium transition hover:text-white">
-                            View Details
-                        </a>
+                        
                     </div>
                 </div>
             </div>
@@ -607,10 +570,7 @@ const scrollToSection = (key) => {
                         </div>
 
 
-                        <a href="javascript:void(0)"
-                            class="text-body-color hover:border-primary hover:bg-primary inline-block rounded-full border border-[#E5E7EB] py-2 px-7 text-base font-medium transition hover:text-white">
-                            View Details
-                        </a>
+                        
                     </div>
                 </div>
             </div>
@@ -638,10 +598,7 @@ const scrollToSection = (key) => {
                                 <li>Manajemen Keuangan Publik</li>
                             </ul>
                         </div>
-                        <a href="javascript:void(0)"
-                            class="text-body-color hover:border-primary hover:bg-primary inline-block rounded-full border border-[#E5E7EB] py-2 px-7 text-base font-medium transition hover:text-white">
-                            View Details
-                        </a>
+                        
                     </div>
                 </div>
             </div>
@@ -791,6 +748,49 @@ const scrollToSection = (key) => {
             </div>
         </footer>
     </div>
+
+    
+    <div>
+
+
+<!-- Modal -->
+<transition name="pop" mode="out-in">
+
+    <div v-if="isModalOpen"
+        class="modal bg-gray-900 opacity-50 pointer-events-auto fixed w-full h-full top-0 left-0 flex items-center justify-center">
+    </div>
+</transition>
+<transition name="slide" mode="out-in">
+    <div v-if="isModalOpen"
+        class="modal mt-10 opacity-100 pointer-events-auto fixed w-full h-full top-0 left-0 flex items-center justify-center dark:text-slate-400">
+
+        <div class="modal-container bg-white  mx-auto rounded shadow-lg z-50 overflow-y-auto">
+
+
+            <div class=" py-4 text-left px-6 dark:bg-gray-800">
+                <!--Title-->
+                <div class="flex justify-between items-center pb-3">
+                    <div @click="closeModal" class="modal-close cursor-pointer z-50">
+                        <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18"
+                            height="18" viewBox="0 0 18 18">
+                            <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!--Body-->
+           
+                
+                    <img  :src="modalData" class="h-screen object-contain" style="max-height: 80vh;" alt="">
+                
+            </div>
+        </div>
+    </div>
+</transition>
+</div>
+
 </template>
 <style>
 .slide-enter-active,
@@ -803,14 +803,40 @@ const scrollToSection = (key) => {
 .slide-leave-to {
     height: 100%;
     opacity: 0;
-    transform: translateX(-50%);
+    transform: translateY(-5%);
 }
 
 .slide-enter-to,
 .slide-leave-from {
     height: 100%;
-    transform: translateX(0%);
+    transform: translateY(0%);
     opacity: 100;
+}
+
+ul{
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+h1{
+  font-size: 3rem;
+}
+h2{
+  font-size: 2rem;
+}
+h3{
+  font-size: 1.25rem;
+}
+.text-huge{
+  font-size: 3rem;
+}
+.text-big{
+  font-size: 1.5rem;
+}
+.text-small{
+  font-size: 0.75rem;
+}
+.text-tiny{
+  font-size: 0.5rem;
 }
 </style>
   

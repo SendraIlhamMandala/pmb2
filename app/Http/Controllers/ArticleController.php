@@ -54,7 +54,11 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        //edit article
+        return Inertia::render('Articles/articleEdit', [
+            'article' => $article,
+        ]);
+
     }
 
     /**
@@ -62,7 +66,10 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        dd($request->all());
+        //update article
+        $article->update($request->all());
+        return redirect(route('articles.index'));
     }
 
     /**

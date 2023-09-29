@@ -118,6 +118,20 @@ export default [
             },
         ],
     },
+    {
+        label: "Artikel",
+        icon: mdiViewList,
+        menu: [
+            {
+                label: "User",
+            },
+            {
+                label: "Pembayaran",
+                route: "verifikasiPembayaranUserIndex",
+
+            },
+        ],
+    },
     // {
     //     href: "https://github.com/justboil/admin-one-vue-tailwind",
     //     label: "GitHub",

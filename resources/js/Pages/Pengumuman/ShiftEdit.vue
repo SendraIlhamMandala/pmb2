@@ -13,38 +13,25 @@ import { useForm, Link } from "@inertiajs/vue3";
 import datatablecomponent from "@/components/DataTableComponent.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import AppHead from "@/components/AppHead.vue";
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import CKEditor from '@ckeditor/ckeditor5-vue';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Head } from '@inertiajs/vue3';
 
-//props article
-const props = defineProps({
-    article: { type: Object },
-
-});
+import DataTable from "datatables.net-vue3";
+import Select from "datatables.net-select";
+import DataTablesLib from "datatables.net";
+import DataTables from "datatables.net-select";
 
 
-// Use the <ckeditor> component in this view.
-const ckeditor = CKEditor.component;
-const editor = ref(ClassicEditor);
-const editorData = ref('<p>Content of the editor.</p>');
-const editorConfig = {
-  mediaEmbed: {
-    previewsInData: true
-  }
-};
+// Impor library DataTables
+DataTable.use(DataTablesLib);
+
+// Mendefinisikan properti untuk komponen
+var props = defineProps(["shift"]);
 
 
+
+// Membuat objek form menggunakan hook useForm
 const form = useForm({
-    tipe: props.article.tipe,
-    isi: ''
+    name: props.shift.name,
 });
-
-
-const submit = () => {
-    form.put(route('articles.update', props.article.id));
-};
 
 // Membuat referensi reaktif untuk status form dengan header
 const formStatusWithHeader = ref(true);
@@ -64,38 +51,40 @@ const getFormStatusColor = computed(() => {
     }
 });
 
+// Mendefinisikan fungsi untuk menangani pengiriman form
+const formStatusSubmit = () => {
+    form.put(route('shifts.update', props.shift.id))
+};
+
 
 
 </script>
 
 <template>
 
-<AppHead :title="'Edit role '" />
+<AppHead :title="'Edit shift '+shift.id" />
     <LayoutAuthenticated>
         
         <SectionMain>
             <SectionTitle>Form with status example</SectionTitle>
 
             <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable
-                @submit.prevent="submit">
+                @submit.prevent="formStatusSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>
-                        {{form.recentlySuccessful?" Berhasil menambahkan": "Edit"}}</span>
+                    <span><b class="capitalize">{{
+                        formStatusOptions[formStatusCurrent]
+                    }}</b>
+                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
                 </NotificationBarInCard>
-                <form @submit.prevent="submit">
-        <div>
-            <div id="app">
-                <ckeditor name="isi" :editor="editor" v-model="form.isi" :config="editorConfig"  ></ckeditor>
-            </div>
+                <FormField label="Name">
+                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="Game name" placeholder="Game name"
+                        required />
+                </FormField>
 
-           
-        </div>
-    </form>
 
                 <template #footer>
-                    <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }">
-                Submit
-            </PrimaryButton>                </template>
+                    <BaseButton label="Trigger" type="submit" color="info" />
+                </template>
             </CardBox>
          
         </SectionMain>

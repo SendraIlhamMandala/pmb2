@@ -4,17 +4,21 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\JalurDaftarController;
+use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramStudiController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\TahunController;
 use App\Http\Controllers\UserController;
+use App\Models\Article;
 use App\Models\DataPribadi;
+use App\Models\Pengumuman;
 use App\Models\ProgramStudi;
 use App\Models\Tahun;
 use App\Models\User;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -38,6 +42,8 @@ Route::get('/', function () {
     'canRegister' => Route::has('register'),
     'laravelVersion' => Application::VERSION,
     'phpVersion' => PHP_VERSION,
+    'pengumumans' => Pengumuman::all(),
+    'articles' => Article::all(),
   ]);
 })->name('welcome');
 
@@ -83,6 +89,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
   Route::resource('shifts', ShiftController::class);
   Route::get('/shifts/delete/{id}', [ShiftController::class, 'deleteOne'])->name('shifts.deleteOne');
   Route::get('/shifts/deletemultiple/{id}', [ShiftController::class, 'deleteMultiple'])->name('shifts.deleteMultiple');
+
+  Route::resource('pengumumans', PengumumanController::class);
+  Route::get('/pengumumans/delete/{id}', [PengumumanController::class, 'deleteOne'])->name('pengumumans.deleteOne');
+  Route::get('/pengumumans/deletemultiple/{id}', [PengumumanController::class, 'deleteMultiple'])->name('pengumumans.deleteMultiple');
+
 
   Route::resource('articles', ArticleController::class);
   Route::get('/articles/delete/{id}', [ArticleController::class, 'deleteOne'])->name('articles.deleteOne');
@@ -238,6 +249,19 @@ Route::get('/createadmin', [Controller::class, 'createAdmin']);
 Route::get('/link', function () {
   Artisan::call('storage:link');
 });
+
+Route::get('/ckeditor', function () {
+  $articles = Article::all();
+  return Inertia::render('Ckeditor', [
+    'articles' => $articles
+  ]);
+});
+
+
+Route::post('/posttest', function (Request $request) {
+  Article::create($request->all());
+  return redirect()->back();
+})->name('posttest');
 
 Route::get('/testmail', function () {
   // Mail::to(User::find(197))

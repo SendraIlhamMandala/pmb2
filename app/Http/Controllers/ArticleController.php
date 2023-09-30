@@ -52,11 +52,12 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Article $article)
+    public function edit($article)
     {
+        $article_data = Article::where('tipe', $article)->first();
         //edit article
         return Inertia::render('Articles/articleEdit', [
-            'article' => $article,
+            'article' => $article_data,
         ]);
 
     }
@@ -66,7 +67,6 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        dd($request->all());
         //update article
         $article->update($request->all());
         return redirect(route('articles.index'));

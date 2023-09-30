@@ -133,7 +133,7 @@ console.log();
     <LayoutAuthenticatedUser>
 
         <SectionMain>
-            <SectionTitle>Kirim Bukti Pembayaran</SectionTitle>
+            <SectionTitle class="mt-4">Kirim Bukti Pembayaran</SectionTitle>
             <div class="grid grid-cols-1 md:grid-cols-3 grid-rows-1 gap-4">
                 <div class=" md:fixed  md:-translate-y-10 ">
                     <CardBox class="shadow-2xl md:mx-auto mx-auto md:w-3/4 lg:w-80  ">

@@ -123,13 +123,39 @@ export default [
         icon: mdiViewList,
         menu: [
             {
-                label: "User",
-            },
-            {
-                label: "Pembayaran",
-                route: "verifikasiPembayaranUserIndex",
+                label: "Jadwal",
+                href: "/articles/Jadwal%20Pendaftaran/edit",
 
             },
+            {
+                label: "Pengumuman",
+                href: "/pengumumans",
+
+            },
+
+            {
+                label: "Jalur Seleksi",
+                href: "/articles/Jalur%20Seleksi%20Pendaftaran/edit",
+
+            },   
+            {
+                label: "Beasiswa",
+                href: "/articles/beasiswa/edit",
+
+            },
+            {
+                label: "Program Studi",
+                href: "/articles/Program%20Studi/edit",
+
+            },
+            {
+                label: "Petunjuk Pendaftaran",
+                href: "/articles/Petunjuk/edit",
+
+            },
+            
+
+            
         ],
     },
     // {

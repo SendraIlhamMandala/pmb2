@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JalurDaftar;
 use App\Models\Shift;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -18,9 +19,10 @@ class ShiftController extends Controller
     {
         
     $shifts = Shift::orderBy('created_at', 'desc')->get();
-
+    $shifts->load('jalurdaftars');
         return Inertia::render('Shifts/ShiftsView', [
             'shifts' => $shifts,
+            'jalurs' => JalurDaftar::all(),
             'status' => session('status'),]);
     }
 
@@ -39,7 +41,13 @@ class ShiftController extends Controller
     {
         //store shift data
 
-        Shift::create($request->all());
+        
+        $shift = Shift::create($request->shift);
+        
+        foreach ($request->jalur['id'] as $key => $value) {
+            $shift->jalurdaftars()->attach(JalurDaftar::find($value));
+        }
+
         return redirect(route('shifts.index'));
 
     }
@@ -60,8 +68,10 @@ class ShiftController extends Controller
         //
         
             //edit page
+            $shift->load('jalurdaftars');
             return Inertia::render('Shifts/ShiftEdit', [
-                'shift' => $shift
+                'shift' => $shift,
+                'jalurs' => JalurDaftar::all()
             ]);
     
     }
@@ -73,7 +83,11 @@ class ShiftController extends Controller
     {
         //
            //update shift
-           $shift->update($request->all());
+           $shift->update($request->shift);
+           $shift->jalurdaftars()->detach();
+           foreach ($request->jalur['id'] as $key => $value) {
+               $shift->jalurdaftars()->attach(JalurDaftar::find($value));
+           }
            return redirect(route('shifts.index'));
    
     }

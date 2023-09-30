@@ -18,20 +18,27 @@ import DataTable from "datatables.net-vue3";
 import Select from "datatables.net-select";
 import DataTablesLib from "datatables.net";
 import DataTables from "datatables.net-select";
+import FormCheckRadioGroup from "@/components/FormCheckRadioGroup.vue";
 
 
 // Impor library DataTables
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["shift"]);
+var props = defineProps(["shift", "jalurs",]);
 
 
 
 // Membuat objek form menggunakan hook useForm
+// Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: props.shift.name,
+    shift:{ name: props.shift.name },
+   jalur:{   id: props.shift.jalurdaftars.map((data)=>{
+    return data.id
+   }), },
+
 });
+
 
 // Membuat referensi reaktif untuk status form dengan header
 const formStatusWithHeader = ref(true);
@@ -56,6 +63,10 @@ const formStatusSubmit = () => {
     form.put(route('shifts.update', props.shift.id))
 };
 
+const result = props.jalurs.reduce((obj, jalur) => {
+  obj[jalur.id] = jalur.name;
+  return obj;
+}, {});
 
 
 </script>
@@ -66,20 +77,25 @@ const formStatusSubmit = () => {
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle>Edit Shift</SectionTitle>
 
             <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span><b class="capitalize">{{
-                        formStatusOptions[formStatusCurrent]
-                    }}</b>
-                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
+                    <span>
+                        {{form.recentlySuccessful?" Berhasil menambahkan": "Edit Shift"}}</span>
                 </NotificationBarInCard>
-                <FormField label="Name">
-                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="Game name" placeholder="Game name"
+                <FormField label="shift">
+                    <FormControl v-model="form.shift.name"  :icon-left="mdiAccount" help="Shift" placeholder="Shift"
                         required />
                 </FormField>
+                <FormField label="Jalur">
+          <FormCheckRadioGroup
+            v-model="form.jalur.id"
+            name="sample-checkbox"
+            :options="result"
+          />
+        </FormField>
 
 
                 <template #footer>

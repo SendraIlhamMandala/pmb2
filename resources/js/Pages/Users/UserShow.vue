@@ -36,7 +36,7 @@ var props = defineProps(["user", "usersWithPassword", "password", "usersEdit"]);
 // Configuration for exporting data to Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "Data Gameee",
+    messageTop: "Data User",
     exportOptions: {
         columns: [0, 1, 2, 3, 4, 5],
     },
@@ -207,7 +207,7 @@ console.log(props.user);
             </a>
         </div>
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle>show</SectionTitle>
 
             <CardBox class="mt-6 bg-opacity-0  ">
 

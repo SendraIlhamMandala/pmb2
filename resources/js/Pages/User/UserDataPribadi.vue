@@ -85,7 +85,7 @@ const handleFileChangeRanking = (event) => {
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["game", "user", "cat" , "errors"]);
+var props = defineProps(["user", "cat" , "errors"]);
 
 const selectOptionsKelamin = ["Laki - Laki", "Perempuan"];
 const selectOptionsPekerjaan = ["PNS", "TNI / Polri", "BUMN / BUMD ", "Wiraswasta", "lainnya"];
@@ -246,7 +246,7 @@ console.log(props.user);
     <LayoutAuthenticatedUser>
 
         <SectionMain>
-            <SectionTitle>Masukkan Data </SectionTitle>
+            <SectionTitle class="mt-4">Masukkan Data </SectionTitle>
 
             <div class=" grid grid-cols-1 md:grid-cols-3 grid-rows-1 gap-4">
 

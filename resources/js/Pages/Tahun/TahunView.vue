@@ -29,7 +29,7 @@ var props = defineProps(["tahun", "tahunEdit"]);
 // Mendefinisikan konfigurasi untuk mengekspor data ke Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "data Gameee",
+    messageTop: "data Tahun",
     exportOptions: {
         columns: [0, 1, 2, 3, 4],
     },
@@ -139,14 +139,13 @@ const submitForm = () => {
 };
 
 
-// Menampilkan elemen pertama dari properti gamesEdit ke konsol
 console.log(props.tahun);
 
 </script>
 
 <template>
 
-<AppHead title="Game" />
+<AppHead title="Tahun" />
     <LayoutAuthenticated>
         
         <SectionMain>

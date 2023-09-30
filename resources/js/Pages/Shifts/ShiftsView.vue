@@ -13,6 +13,7 @@ import { useForm, Link } from "@inertiajs/vue3";
 import datatablecomponent from "@/components/DataTableComponent.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import AppHead from "@/components/AppHead.vue";
+import FormCheckRadioGroup from "@/components/FormCheckRadioGroup.vue";
 
 import DataTable from "datatables.net-vue3";
 import Select from "datatables.net-select";
@@ -24,12 +25,12 @@ import DataTables from "datatables.net-select";
 DataTable.use(DataTablesLib);
 
 // Mendefinisikan properti untuk komponen
-var props = defineProps(["shifts", "shiftsEdit"]);
+var props = defineProps(["shifts", "jalurs", "shiftsEdit"]);
 
 // Mendefinisikan konfigurasi untuk mengekspor data ke Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "data Gameee",
+    messageTop: "data Shift",
     exportOptions: {
         columns: [0, 1, 2, 3, 4],
     },
@@ -37,7 +38,9 @@ const dataExcel = {
 
 // Membuat objek form menggunakan hook useForm
 const form = useForm({
-    name: ""
+    shift:{ name: "" },
+   jalur:{   id: [], },
+
 });
 
 // Membuat referensi reaktif untuk status form dengan header
@@ -66,11 +69,11 @@ const formStatusSubmit = () => {
 };
 
 // Mendefinisikan kolom-kolom untuk tabel data
-
+console.log(props.shifts);
 const columns = [
     { data: "id" },
     { data: "name" , render: data => data.toUpperCase() },
-    { data: "created_at", render: data => new Date(data).getFullYear() },
+    { data: "jalurdaftars", render: data => JSON.stringify(data.map(item => item.name).join(", ")).replace(/"/g, '')},
     {
         title: "aksi",
         render: function (data, type, row) {
@@ -106,18 +109,22 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             }
         ];
 
-// Menampilkan elemen pertama dari properti gamesEdit ke konsol
-// console.log(props.gamesEdit[0]);
+
+const result = props.jalurs.reduce((obj, jalur) => {
+  obj[jalur.id] = jalur.name;
+  return obj;
+}, {});
+console.log(result);
 
 </script>
 
 <template>
 
-<AppHead title="Game" />
+<AppHead title="Shift" />
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle>Shift </SectionTitle>
 
             <CardBox is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
@@ -128,11 +135,21 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
                         {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah Shift"}}</span>
                 </NotificationBarInCard>
                 <FormField label="Name">
-                    <FormControl v-model="form.name" :icon-left="mdiAccount" help="Shift name" placeholder="Shift name"
+                    <FormControl v-model="form.shift.name" :icon-left="mdiAccount" help="Shift name" placeholder="Shift name"
                         required />
                 </FormField>
 
-            
+               
+
+                <FormField label="Jalur">
+          <FormCheckRadioGroup
+            v-model="form.jalur.id"
+            name="sample-checkbox"
+            :options="result"
+          />
+        </FormField>
+
+
 
                 <template #footer>
                     <BaseButton label="Tambah" type="submit" color="info" />
@@ -141,7 +158,7 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             <CardBox class="mt-6">
 
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Game</span>
+                    <span>Tabel Shift</span>
                 </NotificationBarInCard>
                 <datatablecomponent :buttons_data="buttons_data" routeTo="shifts"  :dataFrom="shifts" :form="form" :columns="columns">
                 </datatablecomponent>

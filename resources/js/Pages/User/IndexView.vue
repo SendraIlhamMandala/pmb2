@@ -18,10 +18,10 @@ const props = defineProps({
     canRegister: {
         type: Boolean,
     },
-    pengumumans : {
+    pengumumans: {
         type: Object
     },
-    articles : {
+    articles: {
         type: Object
     }
 });
@@ -117,13 +117,13 @@ document.onkeydown = (evt) => {
 function get_pengumuman_class() {
     if (props.pengumumans.length == 1) {
         return 'grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-1 grid-rows-1 gap-4  ';
-    }else if (props.pengumumans.length == 2) {        
+    } else if (props.pengumumans.length == 2) {
         return 'grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-2 grid-rows-1 gap-4  ';
-    }else{
+    } else {
         return 'grid w-5/6 lg:w-2/2 justify-center mx-auto flex items-stretch grid-cols-1 lg:grid-cols-3 grid-rows-1 gap-4  '
     }
-    
- 
+
+
 }
 console.log(props.pengumumans.length);
 </script>
@@ -145,7 +145,8 @@ console.log(props.pengumumans.length);
 
                 <ul class="hidden   lg:flex lg:items-center  lg:space-x-2">
                     <!-- Menu Items -->
-                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;"
+                        class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " @click="scrollToSection('jadwal')">
                             <p align="center"> Jadwal Pendaftaran</p>
                         </a>
@@ -159,7 +160,8 @@ console.log(props.pengumumans.length);
                                 d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                         </svg>
                     </li>
-                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;"
+                        class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
 
                         <a class="text-sm text-white select-none " @click="scrollToSection('petunjuk')">
                             <p align="center">Petunjuk Pendaftaran</p>
@@ -173,7 +175,8 @@ console.log(props.pengumumans.length);
                         </svg>
                     </li>
 
-                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;"
+                        class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " @click="scrollToSection('jalur')">
                             <p align="center">Jalur Seleksi</p>
                         </a>
@@ -186,7 +189,8 @@ console.log(props.pengumumans.length);
                         </svg>
                     </li>
 
-                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;"
+                        class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " @click="scrollToSection('beasiswa')">
                             <p align="center">Beasiswa</p>
                         </a>
@@ -199,7 +203,8 @@ console.log(props.pengumumans.length);
                         </svg>
                     </li>
 
-                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;"
+                        class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " @click="scrollToSection('prodi')">
                             <p align="center">Program Studi</p>
                         </a>
@@ -212,7 +217,8 @@ console.log(props.pengumumans.length);
                         </svg>
                     </li>
 
-                    <li style="list-style-type: none;" class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
+                    <li style="list-style-type: none;"
+                        class="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300">
                         <a class="text-sm text-white select-none " href="#">
                             <p align="center">Hasil tes</p>
                         </a>
@@ -237,9 +243,11 @@ console.log(props.pengumumans.length);
                             </a>
                         </div>
                         <div v-if="screenWidth < 1024" class="fixed bottom-0 left-0 w-full flex justify-center py-4">
-                            <a v-if="!$page.props.auth.user" class="inline-block py-2 px-6 mx-6 bg-white text-emerald-500 hover:bg-emerald-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
+                            <a v-if="!$page.props.auth.user"
+                                class="inline-block py-2 px-6 mx-6 bg-white text-emerald-500 hover:bg-emerald-200 hover:text-white text-sm font-bold rounded-xl transition duration-200"
                                 href="/login">login</a>
-                            <a v-if="!$page.props.auth.user" class="inline-block py-2 px-6 border bg-emerald-400 border-white text-white hover:bg-white hover:text-emerald-500 text-sm font-bold rounded-xl transition duration-200"
+                            <a v-if="!$page.props.auth.user"
+                                class="inline-block py-2 px-6 border bg-emerald-400 border-white text-white hover:bg-white hover:text-emerald-500 text-sm font-bold rounded-xl transition duration-200"
                                 href="/register">Daftar</a>
                         </div>
 
@@ -341,9 +349,9 @@ console.log(props.pengumumans.length);
                     <div class="  mx-auto ">
                         <div class="rounded overflow-hidden">
                             <div class="relative mx-auto overflow-hidden">
-                                <img class=" mx-auto shadow-lg md:hidden " src="image/block_splash_m.jpg" alt="phone feature 1"
-                                    loading="lazy" />
-                                <img class=" mx-auto shadow-lg hidden md:block  " src="image/block_splash.jpg"
+                                <img class=" mx-auto shadow-lg md:hidden " src="image/splash_m.png"
+                                    alt="phone feature 1" loading="lazy" />
+                                <img class=" mx-auto shadow-lg hidden md:block  " style="max-width: 100%;" src="image/splash.png"
                                     alt="phone feature 1" loading="lazy" />
                                 <div class="w-full h-full">
 
@@ -357,28 +365,32 @@ console.log(props.pengumumans.length);
 
 
                 </div>
-                <div  :class="get_pengumuman_class()">
+                <div :class="get_pengumuman_class()">
 
                     <div v-for="pengumuman in pengumumans" class="col md:w-10/12 mx-auto my-6">
-  <div class="rounded overflow-hidden">
-    <div class="relative flex items-center justify-center">
-      <img class="" :src="'storage/gambar/'+pengumuman.gambar" @click="openModal('storage/gambar/'+pengumuman.gambar)" alt="phone feature 1" loading="lazy" />
-    </div>
-    <div class=" my-8 ">
-      <div class="flex justify-center mb-4">
-        <i class="fa text-3xl fa-globe text-primary my-auto"></i>
-        <h3>{{ pengumuman.judul }}</h3>
-      </div>
-      <p class="py-2 font-semibold text-center text-muted">{{ pengumuman.isi }}</p>
-    </div>
-  </div>
-</div>
-                
+                        <div class="rounded overflow-hidden">
+                            <div class="relative flex items-center justify-center">
+                                <img class="" :src="'storage/gambar/' + pengumuman.gambar"
+                                    @click="openModal('storage/gambar/' + pengumuman.gambar)" alt="phone feature 1"
+                                    loading="lazy" />
+                            </div>
+                            <div class=" my-8 ">
+                                <div class="flex justify-center mb-4">
+                                    <i class="fa text-3xl fa-globe text-primary my-auto"></i>
+                                    <h3>{{ pengumuman.judul }}</h3>
+                                </div>
+                                <p class="py-2 font-semibold text-center text-muted">{{ pengumuman.isi }}</p>
+                            </div>
+                        </div>
+                    </div>
+
 
 
                 </div>
             </div>
         </section>
+
+
 
         <section id="jadwal" ref="jadwal">
 
@@ -388,19 +400,13 @@ console.log(props.pengumumans.length);
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
                         <div class="card-body">
                             <div class="text-wrap p-lg-6">
-                                
+                                    <div class="text-justify">
 
-                                <h5 class=" uppercase font-bold text-blue-500">Jadwal Pendaftaran</h5>
-                                <hr class="border-0 h-1 bg-gradient-to-r from-gray-200 via-gray-500 to-gray-200">
-                                <br>
-                                <p class="text-left"><strong>Gelombang 1</strong> : 1 Februari 2023 - 31 Maret 2023</p>
-                                <p class="text-left"><strong>Gelombang 2</strong> : 1 April 2023 - 31 Mei 2023</p>
-                                <p class="text-left"><strong>Gelombang 3</strong> : 1 Juni 2023 - 31 Juli 2023</p>
-                                <p class="text-left"><strong>Gelombang 4</strong> : 1 Agustus 2023 - 30 September 2023</p>
+                                        <div v-html="articles[0].isi">
+                                        </div>
+                                    </div>
                             </div>
                         </div>
-
-                        
                     </div>
                 </div>
             </div>
@@ -408,138 +414,42 @@ console.log(props.pengumumans.length);
 
         <section id="petunjuk" ref="petunjuk">
 
-            <div class="w-5/6 justify-start    mx-auto ">
-                <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
-                    <img src="image/petunjuk.jpg" alt="image" class="w-full" />
-                    <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
-                        <h3>
-                            <a href="javascript:void(0)"
-                                class="text-dark justify-start  hover:text-primary mb-4 block text-xl font-semibold sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px]">
+           
+<div class="w-5/6 justify-start    mx-auto ">
+    <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
+        <img src="image/petunjuk.jpg" alt="image" class="w-full" />
+        <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
+            <div class="card-body">
+                <div class="text-wrap p-lg-6">
+                        <div class="text-justify">
 
-                            </a>
-                        </h3>
-                        <img src="image/petunjuk_daftar.jpg" alt="image" class="w-full" />
-                        
-                    </div>
+                            <div v-html="articles[4].isi">
+                            </div>
+                        </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</div>
+</section>
 
 
         <section id="jalur" ref="jalur">
 
+           
             <div class="w-5/6 justify-start    mx-auto ">
                 <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
-                    <img src="image/petunjuk.jpg" alt="image" class="w-full" />
+                    <img src="image/jalur.png" alt="image" class="w-full" />
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
-                        <div class="text-wrap p-6">
-                            <h5 class="text-center text-uppercase font-bold text-blue-500">Jalur Seleksi Pendaftaran</h5>
-                            <hr class="border-0 h-1 bg-gradient-to-r from-gray-300 via-gray-600 to-gray-300">
+                        <div class="card-body">
+                            <div class="text-wrap p-lg-6">
+                                    <div class="text-justify">
 
-                            <ol class="pl-6">
-                                <li class="text-justify">
-                                    <br>
-                                    <div v-if="articles" v-for="article in articles" >
-       
-        <div v-html="article.isi" >            
-        </div>
-    </div>
-                                    <h4 class="text-justify font-bold">Jalur Rangking</h4>
-                                    Jalur Rapor yaitu jalur pendaftaran yang terbuka bagi siswa/siswi tingkat SMA/SMK/MA
-                                    kelas XII berlaku untuk semua jurusan, tanpa harus mengikuti tes ujian saringan masuk,
-                                    sesuai dengan kriteria yang ditentukan berdasarkan penilaian dari prestasi akademik.
-                                    Syarat:
-                                    <br>
-                                    <ol class="list-disc pl-6">
-                                        <li>Lulusan baru SMA, SMK, MA / sederajat untuk semua jurusan.</li>
-                                        <li>Berkelakuan baik, tidak terlibat pengedaran dan pemakaian Narkoba (NAPZA),
-                                            dengan surat keterangan dari pihak yang berwenang, yang dipenuhi setelah calon
-                                            dinyatakan lulus seleksi.</li>
-                                        <li>Rata-rata nilai raport pada sem. 3, 4, 5, 6 dengan rata-rata nilai rapot minimal
-                                            7,5.</li>
-                                    </ol>
-                                </li>
-
-                                <li class="text-justify">
-                                    <br>
-                                    <h4 class="text-justify font-bold">Jalur Bidikmisi</h4>
-                                    Jalur Bidikmisi merupakan bantuan biaya pendidikan bagi calon mahasiswa tidak mampu
-                                    secara ekonomi dan memiliki potensi akademik baik untuk menempuh pendidikan di perguruan
-                                    tinggi pada program studi unggulan sampai lulus tepat waktu. Syarat dan Pendaftaran
-                                    langsung melalui website <a href="https://bidikmisi.belmawa.ristekdikti.go.id/"
-                                        class="text-blue-500 hover:underline">https://bidikmisi.belmawa.ristekdikti.go.id/</a>
-                                </li>
-
-                                <li class="text-justify">
-                                    <br>
-                                    <h4 class="text-justify font-bold">Jalur Undangan</h4>
-                                    Jalur Undangan merupakan jalur yang diperuntukan bagi siswa-siswi terbaik di Sekolah
-                                    untuk mengikuti seleksi masuk PTN tanpa ujian tertulis. Seleksi didasarkan pada prestasi
-                                    yang dimiliki siswa. Syarat:
-                                    <br>
-                                    <ol class="list-disc pl-6">
-                                        <li>Lulusan baru SMA, SMK, MA / sederajat untuk semua jurusan.</li>
-                                        <li>Berkelakuan baik, tidak terlibat pengedaran dan pemakaian Narkoba (NAPZA),
-                                            dengan surat keterangan dari pihak yang berwenang, yang dipenuhi setelah calon
-                                            dinyatakan lulus seleksi.</li>
-                                        <li>Memiliki surat rekomendasi dari Fakultas Ilmu Sosial dan Ilmu Politik -
-                                            Universitas Garut.</li>
-                                    </ol>
-                                </li>
-
-                                <li class="text-justify">
-                                    <br>
-                                    <h4 class="text-justify font-bold">Prestasi Non Akademik</h4>
-                                    Prestasi Non Akademik merupakan jalur yang diperuntukan bagi siswa/i yang berprestasi
-                                    dibidang olahraga dan seni tanpa harus mengikuti tes ujian saringan masuk. Syarat:
-                                    <br>
-                                    <ol class="list-disc pl-6">
-                                        <li>Lulusan baru SMA, SMK, MA / sederajat untuk semua jurusan.</li>
-                                        <li>Berkelakuan baik, tidak terbatas pengedaran dan pemakaian Narkoba (NAPZA),
-                                            dengan surat keterangan dari pihak yang berwenang, yang dipenuhi setelah calon
-                                            dinyatakan lulus seleksi.</li>
-                                        <li>Memiliki sertifikat atau prestasi Olahraga dan Seni, baik tingkat regional,
-                                            nasional maupun internasional.</li>
-                                    </ol>
-                                </li>
-
-                                <li class="text-justify">
-                                    <br>
-                                    <h4 class="text-justify font-bold">Tes Potensi Akademik</h4>
-                                    Tes Potensi Akademik merupakan kegiatan seleksi berupa ujian tertulis untuk menentukan
-                                    kemampuan potensi akademik para calon mahasiswa sesuai dengan kriteria yang berlaku di
-                                    Fakultas Ilmu Sosial dan Ilmu Politik - Universitas Garut.
-                                </li>
-
-                                <li class="text-justify">
-                                    <br>
-                                    <h4 class="text-justify font-bold">Jalur Aparatur Desa</h4>
-                                    Jalur Aparatur Desa merupakan jalur khusus yang diperuntukan untuk pegawai Desa. Syarat
-                                    :
-                                    <br>
-                                    <ol class="list-disc pl-6">
-                                        <li>Mempunyai Surat Rekomendasi dari Desa</li>
-                                        <li>Surat Keterangan Sehat (Maksimal 2 minggu)</li>
-                                        <li>Berkelakuan baik, tidak terbatas pengedaran dan pemakaian Narkoba (NAPZA),
-                                            dengan surat keterangan dari pihak yang berwenang.</li>
-                                    </ol>
-                                </li>
-
-                                <li class="text-justify">
-                                    <br>
-                                    <h4 class="text-justify font-bold">Jalur Family Program</h4>
-                                    "Bring Your Family to Join Us". Memberikan kesempatan bagi calon mahasiswa baru untuk
-                                    mendaftar dengan rekomendasi keluarga/kerabat yang telah menjadi mahasiswa atau alumni
-                                    FISIP - Universitas Garut.
-                                </li>
-                            </ol>
-
-                            <p class="mt-4">&nbsp;</p>
-                            <p class="mt-4">&nbsp;</p>
-                            <p class="mt-4">&nbsp;</p>
+                                        <div v-html="articles[1].isi">
+                                        </div>
+                                    </div>
+                            </div>
                         </div>
-
-                        
                     </div>
                 </div>
             </div>
@@ -549,28 +459,17 @@ console.log(props.pengumumans.length);
 
             <div class="w-5/6 justify-start    mx-auto ">
                 <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
-                    <img src="image/petunjuk.jpg" alt="image" class="w-full" />
+                    <img src="image/beasiswa.png" alt="image" class="w-full" />
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
-                        <div class="text-wrap p-6">
-                            <h5 class="text-center uppercase font-semibold text-blue-500">Beasiswa</h5>
+                        <div class="card-body">
+                            <div class="text-wrap p-lg-6">
+                                    <div class="text-justify">
 
-                            <hr class="border-0 h-1 bg-gradient-to-r from-gray-300 via-gray-600 to-gray-300">
-                            <br>
-                            <h4 class="text-lg font-semibold text-left">Jenis - Jenis Beasiswa di Lingkungan FISIP -
-                                Universitas Garut:</h4>
-
-                            <h4 class="font-semibold text-left">1. Beasiswa Yayasan</h4>
-                            <p class="text-left">Beasiswa dari Yayasan Universitas Garut, yang terdiri dari beasiswa PPA
-                                (untuk mahasiswa berprestasi dibidang akademik) dan BBM (untuk mahasiswa yang kurang mampu).
-                            </p>
-
-                            <h4 class="font-semibold text-left">2. Beasiswa Kabupaten</h4>
-
-                            <h4 class="font-semibold text-left">3. Beasiswa Provinsi</h4>
+                                        <div v-html="articles[2].isi">
+                                        </div>
+                                    </div>
+                            </div>
                         </div>
-
-
-                        
                     </div>
                 </div>
             </div>
@@ -580,25 +479,17 @@ console.log(props.pengumumans.length);
 
             <div class="w-5/6 justify-start    mx-auto ">
                 <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
-                    <img src="image/petunjuk.jpg" alt="image" class="w-full" />
+                    <img src="image/prodi.png" alt="image" class="w-full" />
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
-                        <div class="text-wrap p-6">
-                            <h5 class="text-center uppercase font-semibold text-blue-500">Program Studi</h5>
-                            <hr class="border-0 h-1 bg-gradient-to-r from-gray-300 via-gray-600 to-gray-300">
-                            <br>
-                            <p class="text-left">Fakultas Ilmu Sosial dan Ilmu Politik (FISIP) - Universitas Garut,
-                                mempunyai 1 Program Studi, dengan 3 Konsentrasi, diantaranya:</p>
+                        <div class="card-body">
+                            <div class="text-wrap p-lg-6">
+                                    <div class="text-justify">
 
-                            <p class="font-semibold text-left">Program Studi: Ilmu Administrasi Negara (S1)</p>
-
-                            <p class="font-semibold text-left">Konsentrasi:</p>
-                            <ul class="list-disc list-inside text-left">
-                                <li>Kebijakan Publik</li>
-                                <li>Manajemen Publik</li>
-                                <li>Manajemen Keuangan Publik</li>
-                            </ul>
+                                        <div v-html="articles[3].isi">
+                                        </div>
+                                    </div>
+                            </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -680,7 +571,7 @@ console.log(props.pengumumans.length);
 
 
                         <ul class="col-span-2 mt-8 flex justify-start gap-6 lg:col-span-5 lg:justify-end">
-                            <li>
+                            <li style="list-style-type: none;">
                                 <a href="https://www.facebook.com/unigafisip/" rel="noreferrer" target="_blank"
                                     class="text-gray-700 transition hover:opacity-75">
                                     <span class="sr-only">Facebook</span>
@@ -693,7 +584,7 @@ console.log(props.pengumumans.length);
                                 </a>
                             </li>
 
-                            <li>
+                            <li style="list-style-type: none;">
                                 <a href="https://www.instagram.com/fisipuniga/" rel="noreferrer" target="_blank"
                                     class="text-gray-700 transition hover:opacity-75">
                                     <span class="sr-only">Instagram</span>
@@ -708,7 +599,7 @@ console.log(props.pengumumans.length);
 
 
 
-                            <li>
+                            <li style="list-style-type: none;">
                                 <a href="https://www.youtube.com/channel/UCaTbG5vzuUTP7hHR7ZTuHTg" rel="noreferrer"
                                     target="_blank" class="text-gray-700 transition hover:opacity-75">
                                     <span class="sr-only">GitHub</span>
@@ -749,50 +640,54 @@ console.log(props.pengumumans.length);
         </footer>
     </div>
 
-    
+
     <div>
 
 
-<!-- Modal -->
-<transition name="pop" mode="out-in">
+        <!-- Modal -->
+        <transition name="pop" mode="out-in">
 
-    <div v-if="isModalOpen"
-        class="modal bg-gray-900 opacity-50 pointer-events-auto fixed w-full h-full top-0 left-0 flex items-center justify-center">
-    </div>
-</transition>
-<transition name="slide" mode="out-in">
-    <div v-if="isModalOpen"
-        class="modal mt-10 opacity-100 pointer-events-auto fixed w-full h-full top-0 left-0 flex items-center justify-center dark:text-slate-400">
+            <div v-if="isModalOpen"
+                class="modal bg-gray-900 opacity-50 pointer-events-auto fixed w-full h-full top-0 left-0 flex items-center justify-center">
+            </div>
+        </transition>
+        <transition name="slide" mode="out-in">
+            <div v-if="isModalOpen"
+                class="modal mt-10 opacity-100 pointer-events-auto fixed w-full h-full top-0 left-0 flex items-center justify-center dark:text-slate-400">
 
-        <div class="modal-container bg-white  mx-auto rounded shadow-lg z-50 overflow-y-auto">
+                <div class="modal-container bg-white  mx-auto rounded shadow-lg z-50 overflow-y-auto">
 
 
-            <div class=" py-4 text-left px-6 dark:bg-gray-800">
-                <!--Title-->
-                <div class="flex justify-between items-center pb-3">
-                    <div @click="closeModal" class="modal-close cursor-pointer z-50">
-                        <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18"
-                            height="18" viewBox="0 0 18 18">
-                            <path
-                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
-                            </path>
-                        </svg>
+                    <div class=" py-4 text-left px-6 dark:bg-gray-800">
+                        <!--Title-->
+                        <div class="flex justify-between items-center pb-3">
+                            <div @click="closeModal" class="modal-close cursor-pointer z-50">
+                                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18"
+                                    height="18" viewBox="0 0 18 18">
+                                    <path
+                                        d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!--Body-->
+
+
+                        <img :src="modalData" class="h-screen object-contain" style="max-height: 80vh;" alt="">
+
                     </div>
                 </div>
-
-                <!--Body-->
-           
-                
-                    <img  :src="modalData" class="h-screen object-contain" style="max-height: 80vh;" alt="">
-                
             </div>
-        </div>
+        </transition>
     </div>
-</transition>
-</div>
-
 </template>
 <style>
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .slide-enter-active,
 .slide-leave-active {
     height: 100%;
@@ -813,31 +708,42 @@ console.log(props.pengumumans.length);
     opacity: 100;
 }
 
-ul{
-  list-style-type: disc;
-  padding-left: 1.5rem;
+ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
 }
-h1{
-  font-size: 3rem;
+
+ol {
+    list-style-type:decimal;
+    padding-left: 1.5rem;
 }
-h2{
-  font-size: 2rem;
+
+h1 {
+    font-size: 3rem;
 }
-h3{
-  font-size: 1.25rem;
+
+h2 {
+    font-size: 2rem;
 }
-.text-huge{
-  font-size: 3rem;
+
+h3 {
+    font-size: 1.25rem;
 }
-.text-big{
-  font-size: 1.5rem;
+
+.text-huge {
+    font-size: 3rem;
 }
-.text-small{
-  font-size: 0.75rem;
+
+.text-big {
+    font-size: 1.5rem;
 }
-.text-tiny{
-  font-size: 0.5rem;
+
+.text-small {
+    font-size: 0.75rem;
 }
-</style>
+
+.text-tiny {
+    font-size: 0.5rem;
+}</style>
   
 

@@ -30,7 +30,7 @@ var props = defineProps(["prodis", "prodisEdit"]);
 // Mendefinisikan konfigurasi untuk mengekspor data ke Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "data Gameee",
+    messageTop: "data Program Studi",
     exportOptions: {
         columns: [0, 1, 2, 3, 4],
     },
@@ -122,18 +122,16 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             }
         ];
 
-// Menampilkan elemen pertama dari properti gamesEdit ke konsol
-// console.log(props.gamesEdit[0]);
 
 </script>
 
 <template>
 
-<AppHead title="Game" />
+<AppHead title="Program Studi" />
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle>Program Studi</SectionTitle>
 
             <CardBox is-form is-hoverable
                 @submit.prevent="formStatusSubmit">

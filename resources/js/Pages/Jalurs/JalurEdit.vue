@@ -66,7 +66,7 @@ const formStatusSubmit = () => {
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle>Edit jalur pilihan</SectionTitle>
 
             <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
@@ -74,10 +74,10 @@ const formStatusSubmit = () => {
                     <span><b class="capitalize">{{
                         formStatusOptions[formStatusCurrent]
                     }}</b>
-                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah game"}}</span>
+                        {{form.recentlySuccessful?" Berhasil menambahkan": "Tambah Jalur"}}</span>
                 </NotificationBarInCard>
                 <FormField label="Name">
-                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="Game name" placeholder="Game name"
+                    <FormControl v-model="form.name"  :icon-left="mdiAccount" help="nama jalur" placeholder="nama jalur"
                         required />
                 </FormField>
 

@@ -36,7 +36,7 @@ var props = defineProps(["users", "usersWithPassword", "password", "usersEdit"])
 // Configuration for exporting data to Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "Data Gameee",
+    messageTop: "Data User",
     exportOptions: {
         columns: [0, 1, 2, 3, 4, 5],
     },
@@ -187,7 +187,7 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle >Users</SectionTitle>
 
             <CardBox is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
@@ -214,7 +214,7 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             <CardBox class="mt-6">
 
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Game</span>
+                    <span>Tabel User</span>
                 </NotificationBarInCard>
                 <datatablecomponent :buttons_data="buttons_data" routeTo="users" :dataFrom="usersWithPassword" :form="form" :columns="columns">
                 </datatablecomponent>

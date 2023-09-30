@@ -69,7 +69,7 @@ const formStatusSubmit = () => {
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle>Edit user {{ user.id }}</SectionTitle>
 
             <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable
                 @submit.prevent="formStatusSubmit">

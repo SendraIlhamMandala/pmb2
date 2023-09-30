@@ -91,7 +91,7 @@ onMounted(function () {
 // Mendefinisikan konfigurasi untuk mengekspor data ke Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "data Gameee",
+    messageTop: "data User",
     exportOptions: {
 
     },

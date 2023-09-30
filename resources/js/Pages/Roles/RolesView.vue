@@ -29,7 +29,7 @@ var props = defineProps(["roles", "rolesEdit"]);
 // Mendefinisikan konfigurasi untuk mengekspor data ke Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "data Gameee",
+    messageTop: "data Role",
     exportOptions: {
         columns: [0, 1, 2, 3, 4],
     },
@@ -106,18 +106,16 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             }
         ];
 
-// Menampilkan elemen pertama dari properti gamesEdit ke konsol
-// console.log(props.gamesEdit[0]);
 
 </script>
 
 <template>
 
-<AppHead title="Game" />
+<AppHead title="Role" />
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle>Role</SectionTitle>
 
             <CardBox is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
@@ -141,7 +139,7 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             <CardBox class="mt-6">
 
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Game</span>
+                    <span>Tabel Role</span>
                 </NotificationBarInCard>
                 <datatablecomponent :buttons_data="buttons_data" routeTo="roles"  :dataFrom="roles" :form="form" :columns="columns">
                 </datatablecomponent>

@@ -104,10 +104,10 @@ console.log(selectOptionsShift,props.shifts);
     <LayoutAuthenticatedUser>
 
         <SectionMain>
-            <SectionTitle>Edit Jalur Daftar</SectionTitle>
+            <SectionTitle class="mt-4">Edit Jalur Daftar</SectionTitle>
 
             <!-- <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable  -->
-            <CardBox class=" shadow-2xl md:mx-auto" is-form is-hoverable @submit.prevent="formSubmit">
+            <CardBox class=" shadow-2xl md:mx-auto md:w-7/12 lg:w-5/12 xl:w-4/12 " is-form is-hoverable @submit.prevent="formSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span>
                         {{ form.recentlySuccessful ? " Berhasil menambahkan" : "data pribadi" }}</span>

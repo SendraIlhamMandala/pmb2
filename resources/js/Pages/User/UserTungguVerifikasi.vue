@@ -42,7 +42,7 @@ const formSubmit = () => {
   <LayoutAuthenticatedUser>
 
     <SectionMain>
-      <SectionTitle>
+      <SectionTitle class="mt-4">
 
         <div @click="toggleScale" :class="{ 'scaled': isScaled }" class=" relative mx-auto rounded-lg overflow-hidden">
           <img src="/image/2tunggu-verifikasi-admin.png" alt="Image with Bounce Effect" />

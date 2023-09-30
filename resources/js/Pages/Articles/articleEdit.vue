@@ -38,7 +38,7 @@ const editorConfig = {
 
 const form = useForm({
     tipe: props.article.tipe,
-    isi: ''
+    isi: props.article.isi,
 });
 
 
@@ -70,13 +70,13 @@ const getFormStatusColor = computed(() => {
 
 <template>
 
-<AppHead :title="'Edit role '" />
+<AppHead :title="'Edit '+article.tipe" />
     <LayoutAuthenticated>
-        
-        <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
 
-            <CardBox class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" is-form is-hoverable
+        <SectionMain>
+            <SectionTitle>Edit {{ article.tipe }}</SectionTitle>
+
+            <CardBox class="shadow-2xl md:mx-auto" is-form is-hoverable
                 @submit.prevent="submit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span>
@@ -93,9 +93,12 @@ const getFormStatusColor = computed(() => {
     </form>
 
                 <template #footer>
-                    <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }">
-                Submit
-            </PrimaryButton>                </template>
+             <div class="flex justify-center items-center">
+               <PrimaryButton class="mx-auto" :class="{ 'opacity-25': form.processing }">
+                 Simpan
+               </PrimaryButton>
+             </div>
+                </template>
             </CardBox>
          
         </SectionMain>
@@ -103,4 +106,6 @@ const getFormStatusColor = computed(() => {
 </template>
 <style>
 @import "datatables.net-dt";
+
+@import 'ckeditor-tailwind-reset/ckeditor-tailwind-reset';
 </style>

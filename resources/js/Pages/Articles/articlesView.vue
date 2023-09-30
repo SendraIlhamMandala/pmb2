@@ -29,7 +29,7 @@ var props = defineProps(["articles", "articlesEdit"]);
 // Mendefinisikan konfigurasi untuk mengekspor data ke Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "data Gameee",
+    messageTop: "data artikel",
     exportOptions: {
         columns: [0, 1, 2, 3, 4],
     },
@@ -108,20 +108,19 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
             }
         ];
 
-// Menampilkan elemen pertama dari properti gamesEdit ke konsol
-// console.log(props.gamesEdit[0]);
+
 
 </script>
 
 <template>
 
-<AppHead title="Game" />
+<AppHead title="Artikel" />
     <LayoutAuthenticated>
         
         <SectionMain>
-            <SectionTitle>Form with status example</SectionTitle>
+            <SectionTitle>Artikel</SectionTitle>
 
-            <CardBox is-form is-hoverable
+            <!-- <CardBox is-form is-hoverable
                 @submit.prevent="formStatusSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                     <span><b class="capitalize">{{
@@ -142,11 +141,11 @@ const buttons_data =  ['copy', dataExcel, 'pdf',
                 <template #footer>
                     <BaseButton label="Tambah" type="submit" color="info" />
                 </template>
-            </CardBox>
+            </CardBox> -->
             <CardBox class="mt-6">
 
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Game</span>
+                    <span>Tabel Artikel</span>
                 </NotificationBarInCard>
                 <datatablecomponent :buttons_data="buttons_data" routeTo="articles"  :dataFrom="articles" :form="form" :columns="columns">
                 </datatablecomponent>

@@ -82,6 +82,13 @@ class JalurDaftarController extends Controller
     {
         //
     }
+
+    public function deleteOne(JalurDaftar $id): RedirectResponse
+    {
+        // dd($id);
+        $id->delete();
+        return redirect(route('jalurs.index'));
+    }
     
     public function deleteMultiple($id): RedirectResponse
     {

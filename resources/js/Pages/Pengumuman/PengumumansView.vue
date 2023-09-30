@@ -30,7 +30,7 @@ var props = defineProps(["pengumuman", "pengumumanEdit"]);
 // Mendefinisikan konfigurasi untuk mengekspor data ke Excel
 const dataExcel = {
     extend: "excel",
-    messageTop: "data Gameee",
+    messageTop: "data Pengumuman",
     exportOptions: {
         columns: [0, 1, 2, 3, 4],
     },
@@ -128,7 +128,7 @@ const handleFileChangeIjazah = (event) => {
 </script>
 
 <template>
-    <AppHead title="Game" />
+    <AppHead title="Pengumuman" />
     <LayoutAuthenticated>
 
         <SectionMain>
@@ -136,10 +136,8 @@ const handleFileChangeIjazah = (event) => {
 
             <CardBox is-form is-hoverable @submit.prevent="formStatusSubmit">
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span><b class="capitalize">{{
-                        formStatusOptions[formStatusCurrent]
-                    }}</b>
-                        {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Tambah Shift" }}</span>
+                    <span>
+                        {{ form.recentlySuccessful ? " Berhasil menambahkan" : "Tambah Pengumuman" }}</span>
                 </NotificationBarInCard>
                 <FormField label="judul">
                     <FormControl v-model="form.judul" :icon-left="mdiAccount" help="Pengumuman judul"
@@ -183,7 +181,7 @@ const handleFileChangeIjazah = (event) => {
             <CardBox class="mt-6">
 
                 <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                    <span>Tabel Game</span>
+                    <span>Tabel Pengumuman</span>
                 </NotificationBarInCard>
                 <datatablecomponent :buttons_data="buttons_data" routeTo="pengumumans" :dataFrom="pengumuman" :form="form"
                     :columns="columns">

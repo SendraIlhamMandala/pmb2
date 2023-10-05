@@ -74,9 +74,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
   })->name('forms');
 
   Route::get('/lihat-user/{id}', [UserController::class, 'lihatuser'])->name('lihatuser');
-
-
-
+  Route::get('/lihat-user/noedit/{id}', [UserController::class, 'lihatuser2'])->name('lihatuser2');
 
   Route::get('verifikasi-pembayaran-user', [UserController::class, 'verifikasiPembayaranUserIndex'])->name('verifikasiPembayaranUserIndex');
   Route::get('verifikasi-user', [UserController::class, 'verifikasiUserShow'])->name('verifikasiUserShow');
@@ -121,6 +119,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
 
   Route::resource('users', UserController::class);
+  Route::get('/user-pendaftar', [UserController::class, 'userAll'])->name('user-pendaftar');
+  Route::get('/users/tahun/{id}', [UserController::class, 'userTahun'])->name('user-pendaftar-tahun');
 
 
   //inertia route style view
@@ -219,6 +219,7 @@ Route::middleware('auth', 'verified')->group(function () {
   Route::get('/tunggu-verifikasi-user', [UserController::class, 'tungguVerifikasi'])->name('tungguVerifikasi');
   Route::get('/verifikasi-user-selesai', [UserController::class, 'verifikasiSelesai'])->name('verifikasiSelesai');
   Route::get('/verifikasi-diterima', [UserController::class, 'diterimaVerifikasi'])->name('diterimaVerifikasi');
+  Route::get('/verifikasi-ditolak', [UserController::class, 'ditolakVerifikasi'])->name('ditolakVerifikasi');
 
   Route::get('/cat', [Controller::class, 'cat']);
   Route::get('/datapribadicek', function () {

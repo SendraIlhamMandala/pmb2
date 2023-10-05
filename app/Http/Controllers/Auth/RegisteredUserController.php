@@ -93,8 +93,8 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         $data = [
-            'no-reply' => 'no_reply@fisipuniga.ac.id',
-            'admin'    => 'admin@admin.admin',
+            'no-reply' => 'no-reply@fisip.uniga.ac.id',
+            'admin'    => 'sendrailham@fisip.uniga.ac.id',
             'name'    => $request->name,
             'email'    => $request->email,
             
@@ -104,9 +104,9 @@ class RegisteredUserController extends Controller
           {
               $message
                   ->from($data['no-reply'])
-                  ->to($data['admin'])->subject('Some body wrote to you online')
-                  ->to($data['email'])->subject('Your submitted information')
-                  ->to('admin@admin.admin', 'Admin')->subject('Pendaftar Baru PMB');
+                  ->to($data['admin'])->subject('Pendaftar Baru PMB');
+                //   ->to($data['email'])->subject('Your submitted information')
+                //   ->to('admin@admin.admin', 'Admin')->subject('Pendaftar Baru PMB');
           });
 
 

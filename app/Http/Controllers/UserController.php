@@ -90,7 +90,7 @@ class UserController extends Controller
 
     public function lihatuser(User $id)
     {
-        
+
         $id->load('dataDaftar');
         $id->load('dataPribadi');
         $id->load('alamat');
@@ -100,6 +100,22 @@ class UserController extends Controller
         $id->load('pindahan');
         $id->load('pekerjaan');
         return Inertia::render('Users/UserShow', [
+            'user' => $id,
+        ]);
+    }
+
+    public function lihatuser2(User $id)
+    {
+
+        $id->load('dataDaftar');
+        $id->load('dataPribadi');
+        $id->load('alamat');
+        $id->load('asalSekolah');
+        $id->load('orangtua');
+        $id->load('tambahan');
+        $id->load('pindahan');
+        $id->load('pekerjaan');
+        return Inertia::render('Users/UserShow2', [
             'user' => $id,
         ]);
     }
@@ -141,7 +157,7 @@ class UserController extends Controller
     //setDataPribadi
     public function setDataPribadi(Request $request, User $id): RedirectResponse
     {
-        
+
         $validator = Validator::make($request->dataPribadi, [
             'no_ktp' => 'required|numeric',
             'nisn' => 'required|numeric',
@@ -224,7 +240,7 @@ class UserController extends Controller
             }
         }
 
-        if (Auth()->user()->dataDaftar->shift=='Hybrid') {
+        if (Auth()->user()->dataDaftar->shift == 'Hybrid') {
             $validator7 = Validator::make($request->pekerjaan, [
                 "nama_pekerjaan" => 'required',
                 "nama_instansi" => 'required',
@@ -361,7 +377,7 @@ class UserController extends Controller
 
     public function updateDataJalur(Request $request, User $user): RedirectResponse
     {
-        
+
         $validator = Validator::make($request->all(), [
             'status' => 'required',
             'shift' => 'required',
@@ -375,12 +391,12 @@ class UserController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
-        
+
         $user->dataDaftar()->update($request->all());
 
         $user->done_setup = 'pribadi';
         if (JalurDaftar::where('name', $request->jalur)->first()->test) {
-        $user->done_setup = 'pembayaran';
+            $user->done_setup = 'pembayaran';
         }
         $user->dataDaftar->save();
         $user->save();
@@ -393,7 +409,7 @@ class UserController extends Controller
     public function dataPribadi()
     {
 
-        
+
         $conn = new mysqli("localhost", "root", "", "fisipol_cat");
 
         $id = Auth()->user();
@@ -413,14 +429,13 @@ class UserController extends Controller
             $sql_select_user_ikut_ujian = "SELECT * FROM tr_ikut_ujian WHERE id_user = '{$result_siswa_data['id']}'";
             $result_siswa_ikut_ujian = $conn->query($sql_select_user_ikut_ujian);
             $result_siswa_ikut_ujian_data = $result_siswa_ikut_ujian->fetch_assoc();
-            
-                    // get latest data from  tr_guru_tes table
-                    $sql_select_guru_tes = "SELECT * FROM tr_guru_tes ORDER BY id DESC LIMIT 1";
-                    $result_guru_tes = $conn->query($sql_select_guru_tes);
-                    $result_guru_tes_data = $result_guru_tes->fetch_assoc();
-                    
-        }else {
-            
+
+            // get latest data from  tr_guru_tes table
+            $sql_select_guru_tes = "SELECT * FROM tr_guru_tes ORDER BY id DESC LIMIT 1";
+            $result_guru_tes = $conn->query($sql_select_guru_tes);
+            $result_guru_tes_data = $result_guru_tes->fetch_assoc();
+        } else {
+
             $result_siswa_ikut_ujian_data = '';
         }
 
@@ -445,7 +460,7 @@ class UserController extends Controller
         $user->dataDaftar;
         return inertia('User/UserDataPribadi', [
             'user' => $user,
-            'cat'=>$result_siswa_ikut_ujian_data 
+            'cat' => $result_siswa_ikut_ujian_data
         ]);
     }
 
@@ -481,10 +496,11 @@ class UserController extends Controller
         ]);
     }
 
-    public function dataJalurEdit(User $user){
-        
-      $shifts = Shift::with('jalurDaftars')->get();
-      $prodi = ProgramStudi::all();
+    public function dataJalurEdit(User $user)
+    {
+
+        $shifts = Shift::with('jalurDaftars')->get();
+        $prodi = ProgramStudi::all();
         return inertia('User/UserDataJalurEdit', [
             'user' => $user,
             'shifts' => $shifts,
@@ -590,7 +606,7 @@ class UserController extends Controller
                 return redirect()->route('diterimaVerifikasi');
             }
         } else if (Auth()->user()->faktur && Auth()->user()->faktur->validasi === 2) {
-            dd('tolak');
+                return redirect()->route('ditolakVerifikasi');
         }
 
         $user = Auth()->user();
@@ -641,7 +657,7 @@ class UserController extends Controller
             return redirect('/');
         }
         if (Auth()->user()->faktur && Auth()->user()->faktur->validasi === 2) {
-            dd('tolak');
+            return redirect(route('ditolakVerifikasi'));
         }
 
         $user = Auth()->user();
@@ -651,6 +667,15 @@ class UserController extends Controller
         ]);
     }
 
+    
+    public function ditolakVerifikasi()
+    {
+
+        return inertia('User/UserDitolak', [
+            'user' => Auth()->user(),
+        ]);
+
+    }
 
     public function verifikasiPembayaranUserIndex(): Response
     {
@@ -784,7 +809,7 @@ class UserController extends Controller
 
     public function tungguVerifikasi()
     {
-        if (Auth()->user()->status=='sudah' || Auth()->user()->status=='tolak') {
+        if (Auth()->user()->status == 'sudah' || Auth()->user()->status == 'tolak') {
             return redirect('/verifikasi-user-selesai');
         }
 
@@ -792,13 +817,13 @@ class UserController extends Controller
         return inertia('User/UserTungguVerifikasi', [
             'user' => $user,
         ]);
-
     }
 
     public function verifikasiSelesai()
     {
-        if (Auth()->user()->status!='sudah') {
-            return Auth()->user()->status  == 'tolak' ? 'pendaftaran ditolak' : 'belum selesai daftar';
+        if (Auth()->user()->status != 'sudah') {
+            return Auth()->user()->status  == 'tolak' ? 
+            redirect(route('ditolakVerifikasi')) : 'belum selesai daftar';
         }
 
         $user = Auth()->user();
@@ -818,16 +843,16 @@ class UserController extends Controller
             ->where('status', 'menunggu verifikasi')
             ->get();
 
-            
-        $users_sudah = User::with(['dataDaftar.tahun', 'faktur'])
-        ->orderBy('created_at', 'desc')
-        ->whereHas('dataDaftar.tahun', function ($query) {
-            $query->where('status', 'aktif');
-        })
-        ->where('status', 'sudah')
-        ->get();
 
- 
+        $users_sudah = User::with(['dataDaftar.tahun', 'faktur'])
+            ->orderBy('created_at', 'desc')
+            ->whereHas('dataDaftar.tahun', function ($query) {
+                $query->where('status', 'aktif');
+            })
+            ->where('status', 'sudah')
+            ->get();
+
+
 
         return inertia(
             'Users/VerifikasiUser',
@@ -839,20 +864,65 @@ class UserController extends Controller
         );
     }
 
-    public function verifikasiUser( $data)
+    public function verifikasiUser($data)
     {
-        $status = explode(',',$data);
+        $status = explode(',', $data);
         $user = User::find($data);
 
-        if ($status[1]=='terima') {
+        if ($status[1] == 'terima') {
             $user->status = 'sudah';
             $user->save();
-        }elseif ($status[1]=='tolak') {
+        } elseif ($status[1] == 'tolak') {
             $user->status = 'tolak';
             $user->save();
         }
-        
+
         return redirect(route('dashboard'));
-        
+    }
+
+    public function userAll()
+    {
+        //return latest tahun 
+
+        $tahuns = Tahun::latest()->get();
+
+        $prevTahun = null;
+        $filteredTahuns = [];
+        foreach ($tahuns as $tahun) {
+            if ($prevTahun !== null && $tahun->tahun == $prevTahun) {
+                continue;
+            }
+            $filteredTahuns[] = $tahun;
+            $prevTahun = $tahun->tahun;
+        }
+        // dd($filteredTahuns);
+
+
+        return Inertia::render('Users/UsersViewAll', [
+            'tahuns' => $tahuns,
+            'filteredTahuns' => $filteredTahuns
+
+        ]);
+    }
+
+    public function userTahun($id)
+    {
+        //return latest tahun 
+        $tahun = Tahun::find($id);
+
+        //get all user where tahun == $tahun->tahun and gelombang == $tahun->gelombang
+        $users = User::with(['dataDaftar.tahun', 'faktur'])->whereHas('dataDaftar.tahun', function ($query) use ($tahun) {
+            $query->where('tahun', $tahun->tahun);
+            $query->where('gelombang', $tahun->gelombang);
+        })->orderBy('id', 'desc')->get();
+
+        $users->load('asalSekolah');
+        $users->load('dataDaftar');
+    
+        return Inertia::render('Users/UsersViewTahun', [
+            'users' => $users,
+            'tahun' => $tahun
+
+        ]);
     }
 }

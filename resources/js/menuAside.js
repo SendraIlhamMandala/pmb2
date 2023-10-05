@@ -31,7 +31,12 @@ export default [
     // },
     {
         route: "users.index",
-        label: "Users",
+        label: "User",
+        icon: mdiTable,
+    },
+        {
+        route: "user-pendaftar",
+        label: "User pendaftar",
         icon: mdiTable,
     },
     {
@@ -41,27 +46,27 @@ export default [
     },
     {
         route: "roles.index",
-        label: "Roles",
+        label: "Role",
         icon: mdiTable,
     },
     {
         route: "shifts.index",
-        label: "Shifts",
+        label: "Shift",
         icon: mdiTable,
     },
     {
         route: "articles.index",
-        label: "Articles",
+        label: "Article",
         icon: mdiTable,
     },
     {
         route: "jalurs.index",
-        label: "Jalurs",
+        label: "Jalur",
         icon: mdiTable,
     },
     {
         route: "prodis.index",
-        label: "Prodis",
+        label: "Prodi",
         icon: mdiTable,
     },
       {

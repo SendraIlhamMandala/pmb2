@@ -103,11 +103,6 @@ const buttons_data = ['copy', dataExcel, 'pdf',
             dt.column(-2).visible(!dt.column(-2).visible());
             dt.column(-1).visible(!dt.column(-1).visible());
         }
-    }, {
-        text: 'Export doc',
-        action: function () {
-            exportHTML();
-        }
     }
 ];
 

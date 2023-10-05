@@ -184,7 +184,7 @@ const navigateToShowUser = (data) => {
     <LayoutAuthenticated>
 
         <SectionMain>
-            <SectionTitle>Verifikasi Pendaftaran Tahun {{ tahun[0].tahun }}</SectionTitle>
+            <SectionTitle>Verifikasi Pendaftaran Tahun {{ tahun[0].tahun }} gelombang {{ tahun[0].gelombang }}  </SectionTitle>
 
 
             <div className="grid-rows-1 gap-4">
@@ -193,7 +193,7 @@ const navigateToShowUser = (data) => {
                     <CardBox class="mt-6">
 
                         <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
-                            <span>Tabel verifikasi user</span>
+                            <span>Tabel verifikasi pembayaran user</span>
                         </NotificationBarInCard>
 
                         <DataTable ref="table" class="display table" width="100%" :options="{
@@ -253,7 +253,7 @@ const navigateToShowUser = (data) => {
                     </CardBox>
 
 
-                    <CardBox class="mt-6">
+                    <!-- <CardBox class="mt-6">
 
                         <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
                             <span>Tabel verifikasi user</span>
@@ -316,7 +316,7 @@ const navigateToShowUser = (data) => {
                         </DataTable>
 
 
-                    </CardBox>
+                    </CardBox> -->
 
 
 
@@ -374,7 +374,7 @@ const navigateToShowUser = (data) => {
                         </DataTable>
                     </CardBox>
 
-
+<!-- 
                     <CardBox class="mt-6">
 
                         <NotificationBarInCard :color="getFormStatusColor" :is-placed-with-header="formStatusWithHeader">
@@ -434,7 +434,7 @@ const navigateToShowUser = (data) => {
 
                             </tbody>
                         </DataTable>
-                    </CardBox>
+                    </CardBox> -->
 
 
                 </div>

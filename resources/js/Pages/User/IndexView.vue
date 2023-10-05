@@ -126,6 +126,31 @@ function get_pengumuman_class() {
 
 }
 console.log(props.pengumumans.length);
+
+import { nextTick } from 'vue';
+
+onMounted(async () => {
+    await nextTick();
+    const imageElements = document.querySelectorAll('.image');
+    console.log(imageElements);
+    imageElements.forEach((element) => {
+
+    element.addEventListener('click', (data) => {
+        
+
+        let base64Data = data.srcElement.src.split(",")[1]; // get the base64 data
+        let mimeType = data.srcElement.src.split(",")[0].split(":")[1].split(";")[0]; // get the MIME type of the image
+
+        // create a Blob from the base64 data
+        let blob = new Blob([Uint8Array.from(atob(base64Data), c => c.charCodeAt(0))], { type: mimeType });
+
+        // create an object URL for the Blob
+        let url = URL.createObjectURL(blob);
+
+        // open the object URL in a new window or tab
+        window.open(url, '_blank');
+    });});
+});
 </script>
 
 <template>
@@ -349,14 +374,15 @@ console.log(props.pengumumans.length);
                     <div class="  mx-auto ">
                         <div class="rounded overflow-hidden">
                             <div class="relative mx-auto overflow-hidden">
-                                <img class=" mx-auto shadow-lg md:hidden " src="image/splash_m.png"
-                                    alt="phone feature 1" loading="lazy" />
-                                <img class=" mx-auto shadow-lg hidden md:block  " style="max-width: 100%;" src="image/splash.png"
-                                    alt="phone feature 1" loading="lazy" />
-                                <div class="w-full h-full">
-
-                                    <div class="w-full h-full absolute bg-blue-300 z-[-2]"></div>
+                                <!-- <img class=" mx-auto shadow-lg md:hidden " src="image/splash_m.png" alt="phone feature 1"
+                                    loading="lazy" /> -->
+                                <div class=" md:hidden " v-html="articles[6].isi">
                                 </div>
+                                <!-- <img class=" mx-auto shadow-lg hidden md:block  " style="max-width: 100%;"
+                                    src="image/splash.png" alt="phone feature 1" loading="lazy" /> -->
+                                <div class=" hidden md:block  " v-html="articles[5].isi">
+                                </div>
+
                             </div>
 
                         </div>
@@ -367,7 +393,7 @@ console.log(props.pengumumans.length);
                 </div>
                 <div :class="get_pengumuman_class()">
 
-                    <div v-for="pengumuman in pengumumans" class="col md:w-10/12 mx-auto my-6">
+                    <div v-for="pengumuman in pengumumans" class="col mx-auto my-6">
                         <div class="rounded overflow-hidden">
                             <div class="relative flex items-center justify-center">
                                 <img class="" :src="'storage/gambar/' + pengumuman.gambar"
@@ -400,11 +426,11 @@ console.log(props.pengumumans.length);
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
                         <div class="card-body">
                             <div class="text-wrap p-lg-6">
-                                    <div class="text-justify">
+                                <div class="text-justify">
 
-                                        <div v-html="articles[0].isi">
-                                        </div>
+                                    <div v-html="articles[0].isi">
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -414,40 +440,40 @@ console.log(props.pengumumans.length);
 
         <section id="petunjuk" ref="petunjuk">
 
-           
-<div class="w-5/6 justify-start    mx-auto ">
-    <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
-        <img src="image/petunjuk.jpg" alt="image" class="w-full" />
-        <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
-            <div class="card-body">
-                <div class="text-wrap p-lg-6">
-                        <div class="text-justify">
 
-                            <div v-html="articles[4].isi">
+            <div class="w-5/6 justify-start    mx-auto ">
+                <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
+                    <img src="image/petunjuk.jpg" alt="image" class="w-full" />
+                    <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
+                        <div class="card-body">
+                            <div class="text-wrap p-lg-6">
+                                <div class="text-justify">
+
+                                    <div v-html="articles[4].isi">
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-</section>
+        </section>
 
 
         <section id="jalur" ref="jalur">
 
-           
+
             <div class="w-5/6 justify-start    mx-auto ">
                 <div class="mb-10 overflow-hidden justify-center rounded-lg bg-white">
                     <img src="image/jalur.png" alt="image" class="w-full" />
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
                         <div class="card-body">
                             <div class="text-wrap p-lg-6">
-                                    <div class="text-justify">
+                                <div class="text-justify">
 
-                                        <div v-html="articles[1].isi">
-                                        </div>
+                                    <div v-html="articles[1].isi">
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -463,11 +489,11 @@ console.log(props.pengumumans.length);
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
                         <div class="card-body">
                             <div class="text-wrap p-lg-6">
-                                    <div class="text-justify">
+                                <div class="text-justify">
 
-                                        <div v-html="articles[2].isi">
-                                        </div>
+                                    <div v-html="articles[2].isi">
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -483,11 +509,11 @@ console.log(props.pengumumans.length);
                     <div class="p-2 text-center sm:p-9 md:p-7 xl:p-9">
                         <div class="card-body">
                             <div class="text-wrap p-lg-6">
-                                    <div class="text-justify">
+                                <div class="text-justify">
 
-                                        <div v-html="articles[3].isi">
-                                        </div>
+                                    <div v-html="articles[3].isi">
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -501,10 +527,10 @@ console.log(props.pengumumans.length);
 
                     <div class="mt-8 grid grid-cols-2 gap-2 lg:mt-0 lg:grid-cols-4 lg:gap-y-16">
 
-                        <div class="col-span-2 md:mt-8 sm:col-span-1">
-                            <iframe
+                        <div class="col-span-2 mx-auto md:mt-8 sm:col-span-1">
+                            <iframe class=" "
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.3512869616084!2d107.88690587424747!3d-7.200701670684401!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68b0f14a76712d%3A0x5925220d57b5f0b!2sFISIP%20UNIGA!5e0!3m2!1sid!2sid!4v1692775090905!5m2!1sid!2sid"
-                                width="250" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+                                width="300" height="300" style="border:0;" allowfullscreen="" loading="lazy"
                                 referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                         <div class="col-span-2 mt-8 sm:col-span-1">
@@ -673,8 +699,10 @@ console.log(props.pengumumans.length);
 
                         <!--Body-->
 
+                        <a :href="modalData" target="_blank">
 
-                        <img :src="modalData" class="h-screen object-contain" style="max-height: 80vh;" alt="">
+                            <img :src="modalData" class="h-screen object-contain" style="max-height: 80vh;" alt="">
+                        </a>
 
                     </div>
                 </div>
@@ -684,10 +712,11 @@ console.log(props.pengumumans.length);
 </template>
 <style>
 .image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .slide-enter-active,
 .slide-leave-active {
     height: 100%;
@@ -714,7 +743,7 @@ ul {
 }
 
 ol {
-    list-style-type:decimal;
+    list-style-type: decimal;
     padding-left: 1.5rem;
 }
 
@@ -744,6 +773,7 @@ h3 {
 
 .text-tiny {
     font-size: 0.5rem;
-}</style>
+}
+</style>
   
 

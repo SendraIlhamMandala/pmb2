@@ -88,7 +88,8 @@ DataTable.use(DataTablesLib);
 var props = defineProps(["user", "cat" , "errors"]);
 
 const selectOptionsKelamin = ["Laki - Laki", "Perempuan"];
-const selectOptionsPekerjaan = ["PNS", "TNI / Polri", "BUMN / BUMD ", "Wiraswasta", "lainnya"];
+const selectOptionsPekerjaan = ["PNS", "TNI / Polri", "BUMN / BUMD ", "Wiraswasta", "Tidak Bekerja", "lainnya"];
+const selectOptionsPekerjaan2 = ["PNS", "TNI / Polri", "BUMN / BUMD ", "Wiraswasta", "Belum Bekerja" , "lainnya"];
 const selectOptionsSurvey = ["Teman di FISIP UNIGA", "Medsos (IG, Facebook)", "Brosur/ Spanduk ", "Iklan Radio", "Guru BK / Sekolah", "Roadshow" , "Lainnya"];
 const selectOptionsPenghasilan = ["< Rp.500.000", "Rp.500.000 - Rp.999.999", "Rp.1000.000 - Rp.1.999.999", "Rp.2.000.000 - Rp.4.999.999", "Rp.5.000.000 - Rp.20.000.000", "> 20.000.000"];
 
@@ -1189,7 +1190,7 @@ console.log(props.user);
                                 </div>
 
                                 <FormField label="Pekerjaan Anda">
-                                    <FormControl v-model="pilihan_pekerjaan_anda" :options="selectOptionsPekerjaan"
+                                    <FormControl v-model="pilihan_pekerjaan_anda" :options="selectOptionsPekerjaan2"
                                         required />
                                     <NotificationBar color="warning" v-if="errors.nama_pekerjaan" :icon="mdiAlert"
                                         :outline="notificationsOutline">
@@ -1214,7 +1215,7 @@ console.log(props.user);
 
                                 <FormField label="Instansi Pekerjaan Anda">
                                     <FormControl v-model="form.pekerjaan.nama_instansi" type="text"
-                                        placeholder="Masukkan Instansi Pekerjaan Anda" required />
+                                        placeholder="isi - jika belum bekerja" required />
                                     <NotificationBar color="warning" v-if="errors.nama_instansi" :icon="mdiAlert"
                                         :outline="notificationsOutline">
                                         <b>Warning</b>.{{ errors.nama_instansi }} <template #right>

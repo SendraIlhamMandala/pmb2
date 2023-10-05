@@ -78,7 +78,7 @@ const columns = [
         render: function (data, type, row) {
             // Render tautan aksi edit dengan ID baris
             return (
-                "<a class='table-edit' data-id='" + row.id + "' href='/articles/" + row.id + "/edit' >EDIT</a>"
+                "<a class='table-edit' data-id='" + row.id + "' href='/articles/" + row.tipe + "/edit' >EDIT</a>"
             );
         },
     },
